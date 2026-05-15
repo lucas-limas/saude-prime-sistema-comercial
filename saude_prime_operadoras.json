@@ -1,0 +1,728 @@
+[
+  {
+    "operadora": "Unity Saúde",
+    "administradora": "Esplendor",
+    "tipo_contratacao": "Coletivo por Adesão",
+    "vigencia": "Mai/2026",
+    "reajuste": "Mai/2026",
+    "abrangencia": "Regional — DF e entorno (GO)",
+    "associacoes_elegíveis": ["UEB", "UVA", "UNIPRO", "ANC", "UNSP"],
+    "taxa_associativa": 5.00,
+    "vencimentos_disponiveis": [1, 10, 20],
+
+    "produtos": [
+      {
+        "produto": "Life Vital",
+        "segmentacao": "Ambulatorial",
+        "acomodacao": "Não se aplica",
+        "coparticipacao": { "tipo": "sem" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [189.94, 201.35, 231.55, 259.32, 311.19, 357.87, 450.91, 554.62, 721.01, 1045.46]
+      },
+      {
+        "produto": "Life Vital",
+        "segmentacao": "Ambulatorial",
+        "acomodacao": "Não se aplica",
+        "coparticipacao": { "tipo": "total", "percentual": 30, "teto_mensal": 450.00,
+          "limites": {
+            "consulta_eletiva": 25.00,
+            "pronto_socorro": 45.00,
+            "exame_simples": 12.00,
+            "exame_complementar": 36.00,
+            "exame_especial": 58.00,
+            "cirurgia_internacao": 195.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [138.34, 146.64, 168.64, 188.87, 226.65, 260.65, 328.41, 403.95, 525.13, 761.45]
+      },
+      {
+        "produto": "Unity Vida",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "sem" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [348.34, 369.25, 424.63, 475.59, 570.69, 656.31, 826.94, 1017.15, 1322.28, 1917.30]
+      },
+      {
+        "produto": "Unity Vida",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "total", "percentual": 30, "teto_mensal": 450.00,
+          "limites": {
+            "consulta_eletiva": 25.00,
+            "pronto_socorro": 45.00,
+            "exame_simples": 12.00,
+            "exame_complementar": 36.00,
+            "exame_especial": 58.00,
+            "cirurgia_internacao": 195.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [248.94, 263.88, 303.46, 339.87, 407.85, 469.02, 590.97, 726.90, 944.97, 1370.20]
+      },
+      {
+        "produto": "Unity Star",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "sem" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [433.42, 459.42, 528.34, 591.74, 710.08, 816.60, 1028.91, 1265.56, 1645.23, 2385.58]
+      },
+      {
+        "produto": "Unity Star",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total", "percentual": 30, "teto_mensal": 450.00,
+          "limites": {
+            "consulta_eletiva": 25.00,
+            "pronto_socorro": 45.00,
+            "exame_simples": 12.00,
+            "exame_complementar": 36.00,
+            "exame_especial": 58.00,
+            "cirurgia_internacao": 195.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [371.26, 393.54, 452.57, 506.88, 608.25, 699.46, 881.36, 1084.07, 1409.30, 2043.48]
+      }
+    ],
+
+    "rede_hospitalar": [
+      { "nome": "Hospital Santa Lúcia Norte",      "cidade": "Brasília/DF", "regiao": "Asa Norte",      "coberturas": ["PS","INT","AMB"], "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital Santa Lúcia Taguatinga", "cidade": "Taguatinga/DF",                           "coberturas": ["PS","INT"],       "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital Santa Lúcia Gama",       "cidade": "Gama/DF",                                 "coberturas": ["PS","INT"],       "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital São Mateus",             "cidade": "Brasília/DF", "regiao": "Cruzeiro",       "coberturas": ["PS","INT","AMB"], "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital PAI",                    "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","INT","AMB"], "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital AMMA",                   "cidade": "Águas Claras/DF",                         "coberturas": ["INT","AMB"],      "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Pronto-Socorro das Fraturas",     "cidade": "Ceilândia/DF",                            "coberturas": ["PS","INT"],       "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital Jardim Botânico",        "cidade": "Brasília/DF", "regiao": "Jardim Botânico","coberturas": ["PS","INT","AMB"], "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital Santa Luzia",            "cidade": "Luziânia/GO",                             "coberturas": ["PS","INT","AMB"], "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Hospital Luciano Chaves",         "cidade": "Formosa/GO",                              "coberturas": ["INT"],            "produtos": ["Life Vital","Unity Vida","Unity Star"] },
+      { "nome": "Maternidade Brasília",            "cidade": "Brasília/DF", "regiao": "Sudoeste",       "coberturas": ["INT","MAT"],      "produtos": ["Unity Star"] },
+      { "nome": "Hospital Home",                   "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","INT"],       "produtos": ["Unity Star"] },
+      { "nome": "Hospital Pacini",                 "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","INT"],       "produtos": ["Unity Star"] },
+      { "nome": "CBV Hospital de Olhos",           "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","AMB"],       "produtos": ["Unity Star"] },
+      { "nome": "Hospital Cerrado",                "cidade": "Valparaíso/GO",                           "coberturas": ["INT"],            "produtos": ["Unity Star"] }
+    ],
+
+    "laboratorios": ["Bom Exame","LAC","Citoprev","Aliança","Análises Clínicas Ceilândia","Sabin (Unity Vida e Unity Star)"],
+
+    "carencias": {
+      "urgencia_emergencia":       { "padrao": "24h",     "arc400": "Início da vigência", "arc500": "Início da vigência" },
+      "consultas_eletivas":        { "padrao": "30 dias", "arc400": "Início da vigência", "arc500": "Início da vigência" },
+      "exames_simples":            { "padrao": "30 dias", "arc400": "Início da vigência", "arc500": "Início da vigência" },
+      "exames_complementares":     { "padrao": "120 dias","arc400": "90 dias",            "arc500": "90 dias"            },
+      "exames_especiais":          { "padrao": "180 dias","arc400": "180 dias",           "arc500": "180 dias"           },
+      "pac_ambulatorial":          { "padrao": "180 dias","arc400": "180 dias",           "arc500": "180 dias"           },
+      "pac_hospitalar":            { "padrao": "180 dias","arc400": "N/A",                "arc500": "180 dias"           },
+      "parto_a_termo":             { "padrao": "300 dias","arc400": "N/A",                "arc500": "300 dias"           },
+      "cpt_doencas_preexistentes": { "padrao": "24 meses" }
+    },
+
+    "arc": {
+      "descricao": "Aproveitamento de Carências — ARC 400 (Ambulatorial) e ARC 500 (Amb + Hosp + Obst)",
+      "requisitos": [
+        "Plano anterior regulamentado pela Lei nº 9.656/98",
+        "Mínimo 6 meses de permanência no plano anterior",
+        "Cancelado há no máximo 30 dias",
+        "Beneficiário entre 06 e 64 anos",
+        "Sem CPT ativa"
+      ],
+      "documentacao": [
+        "3 últimos boletos quitados (último com menos de 30 dias)",
+        "Declaração de tempo de permanência da operadora anterior (atualizada e original)"
+      ]
+    },
+
+    "diferenciais": [
+      "Telemedicina gratuita e isenta de coparticipação",
+      "Rede exclusiva Unity Star: Maternidade Brasília, Hospital Home, Pacini, CBV Olhos, Hospital Cerrado",
+      "Taxa associativa de apenas R$ 5,00/mês",
+      "3 opções de vencimento: dia 1º, 10 ou 20"
+    ],
+
+    "restricoes": [
+      "Plano ambulatorial (Life Vital) sem cobertura hospitalar",
+      "Hospitais exclusivos Unity Star não disponíveis nos planos Life Vital e Unity Vida",
+      "Sabin disponível apenas nos planos Unity Vida e Unity Star"
+    ],
+
+    "observacoes": [
+      "Valores vigentes em Mai/2026 — sujeitos a alteração sem aviso prévio",
+      "HOB, Instituto Panamericano, Oftalmed Visão, CEME Luziânia e Santa Mônica (Águas Lindas) também credenciados"
+    ]
+  },
+
+  {
+    "operadora": "Evo Saúde",
+    "administradora": "Easyplan",
+    "tipo_contratacao": "Coletivo por Adesão",
+    "vigencia": "Set/2026",
+    "reajuste": "Set/2026",
+    "abrangencia": "Regional — DF e entorno | Urgência nacional via ABRAMGE",
+    "taxa_associativa": 5.00,
+    "entrevista_medica": true,
+
+    "produtos": [
+      {
+        "produto": "NOW",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "sem" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [329.69, 352.17, 383.37, 450.31, 541.95, 612.67, 747.64, 917.58, 1233.41, 1637.60]
+      },
+      {
+        "produto": "ONE",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": {
+          "tipo": "total",
+          "modelo": "valor_fixo",
+          "valores_fixos": {
+            "clinica_aps": 0.00,
+            "consulta_eletiva": 15.00,
+            "pronto_socorro": 50.00,
+            "exame_simples": 12.00,
+            "exame_complexo": 60.00,
+            "internacao_cirurgia": 120.00,
+            "terapia_simples": 20.00,
+            "terapia_multidisciplinar": 40.00,
+            "telemedicina": 0.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [249.30, 266.30, 289.90, 340.52, 409.81, 463.29, 565.35, 693.86, 932.68, 1238.32],
+        "diferencial": "Clínica Amparo (Grupo Sabin) como porta de entrada obrigatória para especialistas (exceto Oftalmologia)"
+      },
+      {
+        "produto": "NOW",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": {
+          "tipo": "total",
+          "modelo": "valor_fixo",
+          "valores_fixos": {
+            "clinica_aps": 0.00,
+            "consulta_eletiva": 15.00,
+            "pronto_socorro": 50.00,
+            "exame_simples": 12.00,
+            "exame_complexo": 60.00,
+            "internacao_cirurgia": 120.00,
+            "terapia_simples": 20.00,
+            "terapia_multidisciplinar": 40.00,
+            "telemedicina": 0.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [286.68, 306.24, 333.37, 391.58, 471.26, 532.76, 650.13, 797.90, 1072.54, 1424.01]
+      },
+      {
+        "produto": "NOW",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "sem" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [394.15, 421.03, 458.33, 538.36, 647.91, 732.47, 893.83, 1097.00, 1474.58, 1957.80]
+      },
+      {
+        "produto": "ONE",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": {
+          "tipo": "total",
+          "modelo": "valor_fixo",
+          "valores_fixos": {
+            "clinica_aps": 0.00,
+            "consulta_eletiva": 15.00,
+            "pronto_socorro": 50.00,
+            "exame_simples": 12.00,
+            "exame_complexo": 60.00,
+            "internacao_cirurgia": 120.00,
+            "terapia_simples": 20.00,
+            "terapia_multidisciplinar": 40.00,
+            "telemedicina": 0.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [292.74, 312.71, 340.41, 399.85, 481.22, 544.02, 663.86, 814.76, 1095.20, 1454.10],
+        "diferencial": "Clínica Amparo (Grupo Sabin) como porta de entrada obrigatória para especialistas (exceto Oftalmologia)"
+      },
+      {
+        "produto": "NOW",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": {
+          "tipo": "total",
+          "modelo": "valor_fixo",
+          "valores_fixos": {
+            "clinica_aps": 0.00,
+            "consulta_eletiva": 15.00,
+            "pronto_socorro": 50.00,
+            "exame_simples": 12.00,
+            "exame_complexo": 60.00,
+            "internacao_cirurgia": 120.00,
+            "terapia_simples": 20.00,
+            "terapia_multidisciplinar": 40.00,
+            "telemedicina": 0.00
+          }
+        },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [348.80, 372.59, 405.60, 476.42, 573.37, 648.20, 790.99, 970.79, 1304.93, 1732.56]
+      }
+    ],
+
+    "rede_hospitalar": [
+      { "nome": "Hospital Brasília",      "cidade": "Brasília/DF", "regioes": ["Lago Sul","Águas Claras"], "coberturas": ["PS","INT"], "produtos": ["ONE","NOW"] },
+      { "nome": "Hospital Home",          "cidade": "Brasília/DF", "regiao": "Asa Sul",                    "coberturas": ["PS","INT"], "produtos": ["ONE","NOW"] },
+      { "nome": "Maternidade Brasília",   "cidade": "Brasília/DF", "regiao": "Sudoeste",                   "coberturas": ["MAT"],      "produtos": ["ONE","NOW"] },
+      { "nome": "Hospital Cerrado",       "cidade": "Valparaíso/GO",                                        "coberturas": ["INT"],      "produtos": ["ONE","NOW"] },
+      { "nome": "Clínicas de Ceilândia",  "cidade": "Ceilândia/DF",                                        "coberturas": ["PS","INT"], "produtos": ["ONE","NOW"] },
+      { "nome": "Centro Clínico AMMA",    "cidade": "Águas Claras/DF",                                     "coberturas": ["PS"],       "produtos": ["ONE","NOW"] },
+      { "nome": "HPAES",                  "cidade": "São Sebastião/DF",                                    "coberturas": ["INT","AMB"],"produtos": ["ONE","NOW"] },
+      { "nome": "Clínica Amparo (Grupo Sabin)", "cidade": "Brasília/DF",
+        "regioes": ["Asa Norte","Lago Norte","Sudoeste","Taguatinga"],
+        "coberturas": ["AMB"], "produtos": ["ONE"],
+        "observacao": "Porta de entrada obrigatória para especialistas — exceto Oftalmologia" }
+    ],
+
+    "laboratorios": ["Sabin (ONE e NOW)", "Laboratório Exame (NOW)"],
+
+    "carencias": {
+      "urgencia_emergencia":       { "padrao": "24h",      "rc1_6a11m": "24h",      "rc2_12a23m": "24h",    "rc3_mais24m": "24h"    },
+      "consultas_exames_simples":  { "padrao": "30 dias",  "rc1_6a11m": "15 dias",  "rc2_12a23m": "10 dias","rc3_mais24m": "Zero"   },
+      "exames_complementares":     { "padrao": "90 dias",  "rc1_6a11m": "45 dias",  "rc2_12a23m": "15 dias","rc3_mais24m": "Zero"   },
+      "exames_procedimentos_esp":  { "padrao": "180 dias", "rc1_6a11m": "90 dias",  "rc2_12a23m": "30 dias","rc3_mais24m": "15 dias"},
+      "terapias":                  { "padrao": "180 dias", "rc1_6a11m": "180 dias", "rc2_12a23m": "180 dias","rc3_mais24m": "180 dias"},
+      "internacoes":               { "padrao": "180 dias", "rc1_6a11m": "100 dias", "rc2_12a23m": "45 dias","rc3_mais24m": "30 dias"},
+      "saude_mental_internacao":   { "padrao": "180 dias", "rc1_6a11m": "100 dias", "rc2_12a23m": "45 dias","rc3_mais24m": "30 dias"},
+      "parto_a_termo":             { "padrao": "300 dias", "rc1_6a11m": "300 dias", "rc2_12a23m": "300 dias","rc3_mais24m": "300 dias"},
+      "cpt_doencas_preexistentes": { "padrao": "720 dias" }
+    },
+
+    "arc": {
+      "descricao": "Redução de carência por tempo de permanência em plano anterior regulamentado",
+      "faixas": [
+        { "codigo": "RC1", "permanencia": "6 a 11 meses e 29 dias" },
+        { "codigo": "RC2", "permanencia": "12 a 23 meses e 29 dias" },
+        { "codigo": "RC3", "permanencia": "Acima de 24 meses" }
+      ]
+    },
+
+    "diferenciais": [
+      "Odontológico ODONTOGROUP incluso sem custo adicional (229 procedimentos)",
+      "Telemedicina 24h isenta de coparticipação",
+      "Urgência nacional via ABRAMGE (mais de 170 prestadores no Brasil)",
+      "Clínica Amparo (Grupo Sabin) como atenção primária no plano ONE",
+      "Taxa associativa de apenas R$ 5,00/mês"
+    ],
+
+    "restricoes": [
+      "Não possui plano ambulatorial puro por adesão",
+      "Plano ONE exige atendimento pela Clínica Amparo antes do especialista (exceto Oftalmologia)",
+      "Entrevista médica obrigatória para contratação"
+    ],
+
+    "observacoes": [
+      "Valores vigentes para reajuste em Set/2026",
+      "Coparticipação por valor fixo por procedimento — não percentual",
+      "Oftalmologia via Oftalmed: Asa Sul, Águas Claras, Taguatinga e Ceilândia"
+    ]
+  },
+
+  {
+    "operadora": "Plenum Saúde",
+    "administradora": "Easyplan",
+    "tipo_contratacao": "Coletivo por Adesão",
+    "vigencia": "Mar/2027",
+    "reajuste": "Mar/2027",
+    "abrangencia": "Regional — DF e entorno (GO) | Urgência nacional via seguro AIG",
+    "taxa_associativa": 5.00,
+    "entrevista_medica": true,
+    "entrevista_formato": "Vídeo via WhatsApp",
+
+    "produtos": [
+      {
+        "produto": "Delta",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "parcial", "incidencia": "Terapias de rotina" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [349.90, 437.38, 507.36, 577.34, 629.82, 664.81, 804.77, 874.75, 1084.69, 1679.52]
+      },
+      {
+        "produto": "Ômega",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "parcial", "incidencia": "Terapias de rotina" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [389.90, 487.38, 565.36, 643.34, 701.82, 740.81, 896.77, 974.75, 1208.69, 1871.52]
+      },
+      {
+        "produto": "Delta",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "total", "incidencia": "Todos os procedimentos" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [269.90, 337.38, 391.36, 445.34, 485.82, 512.81, 620.77, 674.75, 836.69, 1295.52]
+      },
+      {
+        "produto": "Ômega",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "total", "incidencia": "Todos os procedimentos" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [299.90, 374.88, 434.86, 494.84, 539.82, 569.81, 689.77, 749.75, 929.69, 1439.52]
+      },
+      {
+        "produto": "Beta",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial", "incidencia": "Terapias de rotina" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [399.90, 499.88, 579.86, 659.84, 719.82, 759.81, 919.77, 999.75, 1239.69, 1919.52]
+      },
+      {
+        "produto": "Sigma",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial", "incidencia": "Terapias de rotina" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [499.90, 624.88, 724.86, 824.84, 899.82, 949.81, 1149.77, 1249.75, 1549.69, 2399.52],
+        "diferencial": "Hospital Sírio-Libanês (Asa Sul) incluso na rede"
+      },
+      {
+        "produto": "Beta",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total", "incidencia": "Todos os procedimentos" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [309.90, 387.38, 449.36, 511.34, 557.82, 588.81, 712.77, 774.75, 960.69, 1487.52]
+      },
+      {
+        "produto": "Sigma",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total", "incidencia": "Todos os procedimentos" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [389.90, 487.38, 565.36, 643.34, 701.82, 740.81, 896.77, 974.75, 1208.69, 1871.52],
+        "diferencial": "Hospital Sírio-Libanês (Asa Sul) incluso na rede"
+      }
+    ],
+
+    "rede_hospitalar": [
+      { "nome": "Hospital Sírio-Libanês",  "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","INT","AMB"], "produtos": ["Sigma"] },
+      { "nome": "Hospital Brasília",       "cidade": "Brasília/DF", "regioes": ["Lago Sul","Águas Claras"], "coberturas": ["PS","INT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Alvorada",       "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","INT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Home",           "cidade": "Brasília/DF", "regiao": "Asa Sul",        "coberturas": ["PS","INT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Daher",          "cidade": "Brasília/DF", "regiao": "Lago Sul",       "coberturas": ["PS","INT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital AMMA",           "cidade": "Águas Claras/DF",                          "coberturas": ["INT","AMB"],"produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital São Mateus",     "cidade": "Brasília/DF", "regiao": "Cruzeiro",       "coberturas": ["INT","AMB"],"produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Maternidade Brasília",    "cidade": "Brasília/DF", "regiao": "Sudoeste",       "coberturas": ["INT","MAT"],"produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Anchieta",       "cidade": "Taguatinga/DF",                            "coberturas": ["PS","INT","MAT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Anchieta",       "cidade": "Ceilândia/DF",                             "coberturas": ["PS","INT","MAT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "HPAES",                   "cidade": "São Sebastião/DF",                        "coberturas": ["INT","AMB"],"produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Pronto-Socorro das Fraturas", "cidade": "Ceilândia/DF",                        "coberturas": ["PS","INT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Santa Luzia",    "cidade": "Luziânia/GO",                              "coberturas": ["PS","INT","MAT"], "produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Cerrado",        "cidade": "Valparaíso/GO",                            "coberturas": ["INT","AMB"],"produtos": ["Delta","Ômega","Beta","Sigma"] },
+      { "nome": "Hospital Santa Maria Dia","cidade": "Cidade Ocidental/GO",                      "coberturas": ["INT","AMB"],"produtos": ["Delta","Ômega","Beta","Sigma"] }
+    ],
+
+    "laboratorios": [
+      "Laboratório Exame","Aliança","Laboratório Dom Bosco","Vitrium",
+      "Citoprev","Sabin","Sírio-Libanês Diagnósticos (exclusivo Sigma)"
+    ],
+
+    "carencias": {
+      "urgencia_emergencia":       { "padrao": "24h",      "rc1": "24h",       "rc2": "24h"       },
+      "consultas_eletivas":        { "padrao": "30 dias",  "rc1": "24h",       "rc2": "24h"       },
+      "exames_simples":            { "padrao": "30 dias",  "rc1": "24h",       "rc2": "24h"       },
+      "terapias_simples":          { "padrao": "180 dias", "rc1": "60 dias",   "rc2": "24h"       },
+      "exames_procedimentos_esp":  { "padrao": "180 dias", "rc1": "90 dias",   "rc2": "24h"       },
+      "terapias_especiais":        { "padrao": "180 dias", "rc1": "120 dias",  "rc2": "60 dias"   },
+      "internacoes_cirurgias":     { "padrao": "180 dias", "rc1": "150 dias",  "rc2": "120 dias"  },
+      "parto_a_termo":             { "padrao": "300 dias", "rc1": "300 dias",  "rc2": "300 dias"  },
+      "cpt_doencas_preexistentes": { "padrao": "24 meses" }
+    },
+
+    "arc": {
+      "rc1": {
+        "descricao": "Redução sem exigência de plano anterior",
+        "requisitos": [
+          "Idade entre 03 e 70 anos",
+          "IMC máximo 34",
+          "Não estar gestante",
+          "Sem CPT ativa",
+          "Não exige plano anterior"
+        ]
+      },
+      "rc2": {
+        "descricao": "Redução com plano anterior regulamentado",
+        "requisitos": [
+          "Idade entre 03 e 59 anos",
+          "IMC máximo 30",
+          "Não estar gestante",
+          "Sem CPT ativa",
+          "Mínimo 12 meses em plano anterior regulamentado, cancelado há no máximo 30 dias"
+        ]
+      },
+      "observacao": "Reduções dependem de análise e aprovação da operadora. Termo Aditivo enviado por e-mail para assinatura eletrônica."
+    },
+
+    "diferenciais": [
+      "Seguro Viagem Nacional AIG incluso em todos os planos",
+      "UTI Móvel 24h com 3 bases operacionais no DF",
+      "Hospital Sírio-Libanês na rede (planos Sigma)",
+      "Telemedicina 24x7",
+      "Taxa associativa de apenas R$ 5,00/mês",
+      "Mais de 120 clínicas credenciadas em 140+ endereços no DF e entorno"
+    ],
+
+    "restricoes": [
+      "Entrevista médica obrigatória por vídeo (WhatsApp) para contratação",
+      "Hospital Sírio-Libanês exclusivo para planos Sigma",
+      "RC1 limitado a beneficiários entre 03 e 70 anos com IMC ≤ 34",
+      "RC2 limitado a beneficiários entre 03 e 59 anos com IMC ≤ 30",
+      "Não possui plano ambulatorial puro por adesão"
+    ],
+
+    "observacoes": [
+      "Valores vigentes para reajuste em Mar/2027",
+      "Coparticipação parcial incide exclusivamente em terapias de rotina — consultas, exames, internações e cirurgias são isentos",
+      "Sírio-Libanês Diagnósticos credenciado apenas para planos Sigma"
+    ]
+  },
+
+  {
+    "operadora": "Amil",
+    "administradora": "Amil (própria)",
+    "tipo_contratacao": "Coletivo por Adesão",
+    "vigencia": "Mai/2026",
+    "reajuste": "A confirmar",
+    "abrangencia": "Regional DF | Nacional para planos Platinum (reembolso)",
+
+    "produtos": [
+      {
+        "produto": "Bronze DF",
+        "codigo_acomodacao": "QC",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [320.90, 435.79, 511.57, 511.57, 511.57, 571.43, 789.14, 942.24, 1354.94, 1921.31]
+      },
+      {
+        "produto": "Bronze DF",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [356.22, 483.74, 567.86, 567.86, 567.86, 634.31, 875.98, 1045.92, 1504.03, 2132.71]
+      },
+      {
+        "produto": "Prata DF",
+        "codigo_acomodacao": "QC",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [448.22, 524.41, 639.79, 767.74, 806.12, 886.74, 1108.44, 1219.28, 1524.11, 2667.19]
+      },
+      {
+        "produto": "Prata DF",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [497.52, 582.10, 710.15, 852.18, 894.80, 984.28, 1230.36, 1353.40, 1691.75, 2960.58]
+      },
+      {
+        "produto": "Ouro",
+        "codigo_acomodacao": "QC",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [500.09, 585.11, 713.83, 856.60, 899.42, 989.38, 1236.72, 1360.39, 1700.48, 2975.86]
+      },
+      {
+        "produto": "Ouro",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [555.10, 649.48, 792.35, 950.82, 998.36, 1098.19, 1372.74, 1510.02, 1887.53, 3303.18]
+      },
+      {
+        "produto": "Platinum R1",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [589.22, 689.38, 841.04, 1009.26, 1059.73, 1165.70, 1457.12, 1602.84, 2003.56, 3506.22]
+      },
+      {
+        "produto": "Platinum R2",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [595.08, 696.24, 849.42, 1019.30, 1070.26, 1177.28, 1471.61, 1618.78, 2023.46, 3541.07]
+      },
+      {
+        "produto": "Platinum Mais R1",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [732.24, 856.72, 1045.19, 1254.24, 1316.95, 1448.65, 1810.81, 1991.90, 2489.88, 4357.28]
+      },
+      {
+        "produto": "Platinum Mais R2",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "total" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [739.48, 865.19, 1055.54, 1266.65, 1330.00, 1462.99, 1828.75, 2011.62, 2514.52, 4400.42]
+      },
+      {
+        "produto": "Bronze DF",
+        "codigo_acomodacao": "QC",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [427.87, 581.05, 682.09, 682.09, 682.09, 761.89, 1052.17, 1256.29, 1806.55, 2561.69]
+      },
+      {
+        "produto": "Bronze DF",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [474.95, 644.98, 757.14, 757.14, 757.14, 845.72, 1167.95, 1394.53, 2005.33, 2843.56]
+      },
+      {
+        "produto": "Prata DF",
+        "codigo_acomodacao": "QC",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [597.62, 699.22, 853.04, 1023.65, 1074.84, 1182.31, 1477.91, 1625.71, 2032.14, 3556.26]
+      },
+      {
+        "produto": "Prata DF",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [663.36, 776.14, 946.87, 1136.26, 1193.06, 1312.38, 1640.48, 1804.54, 2255.68, 3947.45]
+      },
+      {
+        "produto": "Ouro",
+        "codigo_acomodacao": "QC",
+        "segmentacao": "Ambulatorial + Hospitalar",
+        "acomodacao": "Enfermaria",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [666.78, 780.12, 951.76, 1142.10, 1199.21, 1319.12, 1648.91, 1813.80, 2267.26, 3967.69]
+      },
+      {
+        "produto": "Ouro",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [740.11, 865.93, 1056.43, 1267.72, 1331.10, 1464.20, 1830.26, 2013.29, 2516.62, 4404.08]
+      },
+      {
+        "produto": "Platinum R1",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [785.62, 919.16, 1121.39, 1345.67, 1412.94, 1554.24, 1942.81, 2137.09, 2671.37, 4674.90]
+      },
+      {
+        "produto": "Platinum R2",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [793.43, 928.31, 1132.54, 1359.04, 1426.99, 1569.70, 1962.12, 2158.33, 2697.91, 4721.35]
+      },
+      {
+        "produto": "Platinum Mais R1",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [976.32, 1142.28, 1393.60, 1672.32, 1755.95, 1931.53, 2414.44, 2655.86, 3319.84, 5809.72]
+      },
+      {
+        "produto": "Platinum Mais R2",
+        "codigo_acomodacao": "QP",
+        "segmentacao": "Ambulatorial + Hospitalar + Obstétrico",
+        "acomodacao": "Apartamento",
+        "coparticipacao": { "tipo": "parcial" },
+        "faixas_etarias": ["0-18","19-23","24-28","29-33","34-38","39-43","44-48","49-53","54-58","59+"],
+        "valores":        [985.99, 1153.60, 1407.40, 1688.87, 1773.34, 1950.66, 2438.34, 2682.17, 3352.69, 5867.23]
+      }
+    ],
+
+    "odontologico": {
+      "produto": "Adesão Amil Dental",
+      "valor_mensal": 14.99,
+      "coparticipacao": "sem",
+      "promocao": "Incluso gratuitamente nos primeiros 12 meses ao contratar plano médico — cobrança a partir do 13º mês",
+      "regioes_comercializacao": ["DF","GO","MG","PR","RJ","SP","SP Interior"]
+    },
+
+    "rede_hospitalar": [],
+
+    "laboratorios": [],
+
+    "carencias": {
+      "observacao": "Carências não detalhadas na tabela de preços. Consultar manual do produto."
+    },
+
+    "arc": {
+      "observacao": "Regras de ARC não detalhadas na tabela de preços. Consultar manual do produto."
+    },
+
+    "diferenciais": [
+      "Amil Dental incluso gratuitamente por 12 meses ao contratar plano médico",
+      "Planos Platinum com possibilidade de reembolso (livre escolha)",
+      "Cobertura DF e nacional (Platinum)",
+      "Faixas 29-33, 34-38 com mesmo valor no Bronze DF — teto por faixa"
+    ],
+
+    "restricoes": [
+      "Rede hospitalar e carências não disponíveis na tabela comercial — consultar guia médico no site da Amil",
+      "Coparticipação no boleto: mensalidade e coparticipação cobradas discriminadamente",
+      "Livre escolha: coparticipação deduzida do reembolso nos planos com sistema de livre escolha"
+    ],
+
+    "observacoes": [
+      "Data de impressão da tabela: 13/05/2026",
+      "Valores referem-se à regional de vendas DF",
+      "Preços válidos por tempo limitado — sujeitos a alteração sem aviso prévio",
+      "QC = Qualquer Cobertura (Enfermaria) | QP = Qualquer Procedimento (Apartamento)"
+    ]
+  }
+]
