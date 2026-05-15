@@ -976,23 +976,27 @@ function renderNotes(uP,eP,pP,aP) {
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
 function criarApresentacao() {
-  const totals = ['unity','evo','plenum','amil']
+  const opsOrder = ['unity','evo','plenum','amil'];
+  const opsInfo = opsOrder
     .filter(op => activeOps[op])
     .map(op => {
-      const p = PLANOS.find(x => x.id === selPlanos[op]);
-      const t = p ? qtds.reduce((a,q,i) => a + q * p.precos[i], 0) : null;
-      return {op, t};
-    }).filter(x => x.t !== null);
-  const winner = totals.length
-    ? totals.sort((a,b) => a.t - b.t)[0].op
-    : (['unity','evo','plenum','amil'].find(op => activeOps[op]) || 'unity');
+      const pid = selPlanos[op];
+      const p = PLANOS.find(x => x.id === pid);
+      const total = p ? qtds.reduce((a,q,i) => a + q * p.precos[i], 0) : 0;
+      return {op, pid, total, precos: p ? [...p.precos] : null};
+    });
+  const withTotal = opsInfo.filter(x => x.total > 0);
+  const winner = withTotal.length
+    ? withTotal.slice().sort((a,b) => a.total - b.total)[0].op
+    : (opsOrder.find(op => activeOps[op]) || 'unity');
   const data = {
     nome:      document.getElementById('nome').value,
     obs:       document.getElementById('obs').value,
     qtds:      [...qtds],
     selPlanos: {...selPlanos},
     activeOps: {...activeOps},
-    winner
+    winner,
+    opsInfo
   };
   if (window.parent && window.parent.syncApres) {
     window.parent.syncApres(data);

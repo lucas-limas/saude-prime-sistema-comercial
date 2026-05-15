@@ -92,6 +92,31 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .hc-nome{font-size:12px;font-weight:500;color:var(--navy)}
 .hc-info{font-size:10px;color:var(--ink3)}
 
+/* ── MULTI-OP CARDS (form) ── */
+.op-comp-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.75rem;padding:1.25rem 1.5rem}
+.op-comp-card{border:1.5px solid var(--line);border-radius:var(--r);padding:1rem 1.25rem;transition:box-shadow .15s;position:relative}
+.op-comp-card.is-winner{box-shadow:0 0 0 2px rgba(201,162,39,.55)}
+.occ-badge{font-size:9px;font-weight:700;background:rgba(201,162,39,.15);border:1px solid rgba(201,162,39,.45);color:var(--gold);padding:1px 8px;border-radius:20px;letter-spacing:.08em;display:inline-block;margin-bottom:.4rem}
+.occ-op{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.2rem}
+.occ-plan{font-size:11px;color:var(--ink2);line-height:1.35;margin-bottom:.5rem}
+.occ-total{font-size:17px;font-weight:700;color:var(--navy)}
+.occ-meta{font-size:10px;color:var(--ink3);margin-top:.2rem}
+
+/* ── COMP TABLE (PDF) ── */
+.comp-ops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:1rem;margin-top:1.25rem}
+.comp-op-col{border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--white)}
+.comp-op-col.is-winner{border-color:rgba(201,162,39,.6);box-shadow:0 0 0 2px rgba(201,162,39,.18)}
+.coc-head{padding:.875rem 1rem;border-bottom:1px solid var(--line)}
+.coc-badge{font-size:9px;font-weight:700;background:rgba(201,162,39,.15);color:var(--gold);padding:1px 8px;border-radius:20px;letter-spacing:.06em;display:inline-block;margin-bottom:.3rem}
+.coc-op{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.coc-plan{font-size:11px;color:var(--ink2);margin-top:.2rem;line-height:1.3}
+.coc-total{font-size:19px;font-weight:700;margin:.5rem 0 .15rem}
+.coc-meta{font-size:10px;color:var(--ink3)}
+.coc-vidas{padding:.75rem 1rem;background:var(--cream);border-top:1px solid var(--line)}
+.coc-vida-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;font-size:10px;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.04);color:var(--ink2)}
+.coc-vida-row:last-child{border-bottom:none;font-weight:700;color:var(--navy);font-size:11px}
+.coc-vida-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 /* ── GEN AREA ── */
 .gen-area{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:var(--r);padding:2rem;text-align:center;box-shadow:var(--sh-md)}
 .gen-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:500;color:#fff;margin-bottom:.5rem}
@@ -291,29 +316,62 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 
   <!-- OPERADORA E PLANO -->
   <div class="card">
-    <div class="card-head">🏥 Operadora e plano recomendado</div>
-    <div class="card-body">
+    <div class="card-head" id="ops-card-head">🏥 Operadora e plano recomendado</div>
+
+    <!-- Multi-op: mostrado quando vem do cotador -->
+    <div id="ops-multi-section" style="display:none">
+      <div class="op-comp-row" id="ops-cards"></div>
+      <div class="card-body" style="border-top:1px solid var(--line);padding-top:1rem">
+        <div class="g2">
+          <div class="fg"><label>Abrangência</label>
+            <select id="g-abrang">
+              <option value="Regional">Regional (DF e entorno)</option>
+              <option value="Nacional">Nacional</option>
+            </select>
+          </div>
+          <div class="fg"><label>Acomodação</label>
+            <select id="g-aco">
+              <option value="Enfermaria">Enfermaria</option>
+              <option value="Apartamento">Apartamento</option>
+              <option value="Ambulatorial">Ambulatorial (sem internação)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Campos ocultos para compatibilidade com gerar() no modo manual -->
+      <select id="g-op" style="display:none" onchange="buildPlanosSel()">
+        <option value="unity">Unity Saúde</option>
+        <option value="evo">Evo Saúde</option>
+        <option value="plenum">Plenum Saúde</option>
+        <option value="amil">Amil</option>
+      </select>
+      <select id="g-plano" style="display:none"></select>
+      <input type="text" id="g-reajuste" style="display:none" placeholder="Ex: Março/2027">
+    </div>
+
+    <!-- Single-op: modo manual (padrão) -->
+    <div id="ops-single-section" class="card-body">
       <div class="g3">
         <div class="fg"><label>Operadora recomendada</label>
-          <select id="g-op" onchange="buildPlanosSel()">
+          <select id="g-op-s" onchange="buildPlanosSel()">
             <option value="unity">Unity Saúde</option>
             <option value="evo">Evo Saúde</option>
             <option value="plenum">Plenum Saúde</option>
             <option value="amil">Amil</option>
           </select>
         </div>
-        <div class="fg"><label>Plano recomendado</label><select id="g-plano"></select></div>
-        <div class="fg"><label>Mês / ano de reajuste</label><input type="text" id="g-reajuste" placeholder="Ex: Março/2027"></div>
+        <div class="fg"><label>Plano recomendado</label><select id="g-plano-s"></select></div>
+        <div class="fg"><label>Mês / ano de reajuste</label><input type="text" id="g-reajuste-s" placeholder="Ex: Março/2027"></div>
       </div>
       <div class="g2">
         <div class="fg"><label>Abrangência</label>
-          <select id="g-abrang">
+          <select id="g-abrang-s">
             <option value="Regional">Regional (DF e entorno)</option>
             <option value="Nacional">Nacional</option>
           </select>
         </div>
         <div class="fg"><label>Acomodação</label>
-          <select id="g-aco">
+          <select id="g-aco-s">
             <option value="Enfermaria">Enfermaria</option>
             <option value="Apartamento">Apartamento</option>
             <option value="Ambulatorial">Ambulatorial (sem internação)</option>
@@ -501,6 +559,7 @@ const VANTAGENS_DB = [
 
 // ─── ESTADO ────────────────────────────────────────────────────────────
 let vidaCount = 0;
+let _opsData = null;
 
 // ─── UTILITÁRIOS ───────────────────────────────────────────────────────
 const fm = v => v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -522,11 +581,31 @@ function previewNome() {
 
 // ─── PLANOS SELECT ─────────────────────────────────────────────────────
 function buildPlanosSel() {
-  const op = document.getElementById('g-op').value;
-  const sel = document.getElementById('g-plano');
+  const multi = _opsData !== null;
+  const op  = document.getElementById(multi ? 'g-op'       : 'g-op-s').value;
+  const sel = document.getElementById(multi ? 'g-plano'    : 'g-plano-s');
+  const rEl = document.getElementById(multi ? 'g-reajuste' : 'g-reajuste-s');
   sel.innerHTML = PLANOS_DB[op].map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
-  // Auto-fill reajuste
-  if (PLANOS_DB[op][0]) document.getElementById('g-reajuste').value = PLANOS_DB[op][0].reajuste;
+  if (PLANOS_DB[op][0]) rEl.value = PLANOS_DB[op][0].reajuste;
+}
+
+// ─── OPERATOR CARDS (multi mode) ───────────────────────────────────────
+function buildOpsCards(opsInfo, winner) {
+  const c = document.getElementById('ops-cards');
+  if (!opsInfo || !opsInfo.length) { c.innerHTML = ''; return; }
+  c.innerHTML = opsInfo.map(({op, pid, total}) => {
+    const meta = OP_META[op];
+    const pi = (PLANOS_DB[op] || []).find(p => p.id === pid) || {};
+    const isW = op === winner;
+    const tot = total > 0 ? 'R$ ' + total.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+    return `<div class="op-comp-card${isW?' is-winner':''}" style="border-top:3px solid ${meta.cor}">
+      ${isW ? '<div class="occ-badge">★ RECOMENDADO</div>' : ''}
+      <div class="occ-op" style="color:${meta.cor}">${meta.nome}</div>
+      <div class="occ-plan">${pi.nome || pid}</div>
+      <div class="occ-total">${tot}<span style="font-size:11px;font-weight:400;color:var(--ink3)">/mês</span></div>
+      <div class="occ-meta">${pi.aco||''} · Reajuste ${pi.reajuste||'—'}</div>
+    </div>`;
+  }).join('');
 }
 
 // ─── VIDAS ─────────────────────────────────────────────────────────────
@@ -649,11 +728,12 @@ async function gerar() {
   const tipo = document.getElementById('g-tipo').value;
   const validade = document.getElementById('g-validade').value;
   const dores = document.getElementById('g-dores').value.trim();
-  const opKey = document.getElementById('g-op').value;
-  const planoId = document.getElementById('g-plano').value;
-  const reajuste = document.getElementById('g-reajuste').value || PLANOS_DB[opKey][0]?.reajuste || '';
-  const abrang = document.getElementById('g-abrang').value;
-  const aco = document.getElementById('g-aco').value;
+  const isMulti = _opsData !== null;
+  const opKey   = document.getElementById(isMulti ? 'g-op'       : 'g-op-s').value;
+  const planoId = document.getElementById(isMulti ? 'g-plano'    : 'g-plano-s').value;
+  const reajuste = document.getElementById(isMulti ? 'g-reajuste' : 'g-reajuste-s').value || PLANOS_DB[opKey][0]?.reajuste || '';
+  const abrang  = document.getElementById(isMulti ? 'g-abrang'   : 'g-abrang-s').value;
+  const aco     = document.getElementById(isMulti ? 'g-aco'      : 'g-aco-s').value;
   const copTipo = document.getElementById('g-cop-tipo').value;
   const teto = document.getElementById('g-teto').value;
   const arc = document.getElementById('g-arc').value;
@@ -716,6 +796,45 @@ async function gerar() {
 
   // Economia anual
   const econAnual = totalMensal * 12;
+
+  // Comparativo multi-operadora (quando vem do cotador)
+  const FL_COMP = ['0 a 18 anos','19 a 23 anos','24 a 28 anos','29 a 33 anos',
+    '34 a 38 anos','39 a 43 anos','44 a 48 anos','49 a 53 anos','54 a 58 anos','59 ou mais'];
+  let compOpsHTML = '';
+  let winnerTotalMulti = 0;
+  let winnerReajuste = reajuste;
+  if (isMulti && _opsData.opsInfo && _opsData.opsInfo.length > 0) {
+    const qtdsArr = _opsData.qtds;
+    compOpsHTML = _opsData.opsInfo.map(({op, pid, total, precos}) => {
+      const meta = OP_META[op];
+      const pi = (PLANOS_DB[op] || []).find(p => p.id === pid) || {};
+      const isW = op === _opsData.winner;
+      const opTotal = total > 0 ? total : (precos ? qtdsArr.reduce((a,q,i) => a + q*(precos[i]||0), 0) : 0);
+      if (isW) { winnerTotalMulti = opTotal; winnerReajuste = pi.reajuste || reajuste; }
+      const vidasRows = (precos && qtdsArr.some(q=>q>0)) ? qtdsArr.map((q,i) => {
+        if (q <= 0) return '';
+        const unit = precos[i] || 0;
+        return `<div class="coc-vida-row">
+          <span class="coc-vida-lbl">${FL_COMP[i]}</span>
+          <span style="white-space:nowrap">${q}× R$ ${fm(unit)}</span>
+          <span style="white-space:nowrap">R$ ${fm(q*unit)}</span>
+        </div>`;
+      }).filter(Boolean).join('') + `<div class="coc-vida-row" style="border-top:1.5px solid var(--line2);margin-top:2px;padding-top:4px">
+          <span>Total</span><span></span><span style="color:${meta.cor}">R$ ${fm(opTotal)}</span>
+        </div>` : '';
+      return `<div class="comp-op-col${isW?' is-winner':''}">
+        <div class="coc-head" style="border-top:4px solid ${meta.cor}">
+          ${isW ? '<div class="coc-badge">★ RECOMENDADO</div>' : ''}
+          <div class="coc-op" style="color:${meta.cor}">${meta.nome}</div>
+          <div class="coc-plan">${pi.nome || pid}</div>
+          <div class="coc-total" style="color:${meta.cor}">R$ ${fm(opTotal)}</div>
+          <div class="coc-meta">/mês · ${pi.aco||aco} · Reajuste ${pi.reajuste||'—'}</div>
+        </div>
+        ${vidasRows ? `<div class="coc-vidas">${vidasRows}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
   const hospHTML = hospSel.length > 0 ? hospSel.map(h=>`
     <div class="hosp-card">
       <div class="hosp-icon">${h.icon}</div>
@@ -741,29 +860,47 @@ async function gerar() {
     <img class="capa-logo" src="data:image/jpeg;base64,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" alt="Saúde Prime" onerror="this.style.display='none'">
     <div class="capa-badge">📋 ${tipoLabel}</div>
     <div class="capa-tipo">Apresentação Executiva Comercial</div>
-    <h1 class="capa-title">${firstName},<br>este é o plano<br>feito para <em>você.</em></h1>
+    <h1 class="capa-title">${firstName},<br>${isMulti ? 'compare e escolha<br>com <em>segurança.</em>' : 'este é o plano<br>feito para <em>você.</em>'}</h1>
     <p class="capa-diagnostico">${diagnostico}</p>
     <div class="capa-footer">
       <div class="cf-item"><strong>${nome}</strong><span>Beneficiário</span></div>
-      <div class="cf-item"><strong>${opMeta.nome}</strong><span>Operadora</span></div>
-      <div class="cf-item"><strong>${planoInfo.nome.split('—')[1]?.trim()||planoInfo.nome}</strong><span>Produto</span></div>
+      <div class="cf-item"><strong>${isMulti ? _opsData.opsInfo.map(o=>OP_META[o.op].nome).join(' · ') : opMeta.nome}</strong><span>${isMulti ? 'Operadoras' : 'Operadora'}</span></div>
+      <div class="cf-item"><strong>${isMulti ? 'Comparativo de Planos' : (planoInfo.nome.split('—')[1]?.trim()||planoInfo.nome)}</strong><span>Produto</span></div>
       <div class="cf-item"><strong>${fmtData(validade)}</strong><span>Válido até</span></div>
     </div>
   </div>
 
-  <!-- RAIO-X FINANCEIRO -->
+  <!-- SEÇÃO 01: COMPARATIVO (multi) ou RAIO-X (single) -->
   <div class="sec">
+    ${isMulti ? `
+    <div class="sec-eyebrow">01 — Comparativo de Planos</div>
+    <h2 class="sec-title">Análise lado a lado das suas opções</h2>
+    <p class="sec-intro">Abaixo você compara, de forma transparente, o custo exato de cada operadora para o perfil informado. O plano recomendado é o de <strong>melhor custo-benefício</strong> para o seu caso.</p>
+    <div class="comp-ops-grid">${compOpsHTML}</div>
+    ${winnerTotalMulti > 0 ? `
+    <div class="impacto-grid" style="margin-top:1.25rem">
+      <div class="imp-card imp-rec">
+        <span class="imp-tag it-gold">⭐ Melhor opção</span>
+        <div class="imp-val iv-gold">R$ ${fm(winnerTotalMulti)}</div>
+        <div class="imp-desc"><strong>por mês</strong> — ${abrang} · ${aco} · ${OP_META[_opsData.winner].nome}</div>
+        ${mesesAteReajuste(winnerReajuste) > 0 ? `<div style="margin-top:.75rem;font-size:12px;color:var(--amber);background:#fffbeb;border-radius:var(--r-sm);padding:8px 10px">🔒 Valor <strong>congelado</strong> por aprox. <strong>${mesesAteReajuste(winnerReajuste)} ${mesesAteReajuste(winnerReajuste)===1?'mês':'meses'}</strong> — reajuste em ${winnerReajuste}.</div>` : ''}
+      </div>
+      <div class="imp-card imp-econ">
+        <span class="imp-tag it-green">💰 Impacto anual</span>
+        <div class="imp-val iv-green">R$ ${fm(winnerTotalMulti * 12)}</div>
+        <div class="imp-desc"><span class="imp-acento">Investimento total em 12 meses com o plano recomendado.</span> Planejamento inteligente que protege a saúde sem comprometer o orçamento.</div>
+      </div>
+    </div>` : ''}
+    ` : `
     <div class="sec-eyebrow">01 — Raio-X Financeiro</div>
     <h2 class="sec-title">Seu investimento, detalhado</h2>
     <p class="sec-intro">Transparência total. Abaixo você vê exatamente o que cada vida representa no seu orçamento — sem letras miúdas, sem surpresas.</p>
-
     <div class="rxf-grid">
       <div class="rxf-head">
         <span>Faixa etária</span><span>Vidas</span><span>Valor por vida</span><span>Subtotal</span>
       </div>
       ${rxRows}
     </div>
-
     ${totalMensal > 0 ? `
     <div class="impacto-grid">
       <div class="imp-card imp-rec">
@@ -785,7 +922,7 @@ async function gerar() {
         <strong>Janela de oportunidade: garanta antes do reajuste de ${reajuste}</strong>
         Contratar hoje significa congelar este valor por mais ${meses} ${meses===1?'mês':'meses'}. Após o reajuste, os valores serão recalculados e poderão ser maiores. Agir agora é uma decisão financeira inteligente.
       </div>
-    </div>` : ''}` : ''}
+    </div>` : ''}` : ''}`}
   </div>
 
   <!-- REDE DE ATENDIMENTO -->
@@ -920,31 +1057,43 @@ function compartilhar() {
 
 // ─── INTEGRAÇÃO COTADOR ────────────────────────────────────────────────
 function receiveFromCotador(data) {
-  const { nome, obs, qtds, selPlanos, activeOps, winner } = data;
+  const { nome, obs, qtds, selPlanos, activeOps, winner, opsInfo } = data;
 
+  // Armazena dados completos para gerar()
+  _opsData = { qtds, selPlanos, activeOps, winner, opsInfo: opsInfo || [] };
+
+  // Campos básicos
   document.getElementById('g-nome').value = nome || '';
   previewNome();
   if (obs) document.getElementById('g-dores').value = obs;
 
+  // Mostra seção multi-op, esconde single
+  document.getElementById('ops-single-section').style.display = 'none';
+  document.getElementById('ops-multi-section').style.display = 'block';
+  document.getElementById('ops-card-head').textContent = '🏥 Comparativo de operadoras e planos';
+
+  // Popula cards das operadoras
+  buildOpsCards(opsInfo || [], winner);
+
+  // Configura campos ocultos do winner (compatibilidade com gerar())
   document.getElementById('g-op').value = winner;
   buildPlanosSel();
-
   const pid = selPlanos[winner];
   if (pid) document.getElementById('g-plano').value = pid;
-
   const planoInfo = (PLANOS_DB[winner] || []).find(p => p.id === pid) || {};
   if (planoInfo.reajuste) document.getElementById('g-reajuste').value = planoInfo.reajuste;
 
+  // Acomodação e abrangência (campos visíveis na seção multi)
   const acoSel = document.getElementById('g-aco');
   if (planoInfo.aco) {
     const opt = [...acoSel.options].find(o => o.value === planoInfo.aco);
     if (opt) acoSel.value = planoInfo.aco;
   }
-
   const pNome = (planoInfo.nome || '').toLowerCase();
   document.getElementById('g-abrang').value =
     (winner === 'amil' && pNome.includes('platinum')) ? 'Nacional' : 'Regional';
 
+  // Coparticipação baseada no plano do winner
   let copTipo = 'parcial';
   if (pNome.includes('sem copart')) copTipo = 'sem';
   else if (pNome.includes('copart total')) copTipo = 'total';
@@ -952,23 +1101,25 @@ function receiveFromCotador(data) {
   document.getElementById('g-cop-tipo').value = copTipo;
   toggleCopOpts();
 
+  // Vidas: preenche com preços do winner para edição
   document.getElementById('vidas-body').innerHTML = '';
   vidaCount = 0;
-
-  const winnerPlan = (window.PLANOS || []).find(p => p.id === pid);
+  const winnerInfo = (opsInfo || []).find(o => o.op === winner);
   const FL = ['0 a 18 anos','19 a 23 anos','24 a 28 anos','29 a 33 anos',
               '34 a 38 anos','39 a 43 anos','44 a 48 anos','49 a 53 anos',
               '54 a 58 anos','59 ou mais'];
   qtds.forEach((q, i) => {
-    if (q > 0 && winnerPlan) addVida(FL[i], q, winnerPlan.precos[i]);
+    if (q > 0 && winnerInfo && winnerInfo.precos) addVida(FL[i], q, winnerInfo.precos[i]);
   });
   if (!qtds.some(q => q > 0)) addVida();
 
   buildHospitais();
   buildVantagens();
 
+  // Pré-seleciona vantagens de TODAS as operadoras ativas
+  const activeOpKeys = Object.keys(activeOps).filter(k => activeOps[k]);
   VANTAGENS_DB.forEach(v => {
-    if (v.ops.includes(winner)) {
+    if (v.ops.some(o => activeOpKeys.includes(o))) {
       const cb = document.querySelector(`input[name="vant"][value="${v.id}"]`);
       if (cb) { cb.checked = true; cb.closest('.vant-item')?.classList.add('checked'); }
     }
