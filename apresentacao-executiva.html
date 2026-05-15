@@ -262,13 +262,59 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
   .steps-row{grid-template-columns:repeat(3,1fr)}
 }
 
-@media(max-width:700px){
-  .g2,.g3,.g4,.impacto-grid,.steps-row,.rede-grid,.vant-apres-grid{grid-template-columns:1fr}
+/* Touch e scroll suave */
+.btn,.tab-btn,.hc-item,.vant-item,.op-comp-card{touch-action:manipulation}
+body{-webkit-overflow-scrolling:touch}
+
+@media(max-width:768px){
+  /* Topbar e tabs */
+  .topbar{padding:0 1rem;height:48px}
+  .logo-img{height:28px}
+  .pill{display:none}
+  .bar-right .btn-ghost{display:none}
+  .tab-bar{padding:0 .25rem}
+  .tab-btn{padding:8px 11px;font-size:11px}
+  /* Página */
+  .page{padding:1rem 1rem 3rem}
+  /* Grids do formulário */
+  .g2,.g3,.g4{grid-template-columns:1fr!important}
+  /* Vidas */
+  .vida-row{grid-template-columns:110px 65px 1fr 1fr}
+  /* Hospitais e vantagens */
+  .hosp-check-grid,.vant-grid{grid-template-columns:1fr}
+  /* Cards operadoras (form) */
+  .op-comp-row{grid-template-columns:1fr 1fr}
+  /* Comparativo PDF */
+  .comp-ops-grid{grid-template-columns:1fr 1fr}
+  /* Grids da apresentação gerada */
+  .impacto-grid,.steps-row,.rede-grid,.vant-apres-grid{grid-template-columns:1fr}
   .rxf-head,.rxf-row{grid-template-columns:1fr 60px 80px 90px}
   .sec{padding:1.5rem 1.25rem}
   .capa{padding:1.75rem 1.25rem}
   .capa-footer{grid-template-columns:1fr 1fr}
   .cta-box{flex-direction:column;text-align:center}
+  .sec-title{font-size:22px}
+  .capa-title{font-size:2.5rem}
+}
+@media(max-width:480px){
+  /* Topbar mínimo */
+  .topbar{height:44px}
+  .tab-btn{padding:7px 8px;font-size:10px;letter-spacing:0}
+  .bar-right{gap:4px}
+  .bar-right .btn{padding:5px 9px;font-size:11px}
+  /* Formulário */
+  .vida-row{grid-template-columns:95px 52px 1fr 1fr}
+  /* Grids do form */
+  .op-comp-row{grid-template-columns:1fr}
+  /* Apresentação gerada */
+  .rxf-head,.rxf-row{grid-template-columns:1fr 48px 68px 78px;padding:8px 10px;font-size:11px}
+  .rxf-faixa{font-size:11px}
+  .capa-footer{grid-template-columns:1fr 1fr}
+  .capa-title{font-size:2rem}
+  .sec-title{font-size:20px}
+  .comp-ops-grid{grid-template-columns:1fr}
+  /* Modal de quota fica bottom sheet */
+  .add-vida-btn{margin:8px 12px}
 }
 </style>
 <script src="dados.js"></script>
