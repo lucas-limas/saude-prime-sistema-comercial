@@ -340,7 +340,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
     <span class="pill">Mai / 2026</span>
     <button class="btn btn-ghost" onclick="limpar()">Limpar</button>
     <button class="btn btn-gold" onclick="openSend()">✉ Enviar estudo</button>
-    <button class="btn btn-ghost" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn btn-navy" onclick="criarApresentacao()">✨ Apresentação</button>
   </div>
 </header>
 <nav class="tab-bar">
@@ -972,6 +972,31 @@ function renderNotes(uP,eP,pP,aP) {
     d.innerHTML = `<span class="on-name">${m.nome}</span><span>${m.info}</span>`;
     oc.appendChild(d);
   });
+}
+
+// ── APRESENTAÇÃO ────────────────────────────────────────────────────
+function criarApresentacao() {
+  const totals = ['unity','evo','plenum','amil']
+    .filter(op => activeOps[op])
+    .map(op => {
+      const p = PLANOS.find(x => x.id === selPlanos[op]);
+      const t = p ? qtds.reduce((a,q,i) => a + q * p.precos[i], 0) : null;
+      return {op, t};
+    }).filter(x => x.t !== null);
+  const winner = totals.length
+    ? totals.sort((a,b) => a.t - b.t)[0].op
+    : (['unity','evo','plenum','amil'].find(op => activeOps[op]) || 'unity');
+  const data = {
+    nome:      document.getElementById('nome').value,
+    obs:       document.getElementById('obs').value,
+    qtds:      [...qtds],
+    selPlanos: {...selPlanos},
+    activeOps: {...activeOps},
+    winner
+  };
+  if (window.parent && window.parent.syncApres) {
+    window.parent.syncApres(data);
+  }
 }
 
 // ── NAVEGAÇÃO ───────────────────────────────────────────────────────

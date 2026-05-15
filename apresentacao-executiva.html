@@ -364,7 +364,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 
   <!-- HOSPITAIS -->
   <div class="card">
-    <div class="card-head">🏥 Hospitais de destaque (selecione até 5)</div>
+    <div class="card-head">🏥 Hospitais de destaque na apresentação</div>
     <div class="hosp-check-grid" id="hosp-checks"></div>
   </div>
 
@@ -483,6 +483,9 @@ const HOSPITAIS_DB = [
   {id:'hpai',nome:'Hospital PAI',local:'Asa Sul — DF',icon:'🏥',tags:['PS','INT'],planos:'Unity Vida · Unity Star'},
   {id:'hfrat',nome:'P.S. das Fraturas',local:'Ceilândia — DF',icon:'🦴',tags:['PS','INT'],planos:'Unity · Plenum'},
   {id:'hdaher',nome:'Hospital Daher',local:'Lago Sul — DF',icon:'🏥',tags:['PS','INT'],planos:'Plenum'},
+  {id:'hanch', nome:'Hospital Anchieta',       local:'Taguatinga / Ceilândia — DF', icon:'🏥', tags:['PS','INT','MAT'], planos:'Amil — todos os planos'},
+  {id:'hluz',  nome:'Hospital Santa Luzia',     local:'Luziânia — GO',               icon:'🏥', tags:['PS','INT'],       planos:'Amil — todos os planos'},
+  {id:'sabin', nome:'Sabin / DASA Diagnóstica', local:'Múltiplas unidades — DF',     icon:'🔬', tags:['AMB'],            planos:'Unity · Evo · Amil'},
 ];
 
 const VANTAGENS_DB = [
@@ -673,7 +676,7 @@ async function gerar() {
 
   // Hospitais
   const hospSel = [...document.querySelectorAll('input[name="hosp"]:checked')]
-    .map(cb => HOSPITAIS_DB.find(h=>h.id===cb.value)).filter(Boolean).slice(0,5);
+    .map(cb => HOSPITAIS_DB.find(h=>h.id===cb.value)).filter(Boolean);
 
   // Vantagens
   const vantSel = [...document.querySelectorAll('input[name="vant"]:checked')]
@@ -913,6 +916,67 @@ function compartilhar() {
   } else {
     navigator.clipboard.writeText(msg).then(() => alert('Mensagem copiada! Cole no WhatsApp ou e-mail.'));
   }
+}
+
+// ─── INTEGRAÇÃO COTADOR ────────────────────────────────────────────────
+function receiveFromCotador(data) {
+  const { nome, obs, qtds, selPlanos, activeOps, winner } = data;
+
+  document.getElementById('g-nome').value = nome || '';
+  previewNome();
+  if (obs) document.getElementById('g-dores').value = obs;
+
+  document.getElementById('g-op').value = winner;
+  buildPlanosSel();
+
+  const pid = selPlanos[winner];
+  if (pid) document.getElementById('g-plano').value = pid;
+
+  const planoInfo = (PLANOS_DB[winner] || []).find(p => p.id === pid) || {};
+  if (planoInfo.reajuste) document.getElementById('g-reajuste').value = planoInfo.reajuste;
+
+  const acoSel = document.getElementById('g-aco');
+  if (planoInfo.aco) {
+    const opt = [...acoSel.options].find(o => o.value === planoInfo.aco);
+    if (opt) acoSel.value = planoInfo.aco;
+  }
+
+  const pNome = (planoInfo.nome || '').toLowerCase();
+  document.getElementById('g-abrang').value =
+    (winner === 'amil' && pNome.includes('platinum')) ? 'Nacional' : 'Regional';
+
+  let copTipo = 'parcial';
+  if (pNome.includes('sem copart')) copTipo = 'sem';
+  else if (pNome.includes('copart total')) copTipo = 'total';
+  else if (pNome.includes('copart parcial') || pNome.includes('com copart')) copTipo = 'parcial';
+  document.getElementById('g-cop-tipo').value = copTipo;
+  toggleCopOpts();
+
+  document.getElementById('vidas-body').innerHTML = '';
+  vidaCount = 0;
+
+  const winnerPlan = (window.PLANOS || []).find(p => p.id === pid);
+  const FL = ['0 a 18 anos','19 a 23 anos','24 a 28 anos','29 a 33 anos',
+              '34 a 38 anos','39 a 43 anos','44 a 48 anos','49 a 53 anos',
+              '54 a 58 anos','59 ou mais'];
+  qtds.forEach((q, i) => {
+    if (q > 0 && winnerPlan) addVida(FL[i], q, winnerPlan.precos[i]);
+  });
+  if (!qtds.some(q => q > 0)) addVida();
+
+  buildHospitais();
+  buildVantagens();
+
+  VANTAGENS_DB.forEach(v => {
+    if (v.ops.includes(winner)) {
+      const cb = document.querySelector(`input[name="vant"][value="${v.id}"]`);
+      if (cb) { cb.checked = true; cb.closest('.vant-item')?.classList.add('checked'); }
+    }
+  });
+
+  showTab('gerador', document.getElementById('tbn-gerador'));
+  document.getElementById('btn-back').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────
