@@ -406,8 +406,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
             <option value="total">Coparticipação total</option>
           </select>
         </div>
-        <div class="fg" id="fg-teto" style="display:none"><label>Teto máximo mensal (R$)</label>
-          <input type="number" id="g-teto" placeholder="Ex: 450" min="0" step="0.01"></div>
         <div class="fg"><label>Plano anterior? (ARC)</label>
           <select id="g-arc">
             <option value="nao">Não tem plano anterior</option>
@@ -641,10 +639,7 @@ function calcTotal() {
 }
 
 // ─── COPART ────────────────────────────────────────────────────────────
-function toggleCopOpts() {
-  const t = document.getElementById('g-cop-tipo').value;
-  document.getElementById('fg-teto').style.display = (t==='total'||t==='parcial') ? 'block' : 'none';
-}
+function toggleCopOpts() {}
 
 // ─── HOSPITAIS ─────────────────────────────────────────────────────────
 function buildHospitais() {
@@ -735,7 +730,6 @@ async function gerar() {
   const abrang  = document.getElementById(isMulti ? 'g-abrang'   : 'g-abrang-s').value;
   const aco     = document.getElementById(isMulti ? 'g-aco'      : 'g-aco-s').value;
   const copTipo = document.getElementById('g-cop-tipo').value;
-  const teto = document.getElementById('g-teto').value;
   const arc = document.getElementById('g-arc').value;
   const p1 = document.getElementById('g-p1').value;
   const p2 = document.getElementById('g-p2').value;
@@ -764,7 +758,7 @@ async function gerar() {
 
   // Textos
   const diagnostico = gerarDiagnostico(nome, tipo, dores);
-  const copData = gerarCopartTxt(copTipo, teto);
+  const copData = gerarCopartTxt(copTipo, '');
   const arcTxt = gerarArcTxt(arc);
   const meses = mesesAteReajuste(reajuste);
   const firstName = nome.split(' ')[0];
@@ -962,14 +956,6 @@ async function gerar() {
         <div class="rb-titulo">${copData.titulo}</div>
         <div class="rb-sub">${copData.sub}</div>
         <div class="rb-txt">${copData.txt}</div>
-        ${copData.teto ? `
-        <div class="teto-box">
-          <div style="font-size:1.5rem">🛡️</div>
-          <div>
-            <div class="tb-val">R$ ${fm(parseFloat(copData.teto||450))}</div>
-            <div class="tb-txt"><strong>Trava de segurança mensal</strong>Independente de quanto usar no mês, você nunca paga mais que isso em coparticipação. O plano absorve o restante.</div>
-          </div>
-        </div>` : ''}
       </div>
     </div>
 
