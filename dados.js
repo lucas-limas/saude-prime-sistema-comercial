@@ -6,6 +6,10 @@
 //  [0-18, 19-23, 24-28, 29-33, 34-38, 39-43, 44-48, 49-53, 54-58, 59+]
 //
 //  Para adicionar nova operadora: copie um bloco {key,nome,...} e preencha.
+//  Campos de produto:
+//    id, nome, aco ('enf'|'apt'|'amb'), tipo ('adesao'|'pme'|'pf'),
+//    valores (array de 10 preços)
+//  Se "tipo" não informado, o produto é tratado como 'adesao' (padrão).
 //  NÃO edite a seção "Transformadores" abaixo da linha divisória.
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -104,6 +108,7 @@ window.PLANOS = window.SP_DATA.flatMap(op =>
     op:     op.key,
     nome:   p.nome,
     aco:    p.aco,
+    tipo:   p.tipo || 'adesao',
     precos: p.valores
   }))
 );

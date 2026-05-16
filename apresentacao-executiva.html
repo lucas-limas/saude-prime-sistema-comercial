@@ -383,6 +383,14 @@ body{-webkit-overflow-scrolling:touch}
             </select>
           </div>
         </div>
+        <div class="g2" style="margin-top:.75rem">
+          <div class="fg"><label>Tipo de contratação</label>
+            <div id="g-tipo-display" style="font-size:13px;color:var(--ink);padding:8px 11px;background:var(--cream);border:1.5px solid var(--line);border-radius:var(--r-sm);line-height:1.4">Coletivo por Adesão</div>
+          </div>
+          <div class="fg"><label>Fator moderador</label>
+            <div id="g-fator-display" style="font-size:13px;color:var(--ink);padding:8px 11px;background:var(--cream);border:1.5px solid var(--line);border-radius:var(--r-sm);line-height:1.4">—</div>
+          </div>
+        </div>
       </div>
       <!-- Campos ocultos para compatibilidade com gerar() no modo manual -->
       <select id="g-op" style="display:none" onchange="buildPlanosSel()">
@@ -1089,10 +1097,10 @@ function compartilhar() {
 
 // ─── INTEGRAÇÃO COTADOR ────────────────────────────────────────────────
 function receiveFromCotador(data) {
-  const { nome, obs, qtds, selPlanos, activeOps, winner, opsInfo } = data;
+  const { nome, obs, qtds, selPlanos, activeOps, winner, opsInfo, filtroTipo, filtroCopart } = data;
 
   // Armazena dados completos para gerar()
-  _opsData = { qtds, selPlanos, activeOps, winner, opsInfo: opsInfo || [] };
+  _opsData = { qtds, selPlanos, activeOps, winner, opsInfo: opsInfo || [], filtroTipo, filtroCopart };
 
   // Campos básicos
   document.getElementById('g-nome').value = nome || '';
@@ -1125,11 +1133,28 @@ function receiveFromCotador(data) {
   document.getElementById('g-abrang').value =
     (winner === 'amil' && pNome.includes('platinum')) ? 'Nacional' : 'Regional';
 
-  // Coparticipação baseada no plano do winner
-  let copTipo = 'parcial';
-  if (pNome.includes('sem copart')) copTipo = 'sem';
-  else if (pNome.includes('copart total')) copTipo = 'total';
-  else if (pNome.includes('copart parcial') || pNome.includes('com copart')) copTipo = 'parcial';
+  // Tipo de contratação vindo do cotador (filtroTipo)
+  const tipoMap   = {adesao:'Coletivo por Adesão', pme:'PME / Empresarial', pf:'Pessoa Física'};
+  const copartMap = {todos:'Todos os planos', sem:'Sem coparticipação', parcial:'Com coparticipação', total:'Coparticipação total'};
+  const tipoDisplayEl  = document.getElementById('g-tipo-display');
+  const fatorDisplayEl = document.getElementById('g-fator-display');
+  if (tipoDisplayEl)  tipoDisplayEl.textContent  = tipoMap[filtroTipo]   || 'Coletivo por Adesão';
+  if (fatorDisplayEl) fatorDisplayEl.textContent = copartMap[filtroCopart] || '—';
+  if (filtroTipo && filtroTipo !== 'pf') {
+    const tipoField = document.getElementById('g-tipo');
+    if (tipoField) tipoField.value = filtroTipo; // 'adesao' ou 'pme'
+  }
+
+  // Coparticipação: usa filtro do cotador se específico, senão deriva do plano do winner
+  let copTipo;
+  if (filtroCopart && filtroCopart !== 'todos') {
+    copTipo = filtroCopart;
+  } else {
+    copTipo = 'parcial';
+    if (pNome.includes('sem copart')) copTipo = 'sem';
+    else if (pNome.includes('copart total')) copTipo = 'total';
+    else if (pNome.includes('copart parcial') || pNome.includes('com copart')) copTipo = 'parcial';
+  }
   document.getElementById('g-cop-tipo').value = copTipo;
   toggleCopOpts();
 
