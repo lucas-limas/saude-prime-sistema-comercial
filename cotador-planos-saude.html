@@ -993,10 +993,10 @@ function toggleOp(op) {
 // ── RENDER ───────────────────────────────────────────────────────────
 function render() {
   const tv = qtds.reduce((a,b)=>a+b,0);
-  const uP = activeOps.unity  ? PLANOS.find(p=>p.id===selPlanos.unity)  : null;
-  const eP = activeOps.evo    ? PLANOS.find(p=>p.id===selPlanos.evo)    : null;
-  const pP = activeOps.plenum ? PLANOS.find(p=>p.id===selPlanos.plenum) : null;
-  const aP = activeOps.amil   ? PLANOS.find(p=>p.id===selPlanos.amil)   : null;
+  const uP = activeOps.unity  && planosFiltered('unity').length  > 0 ? PLANOS.find(p=>p.id===selPlanos.unity)  : null;
+  const eP = activeOps.evo    && planosFiltered('evo').length    > 0 ? PLANOS.find(p=>p.id===selPlanos.evo)    : null;
+  const pP = activeOps.plenum && planosFiltered('plenum').length > 0 ? PLANOS.find(p=>p.id===selPlanos.plenum) : null;
+  const aP = activeOps.amil   && planosFiltered('amil').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.amil)   : null;
 
   document.getElementById('placeholder').style.display = tv===0 ? 'block' : 'none';
   document.getElementById('result-wrap').style.display = tv>0 ? 'block' : 'none';
@@ -1099,7 +1099,7 @@ function renderNotes(uP,eP,pP,aP) {
 function criarApresentacao() {
   const opsOrder = ['unity','evo','plenum','amil'];
   const opsInfo = opsOrder
-    .filter(op => activeOps[op])
+    .filter(op => activeOps[op] && planosFiltered(op).length > 0)
     .map(op => {
       const pid = selPlanos[op];
       const p = PLANOS.find(x => x.id === pid);
