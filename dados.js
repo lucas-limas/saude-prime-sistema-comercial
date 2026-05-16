@@ -93,6 +93,21 @@ window.SP_DATA = [
       { id:'a19', nome:'Platinum Mais R1 QP (Apt) — Copart Parcial', aco:'apt', valores:[ 976.32,1142.28,1393.60,1672.32,1755.95, 1931.53, 2414.44, 2655.86, 3319.84, 5809.72] },
       { id:'a20', nome:'Platinum Mais R2 QP (Apt) — Copart Parcial', aco:'apt', valores:[ 985.99,1153.60,1407.40,1688.87,1773.34, 1950.66, 2438.34, 2682.17, 3352.69, 5867.23] },
     ]
+  },
+
+  // ── MEDSENIOR ─────────────────────────────────────────────────────────
+  {
+    key: 'medsenior', nome: 'MedSênior',
+    cor: 'var(--medsenior)', cls: 'on-ms',
+    reajuste: 'A definir',
+    info: 'Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas',
+    produtos: [
+      // Preços disponíveis somente a partir dos 49 anos (índices 0–6 = 0)
+      { id:'ms1', nome:'Sem copart — DF3 Enfermaria',      aco:'enf', tipo:'pf', valores:[0,0,0,0,0,0,0,  803.50,  964.20, 1263.10] },
+      { id:'ms2', nome:'Sem copart — DF4 Apartamento',     aco:'apt', tipo:'pf', valores:[0,0,0,0,0,0,0,  964.19, 1157.03, 1515.71] },
+      { id:'ms3', nome:'Sem copart — Black Apartamento',   aco:'apt', tipo:'pf', valores:[0,0,0,0,0,0,0, 1205.92, 1447.10, 1895.70] },
+      { id:'ms4', nome:'Sem copart — Infinite Apartamento',aco:'apt', tipo:'pf', valores:[0,0,0,0,0,0,0, 1818.30, 2181.96, 2858.37] },
+    ]
   }
 
 ];
