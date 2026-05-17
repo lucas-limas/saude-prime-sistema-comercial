@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ erro: 'Erro ao realizar login.' });
+    res.status(500).json({ erro: 'Erro ao realizar login.', debug: err.message });
   }
 });
 
