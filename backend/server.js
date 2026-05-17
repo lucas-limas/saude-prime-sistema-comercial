@@ -10,8 +10,12 @@ const PORT = process.env.PORT || 3001;
 // ── SEGURANÇA ────────────────────────────────────────────────────────────────
 app.use(helmet());
 
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',')
+  : ['http://localhost:5500', 'http://127.0.0.1:5500', 'null'];
+
 app.use(cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'null'],
+  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
   credentials: true,
 }));
 
@@ -49,8 +53,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ erro: 'Erro interno do servidor.' });
 });
 
-// ── INICIAR ──────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`\n✅ Saúde Prime API rodando em http://localhost:${PORT}`);
-  console.log(`   Health check: http://localhost:${PORT}/api/status\n`);
-});
+// ── INICIAR (apenas localmente; no Vercel é exportado como serverless) ────────
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n✅ Saúde Prime API rodando em http://localhost:${PORT}`);
+    console.log(`   Health check: http://localhost:${PORT}/api/status\n`);
+  });
+}
+
+module.exports = app;

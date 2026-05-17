@@ -1178,7 +1178,7 @@ function renderNotes(uP,eP,pP,aP,mP) {
 function salvarCotacao(payload) {
   const token = window.top.sessionStorage.getItem('sp_token');
   if (!token) return;
-  fetch('http://localhost:3001/api/cotacoes', {
+  fetch('/api/cotacoes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
     body: JSON.stringify(payload),
