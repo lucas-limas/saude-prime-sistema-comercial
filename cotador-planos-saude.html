@@ -1175,16 +1175,6 @@ function renderNotes(uP,eP,pP,aP,mP) {
 }
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
-function salvarCotacao(payload) {
-  const token = window.top.sessionStorage.getItem('sp_token');
-  if (!token) return;
-  fetch('/api/cotacoes', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify(payload),
-  }).catch(() => {});
-}
-
 function criarApresentacao() {
   const opsOrder = ['unity','evo','plenum','amil','medsenior'];
   const opsInfo = opsOrder
@@ -1200,7 +1190,6 @@ function criarApresentacao() {
   const winner = withTotal.length
     ? withTotal.slice().sort((a,b) => a.total - b.total)[0].op
     : (opsOrder.find(op => activeOps[op]) || 'unity');
-  const totalWinner = withTotal.find(x => x.op === winner)?.total || null;
   const data = {
     nome:        document.getElementById('nome').value,
     obs:         document.getElementById('obs').value,
@@ -1212,19 +1201,6 @@ function criarApresentacao() {
     filtroTipo,
     filtroCopart
   };
-
-  salvarCotacao({
-    cliente_nome:  data.nome || null,
-    cliente_obs:   data.obs  || null,
-    filtro_tipo:   filtroTipo   || null,
-    filtro_copart: filtroCopart || null,
-    qtds:          [...qtds],
-    sel_planos:    {...selPlanos},
-    active_ops:    {...activeOps},
-    ops_info:      withTotal,
-    winner:        winner        || null,
-    total_winner:  totalWinner,
-  });
 
   if (window.parent && window.parent.syncApres) {
     window.parent.syncApres(data);
