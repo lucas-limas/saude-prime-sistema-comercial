@@ -581,34 +581,55 @@ const OP_META = window.OP_META || {
 
 const HOSPITAIS_DB = [
   // ── Unity ──────────────────────────────────────────────────────────────
-  {id:'hsl',           nome:'Hospital Santa Lúcia',          local:'Asa Norte / Gama / Taguatinga — DF', icon:'🏥', tags:['PS','INT'], ops:['unity'],                         planos:'Unity Vida · Unity Star'},
-  {id:'hsm',           nome:'Hospital São Mateus',           local:'Cruzeiro — DF',                      icon:'🏥', tags:['PS','INT'], ops:['unity','plenum'],                 planos:'Unity · Plenum'},
-  {id:'hpai',          nome:'Hospital PAI',                  local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['unity'],                         planos:'Unity Vida · Unity Star'},
-  {id:'hamma',         nome:'Hospital AMMA',                 local:'Águas Claras — DF',                  icon:'🏥', tags:['INT','AMB'],ops:['unity','evo'],                   planos:'Unity · Evo'},
+  {id:'hsl',    nome:'Hospital Santa Lúcia',         local:'Asa Norte / Gama / Taguatinga — DF', icon:'🏥', tags:['PS','INT'], ops:['unity','segurosunimed'],                              planos:'Unity · Seguros Unimed (Superior+)'},
+  {id:'hsm',    nome:'Hospital São Mateus',          local:'Cruzeiro — DF',                      icon:'🏥', tags:['PS','INT'], ops:['unity','plenum','segurosunimed'],                      planos:'Unity · Plenum · Seguros Unimed'},
+  {id:'hpai',   nome:'Hospital PAI',                 local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['unity'],                                              planos:'Unity Vida · Unity Star'},
+  {id:'hamma',  nome:'Hospital AMMA',                local:'Águas Claras — DF',                  icon:'🏥', tags:['INT','AMB'],ops:['unity','evo'],                                        planos:'Unity · Evo'},
   // ── Evo ────────────────────────────────────────────────────────────────
-  {id:'hbras',         nome:'Hospital Brasília',             local:'Lago Sul / Águas Claras — DF',       icon:'🏥', tags:['PS','INT'], ops:['evo','plenum','medsenior'],       planos:'Evo ONE e NOW · Plenum · MedSênior Black/Infinite'},
-  {id:'amparo',        nome:'Clínica Amparo (Grupo Sabin)',  local:'Asa Norte / Sudoeste / Taguatinga',  icon:'🩺', tags:['AMB'],      ops:['evo'],                          planos:'Evo ONE — Atenção Primária'},
+  {id:'hbras',  nome:'Hospital Brasília',            local:'Lago Sul / Águas Claras — DF',       icon:'🏥', tags:['PS','INT'], ops:['evo','plenum','medsenior','segurosunimed'],             planos:'Evo · Plenum · MedSênior · Seguros Unimed'},
+  {id:'amparo', nome:'Clínica Amparo (Grupo Sabin)', local:'Asa Norte / Sudoeste / Taguatinga',  icon:'🩺', tags:['AMB'],      ops:['evo'],                                               planos:'Evo ONE — Atenção Primária'},
   // ── Unity + Evo + Plenum ───────────────────────────────────────────────
-  {id:'hhome',         nome:'Hospital Home',                 local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['unity','evo','plenum','medsenior'], planos:'Unity Star · Evo NOW · Plenum · MedSênior'},
-  {id:'hmb',           nome:'Maternidade Brasília',          local:'Sudoeste — DF',                      icon:'👶', tags:['INT','MAT'],ops:['unity','evo','plenum'],           planos:'Unity Star · Evo · Plenum'},
-  {id:'hfrat',         nome:'P.S. das Fraturas',            local:'Ceilândia — DF',                     icon:'🦴', tags:['PS','INT'], ops:['unity','plenum'],                 planos:'Unity · Plenum'},
+  {id:'hhome',  nome:'Hospital Home',                local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['unity','evo','plenum','medsenior','segurosunimed'],     planos:'Unity Star · Evo NOW · Plenum · MedSênior · Seguros Unimed'},
+  {id:'hmb',    nome:'Maternidade Brasília',         local:'Sudoeste — DF',                      icon:'👶', tags:['INT','MAT'],ops:['unity','evo','plenum','segurosunimed'],                planos:'Unity Star · Evo · Plenum · Seguros Unimed'},
+  {id:'hfrat',  nome:'P.S. das Fraturas',           local:'Ceilândia — DF',                     icon:'🦴', tags:['PS','INT'], ops:['unity','plenum','segurosunimed'],                      planos:'Unity · Plenum · Seguros Unimed'},
   // ── Plenum + MedSênior ─────────────────────────────────────────────────
-  {id:'halv',          nome:'Hospital Alvorada Brasília',    local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['plenum','medsenior'],             planos:'Plenum · MedSênior — todos os planos'},
-  {id:'hdaher',        nome:'Hospital Daher',                local:'Lago Sul — DF',                      icon:'🏥', tags:['PS','INT'], ops:['plenum','medsenior'],             planos:'Plenum · MedSênior — todos os planos'},
-  {id:'hsiriol',       nome:'Hospital Sírio-Libanês',        local:'Asa Sul — DF',                       icon:'⭐', tags:['INT'],      ops:['plenum','medsenior'],             planos:'Plenum Sigma · MedSênior Black / Infinite'},
+  {id:'halv',   nome:'Hospital Alvorada Brasília',   local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['plenum','medsenior','segurosunimed'],                  planos:'Plenum · MedSênior · Seguros Unimed'},
+  {id:'hdaher', nome:'Hospital Daher',               local:'Lago Sul — DF',                      icon:'🏥', tags:['PS','INT'], ops:['plenum','medsenior','segurosunimed'],                  planos:'Plenum · MedSênior · Seguros Unimed'},
+  {id:'hsiriol',nome:'Hospital Sírio-Libanês',       local:'Asa Sul — DF',                       icon:'⭐', tags:['INT'],      ops:['plenum','medsenior','segurosunimed'],                  planos:'Plenum Sigma · MedSênior · Seguros Unimed (Superior+)'},
   // ── Amil ───────────────────────────────────────────────────────────────
-  {id:'hbrasilia_amil',nome:'Hospital Brasília (Amil)',      local:'Lago Sul / Águas Claras — DF',       icon:'🏥', tags:['PS','INT'], ops:['amil'],                          planos:'Amil — todos os planos'},
-  {id:'hanch',         nome:'Hospital Anchieta',             local:'Taguatinga / Ceilândia — DF',        icon:'🏥', tags:['PS','INT'], ops:['amil'],                          planos:'Amil — todos os planos'},
-  {id:'hluz',          nome:'Hospital Santa Luzia',          local:'Luziânia — GO',                      icon:'🏥', tags:['PS','INT'], ops:['amil'],                          planos:'Amil — todos os planos'},
+  {id:'hbrasilia_amil',nome:'Hospital Brasília (Amil)',local:'Lago Sul / Águas Claras — DF',     icon:'🏥', tags:['PS','INT'], ops:['amil'],                                              planos:'Amil — todos os planos'},
+  {id:'hanch',  nome:'Hospital Anchieta',            local:'Taguatinga / Ceilândia — DF',        icon:'🏥', tags:['PS','INT'], ops:['amil','segurosunimed'],                               planos:'Amil · Seguros Unimed'},
+  {id:'hluz',   nome:'Hospital Santa Luzia',         local:'Luziânia — GO',                      icon:'🏥', tags:['PS','INT'], ops:['amil'],                                              planos:'Amil — todos os planos'},
   // ── Compartilhados (Labs/Diag) ─────────────────────────────────────────
-  {id:'sabin',         nome:'Sabin / DASA Diagnóstica',      local:'Múltiplas unidades — DF',            icon:'🔬', tags:['AMB'],      ops:['unity','evo','amil','medsenior','segurosunimed'], planos:'Unity · Evo · Amil · MedSênior · Seguros Unimed'},
-  // ── Seguros Unimed ─────────────────────────────────────────────────────
-  {id:'hsu_rede',      nome:'Rede Credenciada Unimed — DF',  local:'Hospitais e clínicas Unimed — DF',   icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'],                planos:'Seguros Unimed — todos os planos'},
+  {id:'sabin',  nome:'Sabin / DASA Diagnóstica',     local:'Múltiplas unidades — DF',            icon:'🔬', tags:['AMB'],      ops:['unity','evo','amil','medsenior','segurosunimed'],       planos:'Unity · Evo · Amil · MedSênior · Seguros Unimed'},
+  {id:'fleury', nome:'Fleury / Exame Diagnóstica',   local:'Brasília — DF',                      icon:'🔬', tags:['AMB'],      ops:['segurosunimed'],                                      planos:'Seguros Unimed — todos os planos'},
+  // ── Seguros Unimed — Hospitais exclusivos ──────────────────────────────
+  {id:'hsu_home2',   nome:'Home Hospital',                  local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_anna',    nome:'Hospital Anna Nery',              local:'Brasília — DF',                      icon:'🏥', tags:['PS'],       ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_sabin_h', nome:'Hospital Dr Albert Sabin',        local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_maux',    nome:'Hospital Maria Auxiliadora',       local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_pnorte',  nome:'Hospital Prontonorte',             local:'Norte do DF',                        icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_sfranc',  nome:'Hospital São Francisco',           local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT','MAT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_urol',    nome:'Hospital Urológico de Brasília',   local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_oftal',   nome:'Oftalmed / Hospital da Visão',     local:'Brasília — DF',                      icon:'👁', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_unimed',  nome:'Unimed Espaço Saúde Cuidar Mais', local:'Brasília — DF',                      icon:'🏥', tags:['INT','AMB'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_hob_bsb', nome:'HOB — Brasília',                   local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
+  {id:'hsu_hob_tag', nome:'HOB — Taguatinga Sul',             local:'Taguatinga — DF',                    icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
+  {id:'hsu_agclaras',nome:'Hospital Águas Claras',             local:'Águas Claras — DF',                  icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
+  {id:'hsu_spacini', nome:'Hospital Pacini',                   local:'Brasília — DF',                      icon:'🏥', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
+  {id:'hsu_shelen',  nome:'Hospital Santa Helena',             local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT','MAT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
+  {id:'hsu_coracao', nome:'Hospital do Coração do Brasil',     local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
+  {id:'hsu_sluz_df', nome:'Hospital Santa Luzia',              local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
+  {id:'hsu_rm',      nome:'RM Clínica de Reabilitação',        local:'Brasília — DF',                      icon:'🏥', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
+  {id:'hsu_cbv',     nome:'CBV — Centro Brasileiro da Visão',  local:'Brasília — DF',                      icon:'👁', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
+  {id:'hsu_dfstar',  nome:'Hospital DF Star',                  local:'Brasília — DF',                      icon:'⭐', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Sênior'},
+  {id:'hsu_recanto', nome:'Clínica Recanto',                   local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
+  {id:'hsu_estanc',  nome:'Estância Resiliência',              local:'Brasília — DF',                      icon:'🏥', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
   // ── MedSênior exclusivos ───────────────────────────────────────────────
-  {id:'hms_sig',       nome:'MedSênior — P.A. 24h SIG',      local:'SIG — Brasília/DF',                 icon:'🏥', tags:['PS','CD'],  ops:['medsenior'],                    planos:'MedSênior — todos os planos'},
-  {id:'hms_tag',       nome:'MedSênior — P.A. 24h Taguatinga',local:'Taguatinga — DF',                  icon:'🏥', tags:['PS','CD'],  ops:['medsenior'],                    planos:'MedSênior — todos os planos'},
-  {id:'hms_units',     nome:'MedSênior — Unidades Ambulatoriais',local:'Asa Sul / Taguatinga / Águas Claras — DF', icon:'🏥', tags:['AMB'], ops:['medsenior'],             planos:'MedSênior — todos os planos'},
-  {id:'hsmarta',       nome:'Hospital Santa Marta',           local:'Brasília — DF',                     icon:'🏥', tags:['PS','INT'], ops:['medsenior'],                    planos:'MedSênior — todos os planos'},
+  {id:'hms_sig',   nome:'MedSênior — P.A. 24h SIG',            local:'SIG — Brasília/DF',                 icon:'🏥', tags:['PS','CD'],  ops:['medsenior'], planos:'MedSênior — todos os planos'},
+  {id:'hms_tag',   nome:'MedSênior — P.A. 24h Taguatinga',     local:'Taguatinga — DF',                   icon:'🏥', tags:['PS','CD'],  ops:['medsenior'], planos:'MedSênior — todos os planos'},
+  {id:'hms_units', nome:'MedSênior — Unidades Ambulatoriais',  local:'Asa Sul / Taguatinga / Águas Claras — DF', icon:'🏥', tags:['AMB'], ops:['medsenior'], planos:'MedSênior — todos os planos'},
+  {id:'hsmarta',   nome:'Hospital Santa Marta',                 local:'Brasília — DF',                     icon:'🏥', tags:['PS','INT'], ops:['medsenior','segurosunimed'], planos:'MedSênior · Seguros Unimed'},
 ];
 
 const VANTAGENS_DB = [
