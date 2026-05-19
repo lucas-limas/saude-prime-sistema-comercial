@@ -230,6 +230,24 @@ window.SP_DATA = [
       { id:'ms7', nome:'PME — Black Apartamento',            aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0,0, 1085.34, 1302.41, 1706.16] },
       { id:'ms8', nome:'PME — Infinite Apartamento',         aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0,0, 1487.70, 1785.24, 2338.66] },
     ]
+  },
+
+  // ── PORTO SAÚDE ────────────────────────────────────────────────────────
+  {
+    key: 'portosaude', nome: 'Porto Saúde',
+    cor: 'var(--portosaude)', cls: 'on-ps',
+    reajuste: 'A definir',
+    info: 'PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação · Rede credenciada DF · Porto Seguro Saúde',
+    produtos: [
+      { id:'ps_1', nome:'Sem copart — Bronze Brasília Pro',  aco:'enf', tipo:'pme', valores:[243.53,295.33,356.27,407.87,441.93,456.40,545.18,586.91,725.17,1218.96] },
+      { id:'ps_2', nome:'Com copart — Bronze Brasília Pro',  aco:'enf', tipo:'pme', valores:[187.52,227.41,274.33,314.06,340.29,351.43,419.79,451.92,558.38, 938.60] },
+      { id:'ps_3', nome:'Sem copart — Prata Brasília Pro',   aco:'enf', tipo:'pme', valores:[287.92,349.16,421.20,482.21,522.48,539.58,644.54,693.88,857.34,1441.12] },
+      { id:'ps_4', nome:'Com copart — Prata Brasília Pro',   aco:'enf', tipo:'pme', valores:[221.70,268.85,324.33,371.30,402.31,415.48,496.30,534.29,660.15,1109.66] },
+      { id:'ps_5', nome:'Sem copart — P420',                 aco:'apt', tipo:'pme', valores:[414.59,502.78,606.52,694.36,752.35,776.98,928.12,999.16,1234.54,2075.16] },
+      { id:'ps_6', nome:'Com copart — P420',                 aco:'apt', tipo:'pme', valores:[339.96,412.28,497.35,569.38,616.92,637.12,761.06,819.31,1012.32,1701.53] },
+      { id:'ps_7', nome:'Sem copart — Ouro Brasília Pro',    aco:'apt', tipo:'pme', valores:[381.88,463.11,558.66,639.57,692.98,715.67,854.89,920.32,1137.13,1911.42] },
+      { id:'ps_8', nome:'Com copart — Ouro Brasília Pro',    aco:'apt', tipo:'pme', valores:[313.14,379.75,458.10,524.45,568.25,586.85,701.01,754.66,932.44,1567.36] },
+    ]
   }
 
 ];
