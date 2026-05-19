@@ -13,8 +13,8 @@
   --cream:#faf9f6;--white:#fff;
   --line:#e8e4dc;--line2:#ccc9be;
   --ink:#1a1916;--ink2:#4a5568;--ink3:#8a97a6;
-  --unity:#0f2340;--evo:#5c1a40;--plenum:#0a4028;--medsenior:#95C13D;
-  --unity-bg:#edf1f7;--evo-bg:#f7edf4;--plenum-bg:#edf5f0;
+  --unity:#0f2340;--evo:#5c1a40;--plenum:#0a4028;--medsenior:#95C13D;--seguros-unimed:#0074BE;
+  --unity-bg:#edf1f7;--evo-bg:#f7edf4;--plenum-bg:#edf5f0;--seguros-unimed-bg:#e0eefd;
   --green:#0a6b3a;--green-bg:#e6f5ee;
   --red:#8b2515;--amber:#92400e;
   --r:10px;--r-sm:6px;--r-lg:14px;
@@ -601,7 +601,9 @@ const HOSPITAIS_DB = [
   {id:'hanch',         nome:'Hospital Anchieta',             local:'Taguatinga / Ceilândia — DF',        icon:'🏥', tags:['PS','INT'], ops:['amil'],                          planos:'Amil — todos os planos'},
   {id:'hluz',          nome:'Hospital Santa Luzia',          local:'Luziânia — GO',                      icon:'🏥', tags:['PS','INT'], ops:['amil'],                          planos:'Amil — todos os planos'},
   // ── Compartilhados (Labs/Diag) ─────────────────────────────────────────
-  {id:'sabin',         nome:'Sabin / DASA Diagnóstica',      local:'Múltiplas unidades — DF',            icon:'🔬', tags:['AMB'],      ops:['unity','evo','amil','medsenior'], planos:'Unity · Evo · Amil · MedSênior'},
+  {id:'sabin',         nome:'Sabin / DASA Diagnóstica',      local:'Múltiplas unidades — DF',            icon:'🔬', tags:['AMB'],      ops:['unity','evo','amil','medsenior','segurosunimed'], planos:'Unity · Evo · Amil · MedSênior · Seguros Unimed'},
+  // ── Seguros Unimed ─────────────────────────────────────────────────────
+  {id:'hsu_rede',      nome:'Rede Credenciada Unimed — DF',  local:'Hospitais e clínicas Unimed — DF',   icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'],                planos:'Seguros Unimed — todos os planos'},
   // ── MedSênior exclusivos ───────────────────────────────────────────────
   {id:'hms_sig',       nome:'MedSênior — P.A. 24h SIG',      local:'SIG — Brasília/DF',                 icon:'🏥', tags:['PS','CD'],  ops:['medsenior'],                    planos:'MedSênior — todos os planos'},
   {id:'hms_tag',       nome:'MedSênior — P.A. 24h Taguatinga',local:'Taguatinga — DF',                  icon:'🏥', tags:['PS','CD'],  ops:['medsenior'],                    planos:'MedSênior — todos os planos'},
