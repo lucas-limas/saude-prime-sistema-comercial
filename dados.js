@@ -22,8 +22,6 @@ window.SP_DATA = [
     reajuste: 'Mai/2026',
     info: 'Adm. Esplendor · Mai/2026 · Taxa assoc. R$ 5,00 · Assoc: UEB, UVA, UNIPRO, ANC, UNSP · Telemedicina gratuita',
     produtos: [
-      { id:'u1', nome:'Sem copart — Life Vital',  aco:'amb', valores:[189.94, 201.35, 231.55, 259.32, 311.19, 357.87, 450.91, 554.62,  721.01, 1045.46] },
-      { id:'u2', nome:'Com copart — Life Vital',  aco:'amb', valores:[138.34, 146.64, 168.64, 188.87, 226.65, 260.65, 328.41, 403.95,  525.13,  761.45] },
       { id:'u3', nome:'Sem copart — Unity Vida',  aco:'enf', valores:[348.34, 369.25, 424.63, 475.59, 570.69, 656.31, 826.94,1017.15, 1322.28, 1917.30] },
       { id:'u4', nome:'Com copart — Unity Vida',  aco:'enf', valores:[248.94, 263.88, 303.46, 339.87, 407.85, 469.02, 590.97, 726.90,  944.97, 1370.20] },
       { id:'u5', nome:'Sem copart — Unity Star',  aco:'apt', valores:[433.42, 459.42, 528.34, 591.74, 710.08, 816.60,1028.91,1265.56, 1645.23, 2385.58] },
