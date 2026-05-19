@@ -248,7 +248,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rede-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1rem}
 .rede-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .rede-head{padding:11px 14px}
-.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}
+.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}
 .rh-name{font-family:"Playfair Display",serif;font-size:17px;color:#fff;letter-spacing:-.1px}
 .rh-adm{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.04em}
 .rede-body{padding:10px 13px}
@@ -256,7 +256,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rg-title{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .rg-item{display:flex;gap:5px;font-size:11px;color:var(--ink);padding:2px 0;line-height:1.35;align-items:baseline}
 .rg-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}
+.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}
 .rloc{font-size:10px;color:var(--ink3)}
 .rtag{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:2px;letter-spacing:.04em;vertical-align:middle;line-height:1.6}
 .rt-ps{background:#fee2e2;color:#991b1b}.rt-int{background:#dbeafe;color:#1e40af}
@@ -273,6 +273,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .car-btn.on-p{background:var(--plenum);border-color:var(--plenum);color:#fff}
 .car-btn.on-a{background:var(--amil);border-color:var(--amil);color:#fff}
 .car-btn.on-ms{background:var(--medsenior-dark);border-color:var(--medsenior-dark);color:#fff}
+.car-btn.on-su{background:var(--seguros-unimed);border-color:var(--seguros-unimed);color:#fff}
 .car-panel{display:none}.car-panel.on{display:grid;grid-template-columns:1fr 280px;gap:1.1rem;align-items:start}
 .car-tbl{width:100%;border-collapse:collapse;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);font-size:11px}
 .car-tbl thead tr{background:var(--navy)}
@@ -679,6 +680,38 @@ body{-webkit-overflow-scrolling:touch}
       </div>
       <div class="rede-foot">Planos Pessoa Física — faixas etárias a partir de 49 anos. Sem coparticipação. Oficinas do Bem inclusas.</div>
     </div>
+    <div class="rede-card">
+      <div class="rede-head rh-su"><div class="rh-name">Seguros Unimed</div><div class="rh-adm">Adm. própria · Abrangência DF + Regiões Administrativas</div></div>
+      <div class="rede-body">
+        <div class="rg"><div class="rg-title">Todos os planos — incl. Essencial I / II / III / IV</div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Santa Lúcia <span class="rloc">Asa Norte / Gama / Taguatinga</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. São Mateus <span class="rloc">Cruzeiro</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Home · Hosp. Alvorada · Hosp. Daher<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Maternidade Brasília <span class="rloc">Sudoeste</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>P.S. das Fraturas <span class="rloc">Ceilândia</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Anchieta <span class="rloc">Taguatinga / Ceilândia</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Santa Marta · Anna Nery · Maria Auxiliadora · Prontonorte<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. São Francisco <span class="rloc">Brasília</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Urológico · Oftalmed / Hosp. da Visão<span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Unimed Espaço Saúde Cuidar Mais · Hosp. Dr Albert Sabin<span class="rtag rt-int">INT</span><span class="rtag rt-amb">AMB</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">A partir do Completo</div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>HOB — Brasília e Taguatinga Sul<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Águas Claras · Hosp. Pacini<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Santa Helena <span class="rloc">Brasília</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">A partir do Superior</div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. do Coração do Brasil · Hosp. Santa Luzia<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Hosp. Sírio-Libanês <span class="rloc">Asa Sul</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>RM Clínica de Reabilitação · CBV — Centro Brasileiro da Visão<span class="rtag rt-int">INT</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">Laboratórios</div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Sabin / DASA Diagnóstica <span class="rloc">Múltiplas unidades</span><span class="rtag rt-amb">AMB</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-su"></span><span>Fleury / Exame Diagnóstica <span class="rloc">Brasília</span><span class="rtag rt-amb">AMB</span></span></div>
+        </div>
+      </div>
+      <div class="rede-foot">Urgência/Emergência nacional via UE Seguros Unimed (+1.000 prestadores). Planos Essencial: abrangência grupo de municípios (DF + RAs). Confirme rede em segurosunimed.com.br/guia-medico.</div>
+    </div>
   </div>
   <div class="card" style="padding:.75rem 1.25rem">
     <div class="legend">
@@ -700,6 +733,7 @@ body{-webkit-overflow-scrolling:touch}
     <button class="car-btn" onclick="showCar('plenum',this)">Plenum Saúde</button>
     <button class="car-btn" onclick="showCar('amil',this)">Amil</button>
     <button class="car-btn" onclick="showCar('medsenior',this)">MedSênior</button>
+    <button class="car-btn" onclick="showCar('segurosunimed',this)">Seguros Unimed</button>
   </div>
   <div class="car-panel on" id="car-unity">
     <div><table class="car-tbl">
@@ -861,24 +895,31 @@ body{-webkit-overflow-scrolling:touch}
   </div>
   <div class="car-panel" id="car-segurosunimed">
     <div><table class="car-tbl">
-      <thead><tr style="background:var(--seguros-unimed)"><th>Procedimento</th><th>PME Nacional</th></tr></thead>
+      <thead><tr style="background:var(--seguros-unimed)"><th>Procedimento</th><th>Padrão</th><th>Com ARC</th></tr></thead>
       <tbody>
-        <tr><td><div class="proc">Urgência / Emergência</div></td><td class="cv-g">24h</td></tr>
-        <tr><td><div class="proc">Consultas Eletivas</div></td><td class="cv-r">30 dias</td></tr>
-        <tr><td><div class="proc">Exames Simples</div></td><td class="cv-r">30 dias</td></tr>
-        <tr><td><div class="proc">Exames Complementares</div></td><td class="cv-r">90 dias</td></tr>
-        <tr><td><div class="proc">Exames / Proc. Especiais</div></td><td class="cv-r">180 dias</td></tr>
-        <tr><td><div class="proc">Internações e Cirurgias</div></td><td class="cv-r">180 dias</td></tr>
-        <tr><td><div class="proc">Parto a Termo</div></td><td class="cv-r">300 dias</td></tr>
-        <tr><td><div class="proc">CPT — Doenças Preexistentes</div></td><td style="text-align:center" class="cv-r">24 meses</td></tr>
+        <tr><td><div class="proc">Urgência / Emergência</div></td><td class="cv-g">24h</td><td class="cv-g">24h</td></tr>
+        <tr><td><div class="proc">Consultas Eletivas</div></td><td class="cv-r">30 dias</td><td class="cv-g">Início vigência</td></tr>
+        <tr><td><div class="proc">Exames Simples</div><div class="proc-sub">Hemograma, glicose, urina, ECG</div></td><td class="cv-r">30 dias</td><td class="cv-g">Início vigência</td></tr>
+        <tr><td><div class="proc">Exames Complementares</div><div class="proc-sub">Ultrassom, RX, EEG</div></td><td class="cv-r">90 dias</td><td class="cv-y">90 dias</td></tr>
+        <tr><td><div class="proc">Exames / Proc. Especiais</div><div class="proc-sub">RM, tomografia, endoscopia, fisioterapia</div></td><td class="cv-r">180 dias</td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">Internações e Cirurgias</div></td><td class="cv-r">180 dias</td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">Parto a Termo</div></td><td class="cv-r">300 dias</td><td class="cv-r">300 dias</td></tr>
+        <tr><td><div class="proc">CPT — Doenças Preexistentes</div></td><td colspan="2" style="text-align:center" class="cv-r">24 meses</td></tr>
       </tbody>
     </table></div>
     <div class="car-side">
-      <div class="sc"><div class="sc-title">Plano PME <span class="sc-badge" style="background:var(--seguros-unimed)">Nacional</span></div>
-        <div class="sc-item">Compulsório: 2–4 · 5–29 · 30–99 vidas</div>
-        <div class="sc-item">Facultativo: 2–4 · 5–29 · 30–99 vidas</div>
-        <div class="sc-item">Planos: Compacto · Efetivo · Completo · Superior · Superior Plus · Sênior</div>
-        <div class="sc-item">Tabela: julho/2025 — ANS nº 00.070-1</div>
+      <div class="sc"><div class="sc-title">Planos PME disponíveis</div>
+        <div class="sc-item"><strong>Essencial I / II</strong> — Sem coparticipação · Enf / Apt</div>
+        <div class="sc-item"><strong>Essencial III / IV</strong> — Com coparticipação · Enf / Apt</div>
+        <div class="sc-item"><strong>Compacto · Efetivo · Completo · Superior · Superior Plus · Sênior</strong></div>
+        <div class="sc-item">Compulsório e Facultativo: 2–4 · 5–29 · 30–99 vidas</div>
+        <div class="sc-item">Essencial: abrangência DF + Regiões Administrativas</div>
+      </div>
+      <div class="sc"><div class="sc-title">Aproveitamento de Carência (ARC) <span class="sc-badge">Requisitos</span></div>
+        <div class="sc-item">Plano anterior regulamentado pela Lei nº 9.656/98</div>
+        <div class="sc-item">Mínimo 6 meses de permanência no plano anterior</div>
+        <div class="sc-item">Cancelado há no máximo 30 dias</div>
+        <div class="sc-item">Sem CPT ativa no plano anterior</div>
       </div>
       <div class="sc-note">⚠️ Carências padrão ANS. Confirme tabela atualizada diretamente com a Seguros Unimed.</div>
     </div>
@@ -1304,10 +1345,11 @@ function showTab(id, btn) {
 }
 
 function showCar(op, btn) {
+  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su'};
   document.querySelectorAll('.car-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('car-'+op).classList.add('on');
-  btn.classList.add('on-'+op[0]);
+  btn.classList.add(clsMap[op] || ('on-'+op[0]));
 }
 
 // ── UTILITÁRIOS ─────────────────────────────────────────────────────
