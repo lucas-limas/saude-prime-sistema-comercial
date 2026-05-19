@@ -399,6 +399,7 @@ body{-webkit-overflow-scrolling:touch}
         <option value="plenum">Plenum Saúde</option>
         <option value="amil">Amil</option>
         <option value="medsenior">MedSênior</option>
+        <option value="segurosunimed">Seguros Unimed</option>
       </select>
       <select id="g-plano" style="display:none"></select>
       <input type="text" id="g-reajuste" style="display:none" placeholder="Ex: Março/2027">
@@ -414,6 +415,7 @@ body{-webkit-overflow-scrolling:touch}
             <option value="plenum">Plenum Saúde</option>
             <option value="amil">Amil</option>
             <option value="medsenior">MedSênior</option>
+            <option value="segurosunimed">Seguros Unimed</option>
           </select>
         </div>
         <div class="fg"><label>Plano recomendado</label><select id="g-plano-s"></select></div>
@@ -1144,10 +1146,10 @@ function compartilhar() {
 
 // ─── INTEGRAÇÃO COTADOR ────────────────────────────────────────────────
 function receiveFromCotador(data) {
-  const { nome, obs, qtds, selPlanos, activeOps, winner, opsInfo, filtroTipo, filtroCopart } = data;
+  const { nome, obs, qtds, selPlanos, activeOps, winner, opsInfo, filtroTipo, filtroCopart, filtroMod } = data;
 
   // Armazena dados completos para gerar()
-  _opsData = { qtds, selPlanos, activeOps, winner, opsInfo: opsInfo || [], filtroTipo, filtroCopart };
+  _opsData = { qtds, selPlanos, activeOps, winner, opsInfo: opsInfo || [], filtroTipo, filtroCopart, filtroMod };
 
   // Campos básicos
   document.getElementById('g-nome').value = nome || '';
@@ -1178,7 +1180,7 @@ function receiveFromCotador(data) {
   }
   const pNome = (planoInfo.nome || '').toLowerCase();
   document.getElementById('g-abrang').value =
-    (winner === 'amil' && pNome.includes('platinum')) ? 'Nacional' : 'Regional';
+    (winner === 'amil' && pNome.includes('platinum')) || winner === 'segurosunimed' ? 'Nacional' : 'Regional';
 
   // Tipo de contratação vindo do cotador (filtroTipo)
   const tipoMap   = {adesao:'Coletivo por Adesão', pme:'PME / Empresarial', pf:'Pessoa Física'};
