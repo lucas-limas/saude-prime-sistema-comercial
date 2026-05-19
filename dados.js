@@ -178,6 +178,36 @@ window.SP_DATA = [
       { id:'su_f99_10', nome:'Com copart — Superior Plus', aco:'apt', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[603.71, 738.94, 925.25,1022.45,1089.04,1263.27,1510.13,1811.14,2150.24,3622.27] },
       { id:'su_f99_11', nome:'Sem copart — Sênior',        aco:'apt', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[1444.95,1768.62,2214.53,2447.17,2606.55,3023.56,3614.40,4334.85,5146.48,8669.71] },
       { id:'su_f99_12', nome:'Com copart — Sênior',        aco:'apt', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[1256.48,1537.93,1925.68,2127.97,2266.56,2629.18,3142.96,3769.44,4475.20,7538.88] },
+      // ── Essencial Compulsório 02–04 vidas ──
+      { id:'su_ec04_1', nome:'Sem copart — Essencial I',   aco:'enf', tipo:'pme', mod:'comp', fvidas:'02-04', valores:[341.65,418.18,523.61,578.61,616.30,714.90,854.60,1024.94,1216.85,2049.89] },
+      { id:'su_ec04_2', nome:'Sem copart — Essencial II',  aco:'apt', tipo:'pme', mod:'comp', fvidas:'02-04', valores:[382.30,467.94,585.92,647.47,689.64,799.97,956.29,1146.91,1361.65,2293.82] },
+      { id:'su_ec04_3', nome:'Com copart — Essencial III', aco:'enf', tipo:'pme', mod:'comp', fvidas:'02-04', valores:[253.07,309.76,387.86,428.60,456.52,529.55,633.03,759.22,901.37,1518.43] },
+      { id:'su_ec04_4', nome:'Com copart — Essencial IV',  aco:'apt', tipo:'pme', mod:'comp', fvidas:'02-04', valores:[283.19,346.62,434.01,479.61,510.84,592.57,708.37,849.56,1008.63,1699.13] },
+      // ── Essencial Compulsório 05–29 vidas ──
+      { id:'su_ec29_1', nome:'Sem copart — Essencial I',   aco:'enf', tipo:'pme', mod:'comp', fvidas:'05-29', valores:[303.33,371.28,464.89,513.72,547.18,634.72,758.75,910.00,1080.38,1819.99] },
+      { id:'su_ec29_2', nome:'Sem copart — Essencial II',  aco:'apt', tipo:'pme', mod:'comp', fvidas:'05-29', valores:[339.43,415.46,520.21,574.86,612.29,710.25,849.05,1018.29,1208.94,2036.57] },
+      { id:'su_ec29_3', nome:'Com copart — Essencial III', aco:'enf', tipo:'pme', mod:'comp', fvidas:'05-29', valores:[224.69,275.02,344.36,380.54,405.32,470.16,562.04,674.07,800.28,1348.14] },
+      { id:'su_ec29_4', nome:'Com copart — Essencial IV',  aco:'apt', tipo:'pme', mod:'comp', fvidas:'05-29', valores:[251.43,307.75,385.34,425.82,453.55,526.11,628.92,754.29,895.51,1508.57] },
+      // ── Essencial Compulsório 30–99 vidas ──
+      { id:'su_ec99_1', nome:'Sem copart — Essencial I',   aco:'enf', tipo:'pme', mod:'comp', fvidas:'30-99', valores:[277.79,340.01,425.74,470.46,501.10,581.27,694.86,833.36,989.40,1666.73] },
+      { id:'su_ec99_2', nome:'Sem copart — Essencial II',  aco:'apt', tipo:'pme', mod:'comp', fvidas:'30-99', valores:[310.84,380.47,476.40,526.45,560.73,650.44,777.55,932.53,1107.14,1865.07] },
+      { id:'su_ec99_3', nome:'Com copart — Essencial III', aco:'enf', tipo:'pme', mod:'comp', fvidas:'30-99', valores:[205.77,251.86,315.36,348.49,371.19,430.57,514.71,617.31,732.89,1234.61] },
+      { id:'su_ec99_4', nome:'Com copart — Essencial IV',  aco:'apt', tipo:'pme', mod:'comp', fvidas:'30-99', valores:[230.26,281.83,352.89,389.96,415.36,481.81,575.96,690.77,820.10,1381.53] },
+      // ── Essencial Facultativo 02–04 vidas ──
+      { id:'su_ef04_1', nome:'Sem copart — Essencial I',   aco:'enf', tipo:'pme', mod:'fac', fvidas:'02-04', valores:[375.81,459.99,575.97,636.48,677.93,786.39,940.06,1127.44,1338.53,2254.87] },
+      { id:'su_ef04_2', nome:'Sem copart — Essencial II',  aco:'apt', tipo:'pme', mod:'fac', fvidas:'02-04', valores:[420.53,514.73,644.51,712.22,758.60,879.97,1051.92,1261.60,1497.82,2523.20] },
+      { id:'su_ef04_3', nome:'Com copart — Essencial III', aco:'enf', tipo:'pme', mod:'fac', fvidas:'02-04', valores:[278.38,340.74,426.64,471.46,502.17,582.51,696.34,835.14,991.50,1670.28] },
+      { id:'su_ef04_4', nome:'Com copart — Essencial IV',  aco:'apt', tipo:'pme', mod:'fac', fvidas:'02-04', valores:[311.51,381.28,477.42,527.57,561.93,651.83,779.20,934.52,1109.49,1869.04] },
+      // ── Essencial Facultativo 05–29 vidas ──
+      { id:'su_ef29_1', nome:'Sem copart — Essencial I',   aco:'enf', tipo:'pme', mod:'fac', fvidas:'05-29', valores:[333.67,408.41,511.38,565.10,601.90,698.19,834.63,1001.00,1188.42,2001.99] },
+      { id:'su_ef29_2', nome:'Sem copart — Essencial II',  aco:'apt', tipo:'pme', mod:'fac', fvidas:'05-29', valores:[373.37,457.01,572.23,632.34,673.52,781.28,933.95,1120.11,1329.84,2240.23] },
+      { id:'su_ef29_3', nome:'Com copart — Essencial III', aco:'enf', tipo:'pme', mod:'fac', fvidas:'05-29', valores:[247.16,302.52,378.80,418.59,445.85,517.18,618.24,741.48,880.31,1482.96] },
+      { id:'su_ef29_4', nome:'Com copart — Essencial IV',  aco:'apt', tipo:'pme', mod:'fac', fvidas:'05-29', valores:[276.57,338.52,423.87,468.40,498.91,578.73,691.82,829.71,985.06,1659.43] },
+      // ── Essencial Facultativo 30–99 vidas ──
+      { id:'su_ef99_1', nome:'Sem copart — Essencial I',   aco:'enf', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[305.57,374.01,468.31,517.51,551.21,639.40,764.35,916.70,1088.34,1833.40] },
+      { id:'su_ef99_2', nome:'Sem copart — Essencial II',  aco:'apt', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[341.93,418.52,524.04,579.09,616.81,715.49,855.30,1025.79,1217.85,2051.58] },
+      { id:'su_ef99_3', nome:'Com copart — Essencial III', aco:'enf', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[226.35,277.05,346.90,383.34,408.31,473.63,566.18,679.04,806.18,1358.08] },
+      { id:'su_ef99_4', nome:'Com copart — Essencial IV',  aco:'apt', tipo:'pme', mod:'fac', fvidas:'30-99', valores:[253.28,310.02,388.18,428.96,456.89,529.99,633.56,759.84,902.11,1519.69] },
     ]
   },
 
