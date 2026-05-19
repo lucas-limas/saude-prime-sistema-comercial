@@ -709,8 +709,11 @@ function toggleCopOpts() {}
 // ─── HOSPITAIS ─────────────────────────────────────────────────────────
 function buildHospitais() {
   const c = document.getElementById('hosp-checks');
+  // Usa apenas operadoras com planos válidos no comparativo (opsInfo), não todas as ativas
   const activeKeys = _opsData
-    ? Object.keys(_opsData.activeOps).filter(k => _opsData.activeOps[k])
+    ? (_opsData.opsInfo && _opsData.opsInfo.length > 0
+        ? _opsData.opsInfo.map(o => o.op)
+        : Object.keys(_opsData.activeOps).filter(k => _opsData.activeOps[k]))
     : null;
   const list = activeKeys
     ? HOSPITAIS_DB.filter(h => h.ops && h.ops.some(op => activeKeys.includes(op)))
@@ -724,7 +727,7 @@ function buildHospitais() {
       <input type="checkbox" name="hosp" value="${h.id}" style="accent-color:var(--navy)">
       <span>
         <span class="hc-nome">${h.icon} ${h.nome}</span>
-        <span class="hc-info">📍 ${h.local}<br><span style="color:var(--navy2)">${h.planos}</span></span>
+        <span class="hc-info">📍 ${h.local}</span>
       </span>
     </label>`).join('');
 }
