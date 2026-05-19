@@ -100,13 +100,19 @@ window.SP_DATA = [
     key: 'medsenior', nome: 'MedSênior',
     cor: 'var(--medsenior)', cls: 'on-ms',
     reajuste: 'A definir',
-    info: 'Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas',
+    info: 'PF e PME · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas',
     produtos: [
       // Preços disponíveis somente a partir dos 49 anos (índices 0–6 = 0)
-      { id:'ms1', nome:'Sem copart — DF3 Enfermaria',      aco:'enf', tipo:'pf', valores:[0,0,0,0,0,0,0,  803.50,  964.20, 1263.10] },
-      { id:'ms2', nome:'Sem copart — DF4 Apartamento',     aco:'apt', tipo:'pf', valores:[0,0,0,0,0,0,0,  964.19, 1157.03, 1515.71] },
-      { id:'ms3', nome:'Sem copart — Black Apartamento',   aco:'apt', tipo:'pf', valores:[0,0,0,0,0,0,0, 1205.92, 1447.10, 1895.70] },
-      { id:'ms4', nome:'Sem copart — Infinite Apartamento',aco:'apt', tipo:'pf', valores:[0,0,0,0,0,0,0, 1818.30, 2181.96, 2858.37] },
+      // ── Pessoa Física ──
+      { id:'ms1', nome:'Sem copart — DF3 Enfermaria',       aco:'enf', tipo:'pf',  valores:[0,0,0,0,0,0,0,  803.50,  964.20, 1263.10] },
+      { id:'ms2', nome:'Sem copart — DF4 Apartamento',      aco:'apt', tipo:'pf',  valores:[0,0,0,0,0,0,0,  964.19, 1157.03, 1515.71] },
+      { id:'ms3', nome:'Sem copart — Black Apartamento',    aco:'apt', tipo:'pf',  valores:[0,0,0,0,0,0,0, 1205.92, 1447.10, 1895.70] },
+      { id:'ms4', nome:'Sem copart — Infinite Apartamento', aco:'apt', tipo:'pf',  valores:[0,0,0,0,0,0,0, 1818.30, 2181.96, 2858.37] },
+      // ── PME (2–29 vidas) · Tabela DF jan/2026 ──
+      { id:'ms5', nome:'PME — DF Enfermaria',                aco:'enf', tipo:'pme', valores:[0,0,0,0,0,0,0,  723.14,  867.77, 1136.78] },
+      { id:'ms6', nome:'PME — DF Apartamento',               aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0,0,  867.78, 1041.34, 1364.16] },
+      { id:'ms7', nome:'PME — Black Apartamento',            aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0,0, 1085.34, 1302.41, 1706.16] },
+      { id:'ms8', nome:'PME — Infinite Apartamento',         aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0,0, 1487.70, 1785.24, 2338.66] },
     ]
   }
 
