@@ -158,6 +158,17 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .op-toggle input:checked+.op-toggle-slider:before{transform:translateX(12px)}
 .op-config-item.op-inactive{opacity:.55}
 
+/* ── TIPO POR OPERADORA ── */
+.op-tipo-row{display:flex;gap:3px;margin-bottom:5px}
+.op-tipo-btn{
+  padding:2px 8px;font-size:9px;font-weight:600;letter-spacing:.03em;
+  border:1.5px solid var(--line2);border-radius:10px;
+  background:transparent;color:var(--ink3);cursor:pointer;
+  transition:all .12s;font-family:"Outfit",sans-serif;
+}
+.op-tipo-btn:hover{border-color:var(--navy);color:var(--navy)}
+.op-tipo-btn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
 /* ═══ RESULTADO ═══ */
 .result-hero{
   display:flex;align-items:baseline;justify-content:space-between;
@@ -440,11 +451,11 @@ body{-webkit-overflow-scrolling:touch}
         <div class="card-head">🎯 Modalidade do plano</div>
         <div style="padding:10px 12px;display:flex;flex-direction:column;gap:10px">
           <div>
-            <div class="filtro-lbl">Tipo de contratação</div>
+            <div class="filtro-lbl">Aplicar a todas as operadoras</div>
             <div class="fb-row" id="ftipo">
-              <button class="fb-btn on" onclick="setFiltroTipo('adesao',this)">Coletivo Adesão</button>
-              <button class="fb-btn" onclick="setFiltroTipo('pme',this)">PME</button>
-              <button class="fb-btn" onclick="setFiltroTipo('pf',this)">Pessoa Física</button>
+              <button class="fb-btn on" data-tipo="adesao" onclick="setFiltroTipo('adesao',this)">Coletivo Adesão</button>
+              <button class="fb-btn" data-tipo="pme" onclick="setFiltroTipo('pme',this)">PME</button>
+              <button class="fb-btn" data-tipo="pf" onclick="setFiltroTipo('pf',this)">Pessoa Física</button>
             </div>
           </div>
           <div>
@@ -1183,7 +1194,8 @@ const OP_META = window.OP_META || {
 let qtds = Array(10).fill(0);
 let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'a1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1'};
 let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true};
-let filtroTipo   = 'adesao'; // 'adesao' | 'pme' | 'pf'
+// tipo por operadora — permite cotação mista entre modalidades
+let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'adesao', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf'};
 let filtroCopart = 'todos';  // 'todos' | 'sem' | 'parcial' | 'total'
 let filtroMod    = 'comp';   // 'comp' | 'fac' — só relevante para PME (Seguros Unimed)
 
@@ -1201,13 +1213,13 @@ function _updateFVidasHint() {
   const hint = document.getElementById('fvidas-hint');
   if (!hint) return;
   const tv = qtds.reduce((a,b)=>a+b,0);
-  if (filtroTipo === 'pme' && tv > 0) {
+  if (tv > 0) {
     const parts = [];
-    if (activeOps.segurosunimed) {
+    if (tipoOp.segurosunimed === 'pme' && activeOps.segurosunimed) {
       const modLabel = filtroMod === 'comp' ? 'Compulsório' : 'Facultativo';
       parts.push(`Seguros Unimed: ${modLabel} · ${getFVidas()} vidas`);
     }
-    if (activeOps.plenum) {
+    if (tipoOp.plenum === 'pme' && activeOps.plenum) {
       parts.push(`Plenum PME: ${getFVidasForOp('plenum')} vidas`);
     }
     if (parts.length > 0) {
@@ -1232,11 +1244,18 @@ function getFVidasForOp(op) {
   return getFVidas();
 }
 
+function tiposDisponiveis(op) {
+  const s = new Set();
+  PLANOS.forEach(p => { if (p.op === op) s.add(p.tipo || 'adesao'); });
+  return [...s];
+}
+
 function planosFiltered(op) {
   const fv = getFVidasForOp(op);
+  const opTipo = tipoOp[op] || 'adesao';
   return PLANOS.filter(p => {
     if (p.op !== op) return false;
-    if (p.tipo !== filtroTipo) return false;
+    if ((p.tipo || 'adesao') !== opTipo) return false;
     if (p.mod    && p.mod    !== filtroMod)   return false;
     if (p.fvidas && p.fvidas !== fv) return false;
     if (filtroCopart !== 'todos' && getCopart(p.nome) !== filtroCopart) return false;
@@ -1245,11 +1264,27 @@ function planosFiltered(op) {
 }
 
 function setFiltroTipo(val, btn) {
-  filtroTipo = val;
+  // Aplica tipo a todas as operadoras que possuem planos nessa modalidade
+  Object.keys(tipoOp).forEach(op => {
+    if (tiposDisponiveis(op).includes(val)) tipoOp[op] = val;
+  });
   document.querySelectorAll('#ftipo .fb-btn').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
   const fmodRow = document.getElementById('fmod-row');
-  if (fmodRow) fmodRow.style.display = val === 'pme' ? 'block' : 'none';
+  if (fmodRow) fmodRow.style.display = tipoOp.segurosunimed === 'pme' ? 'block' : 'none';
+  _syncFiltroSubtitle();
+  _updateFVidasHint();
+  buildOpConfig();
+  render();
+}
+
+function setOpTipo(op, val) {
+  tipoOp[op] = val;
+  // Auto-seleciona o primeiro plano disponível no novo tipo
+  const planos = planosFiltered(op);
+  if (planos.length > 0) selPlanos[op] = planos[0].id;
+  const fmodRow = document.getElementById('fmod-row');
+  if (fmodRow) fmodRow.style.display = tipoOp.segurosunimed === 'pme' ? 'block' : 'none';
   _syncFiltroSubtitle();
   _updateFVidasHint();
   buildOpConfig();
@@ -1279,11 +1314,24 @@ function _syncFiltroSubtitle() {
   const tipoMap   = {adesao:'Coletivo por Adesão', pme:'PME', pf:'Pessoa Física'};
   const copartMap = {todos:'', sem:'· Sem copart.', parcial:'· Com copart.', total:'· Copart. total'};
   const modMap    = {comp:'Compulsório', fac:'Facultativo'};
+
+  const usedTipos = [...new Set(Object.values(tipoOp))];
+
+  // Sincroniza botões globais: ativo só se TODOS os tipoOp forem iguais
+  document.querySelectorAll('#ftipo .fb-btn').forEach(b => {
+    b.classList.toggle('on', usedTipos.length === 1 && b.dataset.tipo === usedTipos[0]);
+  });
+
   const sub = document.getElementById('result-sub');
   if (sub) {
-    const parts = [tipoMap[filtroTipo]];
-    if (filtroTipo === 'pme') parts.push(modMap[filtroMod]);
-    parts.push('DF e entorno · Mai/2026');
+    let tipoLabel;
+    if (usedTipos.length === 1) {
+      tipoLabel = tipoMap[usedTipos[0]];
+      if (usedTipos[0] === 'pme') tipoLabel += ' · ' + modMap[filtroMod];
+    } else {
+      tipoLabel = 'Modalidade mista';
+    }
+    const parts = [tipoLabel, 'DF e entorno · Mai/2026'];
     if (copartMap[filtroCopart]) parts.push(copartMap[filtroCopart]);
     sub.textContent = parts.join(' · ');
   }
@@ -1320,7 +1368,8 @@ function step(i, delta) {
   document.getElementById('total-vidas').textContent = tv;
   document.getElementById('total-badge').textContent = tv + ' vida(s)';
   _updateFVidasHint();
-  if (filtroTipo === 'pme') buildOpConfig();
+  // Reconstrói config se alguma operadora PME estiver ativa (fvidas altera os planos disponíveis)
+  if (Object.entries(tipoOp).some(([op,t]) => t === 'pme' && activeOps[op])) buildOpConfig();
   render();
 }
 
@@ -1329,11 +1378,19 @@ function buildOpConfig() {
   const body = document.getElementById('op-config-body');
   body.innerHTML = '';
   const sfxMap = {portosaude:'ps', bestsenior:'bs'};
+  const tipoLabel = {adesao:'Adesão', pme:'PME', pf:'PF'};
+  const tipoOrder = ['adesao','pme','pf'];
+
   ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior'].forEach(op => {
     const meta = OP_META[op];
-    const planos = planosFiltered(op);
     const isActive = activeOps[op];
     const sfx = sfxMap[op] || op[0];
+    const availTipos = tiposDisponiveis(op);
+
+    // Garante que tipoOp[op] seja válido para esta operadora
+    if (!availTipos.includes(tipoOp[op])) tipoOp[op] = availTipos[0] || 'adesao';
+
+    const planos = planosFiltered(op);
 
     // Se plano atual não está na lista filtrada, seleciona o primeiro disponível
     if (planos.length > 0 && !planos.find(p => p.id === selPlanos[op])) {
@@ -1352,15 +1409,24 @@ function buildOpConfig() {
       </label>
     </div>`;
 
+    // Seletor de tipo por operadora — só aparece se há mais de uma modalidade disponível
+    let tipoRow = '';
+    if (availTipos.length > 1) {
+      const btns = tipoOrder.filter(t => availTipos.includes(t))
+        .map(t => `<button class="op-tipo-btn${tipoOp[op]===t?' on':''}" onclick="setOpTipo('${op}','${t}')">${tipoLabel[t]}</button>`)
+        .join('');
+      tipoRow = `<div class="op-tipo-row">${btns}</div>`;
+    }
+
     if (planos.length === 0) {
-      div.innerHTML = head + `<div class="op-na">Nenhum plano nesta modalidade</div>`;
+      div.innerHTML = head + tipoRow + `<div class="op-na">Nenhum plano nesta modalidade</div>`;
     } else if (!isActive) {
-      div.innerHTML = head;
+      div.innerHTML = head + tipoRow;
     } else {
       const opts = planos.map(p =>
         `<option value="${p.id}" ${selPlanos[op]===p.id?'selected':''}>${p.nome}</option>`
       ).join('');
-      div.innerHTML = head + `<select class="op-config-sel" onchange="selPlan('${op}',this.value)">${opts}</select>`;
+      div.innerHTML = head + tipoRow + `<select class="op-config-sel" onchange="selPlan('${op}',this.value)">${opts}</select>`;
     }
     body.appendChild(div);
   });
@@ -1405,17 +1471,25 @@ function render() {
   if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP); return; }
 
   // Cabeçalho tabela
+  const usedTipos = [...new Set(
+    [uP&&'unity',eP&&'evo',pP&&'plenum',aP&&'amil',mP&&'medsenior',suP&&'segurosunimed',psP&&'portosaude',bdP&&'bradesco',bsP&&'bestsenior']
+      .filter(Boolean).map(op => tipoOp[op])
+  )];
+  const mixedTipos = usedTipos.length > 1;
+  const tipoShort = {adesao:'Adesão', pme:'PME', pf:'PF'};
+  const tipoTag = op => mixedTipos ? ` <small style="font-size:8px;font-weight:600;opacity:.65;letter-spacing:.04em">${tipoShort[tipoOp[op]]}</small>` : '';
+
   const rh = document.getElementById('rt-head');
   let th = '<tr><th>Faixa / Vidas</th>';
-  if(uP)  th += `<th style="color:var(--unity)">${uP.nome.split('—')[0].trim()}</th><th style="color:var(--unity)">Unity subtotal</th>`;
-  if(eP)  th += `<th style="color:var(--evo)">${eP.nome.split('—')[0].trim()}</th><th style="color:var(--evo)">Evo subtotal</th>`;
-  if(pP)  th += `<th style="color:var(--plenum)">${pP.nome.split('—')[0].trim()}</th><th style="color:var(--plenum)">Plenum subtotal</th>`;
-  if(aP)  th += `<th style="color:var(--amil)">${aP.nome.split('—')[0].trim()}</th><th style="color:var(--amil)">Amil subtotal</th>`;
-  if(mP)  th += `<th style="color:var(--medsenior)">${mP.nome.split('—')[0].trim()}</th><th style="color:var(--medsenior)">MedSênior subtotal</th>`;
-  if(suP) th += `<th style="color:var(--seguros-unimed)">${suP.nome.split('—')[0].trim()}</th><th style="color:var(--seguros-unimed)">Seguros Unimed subtotal</th>`;
-  if(psP) th += `<th style="color:var(--portosaude)">${psP.nome.split('—')[0].trim()}</th><th style="color:var(--portosaude)">Porto Saúde subtotal</th>`;
-  if(bdP) th += `<th style="color:var(--bradesco)">${bdP.nome.split('—')[0].trim()}</th><th style="color:var(--bradesco)">Bradesco subtotal</th>`;
-  if(bsP) th += `<th style="color:var(--bestsenior)">${bsP.nome.split('—')[0].trim()}</th><th style="color:var(--bestsenior)">Best Sênior subtotal</th>`;
+  if(uP)  th += `<th style="color:var(--unity)">${uP.nome.split('—')[0].trim()}${tipoTag('unity')}</th><th style="color:var(--unity)">Unity subtotal</th>`;
+  if(eP)  th += `<th style="color:var(--evo)">${eP.nome.split('—')[0].trim()}${tipoTag('evo')}</th><th style="color:var(--evo)">Evo subtotal</th>`;
+  if(pP)  th += `<th style="color:var(--plenum)">${pP.nome.split('—')[0].trim()}${tipoTag('plenum')}</th><th style="color:var(--plenum)">Plenum subtotal</th>`;
+  if(aP)  th += `<th style="color:var(--amil)">${aP.nome.split('—')[0].trim()}${tipoTag('amil')}</th><th style="color:var(--amil)">Amil subtotal</th>`;
+  if(mP)  th += `<th style="color:var(--medsenior)">${mP.nome.split('—')[0].trim()}${tipoTag('medsenior')}</th><th style="color:var(--medsenior)">MedSênior subtotal</th>`;
+  if(suP) th += `<th style="color:var(--seguros-unimed)">${suP.nome.split('—')[0].trim()}${tipoTag('segurosunimed')}</th><th style="color:var(--seguros-unimed)">Seguros Unimed subtotal</th>`;
+  if(psP) th += `<th style="color:var(--portosaude)">${psP.nome.split('—')[0].trim()}${tipoTag('portosaude')}</th><th style="color:var(--portosaude)">Porto Saúde subtotal</th>`;
+  if(bdP) th += `<th style="color:var(--bradesco)">${bdP.nome.split('—')[0].trim()}${tipoTag('bradesco')}</th><th style="color:var(--bradesco)">Bradesco subtotal</th>`;
+  if(bsP) th += `<th style="color:var(--bestsenior)">${bsP.nome.split('—')[0].trim()}${tipoTag('bestsenior')}</th><th style="color:var(--bestsenior)">Best Sênior subtotal</th>`;
   rh.innerHTML = th + '</tr>';
 
   // Linhas — só faixas com qtd > 0
@@ -1549,7 +1623,7 @@ function criarApresentacao() {
     activeOps:   {...activeOps},
     winner,
     opsInfo:     withTotal,
-    filtroTipo,
+    tipoOp:      {...tipoOp},
     filtroCopart,
     filtroMod
   };
