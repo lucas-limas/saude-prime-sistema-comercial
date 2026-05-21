@@ -13,7 +13,7 @@
   --cream:#faf9f6;--white:#fff;
   --line:#e8e4dc;--line2:#ccc9be;
   --ink:#1a1916;--ink2:#4a5568;--ink3:#8a97a6;
-  --unity:#0f2340;--evo:#5c1a40;--plenum:#0a4028;--medsenior:#95C13D;--seguros-unimed:#0074BE;--portosaude:#005CB9;
+  --unity:#0f2340;--evo:#5c1a40;--plenum:#0a4028;--medsenior:#95C13D;--seguros-unimed:#0074BE;--portosaude:#005CB9;--bradesco:#CC0000;
   --unity-bg:#edf1f7;--evo-bg:#f7edf4;--plenum-bg:#edf5f0;--seguros-unimed-bg:#e0eefd;--portosaude-bg:#e6f0fc;
   --green:#0a6b3a;--green-bg:#e6f5ee;
   --red:#8b2515;--amber:#92400e;
@@ -401,6 +401,7 @@ body{-webkit-overflow-scrolling:touch}
         <option value="medsenior">MedSênior</option>
         <option value="segurosunimed">Seguros Unimed</option>
         <option value="portosaude">Porto Saúde</option>
+        <option value="bradesco">Bradesco Saúde</option>
       </select>
       <select id="g-plano" style="display:none"></select>
       <input type="text" id="g-reajuste" style="display:none" placeholder="Ex: Março/2027">
@@ -418,6 +419,7 @@ body{-webkit-overflow-scrolling:touch}
             <option value="medsenior">MedSênior</option>
             <option value="segurosunimed">Seguros Unimed</option>
             <option value="portosaude">Porto Saúde</option>
+            <option value="bradesco">Bradesco Saúde</option>
           </select>
         </div>
         <div class="fg"><label>Plano recomendado</label><select id="g-plano-s"></select></div>
@@ -581,6 +583,7 @@ const OP_META = window.OP_META || {
   evo:{nome:'Evo Saúde',cor:'#5c1a40'},
   plenum:{nome:'Plenum Saúde',cor:'#0a4028'},
   amil:{nome:'Amil',cor:'#461BFF'},
+  bradesco:{nome:'Bradesco Saúde',cor:'#CC0000'},
 };
 
 const HOSPITAIS_DB = [

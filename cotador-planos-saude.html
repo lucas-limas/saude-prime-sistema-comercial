@@ -18,6 +18,7 @@
   --medsenior:#95C13D;--medsenior-dark:#3a7a0f;--medsenior-bg:rgba(149,193,61,.13);
   --seguros-unimed:#0074BE;--seguros-unimed-bg:#e0eefd;
   --portosaude:#005CB9;--portosaude-bg:#e6f0fc;
+  --bradesco:#CC0000;--bradesco-bg:#fdecea;
   --green:#0a6b3a;--green-bg:#e8f5ee;
   --red:#8b2515;--amber:#8b5e0a;
   --r:8px;--r-sm:5px;--r-lg:14px;
@@ -136,9 +137,9 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .op-config-item:last-child{border-bottom:none}
 .op-config-head{display:flex;align-items:center;gap:7px;margin-bottom:6px}
 .op-dot{width:8px;height:8px;border-radius:50%}
-.dot-u{background:var(--unity)}.dot-e{background:var(--evo)}.dot-p{background:var(--plenum)}.dot-a{background:var(--amil)}.dot-m{background:var(--medsenior)}.dot-s{background:var(--seguros-unimed)}.dot-ps{background:var(--portosaude)}
+.dot-u{background:var(--unity)}.dot-e{background:var(--evo)}.dot-p{background:var(--plenum)}.dot-a{background:var(--amil)}.dot-m{background:var(--medsenior)}.dot-s{background:var(--seguros-unimed)}.dot-ps{background:var(--portosaude)}.dot-b{background:var(--bradesco)}
 .op-config-name{font-size:11px;font-weight:600;letter-spacing:.03em}
-.cn-u{color:var(--unity)}.cn-e{color:var(--evo)}.cn-p{color:var(--plenum)}.cn-a{color:var(--amil)}.cn-m{color:var(--medsenior)}.cn-s{color:var(--seguros-unimed)}.cn-ps{color:var(--portosaude)}
+.cn-u{color:var(--unity)}.cn-e{color:var(--evo)}.cn-p{color:var(--plenum)}.cn-a{color:var(--amil)}.cn-m{color:var(--medsenior)}.cn-s{color:var(--seguros-unimed)}.cn-ps{color:var(--portosaude)}.cn-b{color:var(--bradesco)}
 .op-config-sel{
   width:100%;font-family:"Outfit",sans-serif;font-size:11px;
   color:var(--ink);background:var(--cream);
@@ -204,6 +205,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .sub-ms{font-size:13px;font-weight:600;color:var(--medsenior)}
 .sub-su{font-size:13px;font-weight:600;color:var(--seguros-unimed)}
 .sub-ps{font-size:13px;font-weight:600;color:var(--portosaude)}
+.sub-bd{font-size:13px;font-weight:600;color:var(--bradesco)}
 .best{
   display:inline-flex;align-items:center;justify-content:center;
   width:14px;height:14px;background:var(--green);color:#fff;
@@ -216,7 +218,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
   border-radius:var(--r);padding:12px 16px;
   display:flex;align-items:center;justify-content:space-between;
 }
-.tb-u{background:var(--unity)}.tb-e{background:var(--evo)}.tb-p{background:var(--plenum)}.tb-a{background:var(--amil)}.tb-ms{background:var(--medsenior-dark)}.tb-su{background:var(--seguros-unimed)}.tb-ps{background:var(--portosaude)}
+.tb-u{background:var(--unity)}.tb-e{background:var(--evo)}.tb-p{background:var(--plenum)}.tb-a{background:var(--amil)}.tb-ms{background:var(--medsenior-dark)}.tb-su{background:var(--seguros-unimed)}.tb-ps{background:var(--portosaude)}.tb-bd{background:var(--bradesco)}
 .tb-off{background:var(--cream);border:1px solid var(--line)}
 .tb-op{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px}
 .tb-op-off{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
@@ -253,7 +255,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rede-panel{display:none}.rede-panel.on{display:block}
 .rede-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .rede-head{padding:11px 14px}
-.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}.rh-ps{background:var(--portosaude)}
+.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}.rh-ps{background:var(--portosaude)}.rh-b{background:var(--bradesco)}
 .rh-name{font-family:"Playfair Display",serif;font-size:17px;color:#fff;letter-spacing:-.1px}
 .rh-adm{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.04em}
 .rede-body{padding:10px 13px}
@@ -261,7 +263,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rg-title{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .rg-item{display:flex;gap:5px;font-size:11px;color:var(--ink);padding:2px 0;line-height:1.35;align-items:baseline}
 .rg-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}.gd-ps{background:var(--portosaude)}
+.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}.gd-ps{background:var(--portosaude)}.gd-b{background:var(--bradesco)}
 .rloc{font-size:10px;color:var(--ink3)}
 .rtag{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:2px;letter-spacing:.04em;vertical-align:middle;line-height:1.6}
 .rt-ps{background:#fee2e2;color:#991b1b}.rt-int{background:#dbeafe;color:#1e40af}
@@ -280,6 +282,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .car-btn.on-ms{background:var(--medsenior-dark);border-color:var(--medsenior-dark);color:#fff}
 .car-btn.on-su{background:var(--seguros-unimed);border-color:var(--seguros-unimed);color:#fff}
 .car-btn.on-ps{background:var(--portosaude);border-color:var(--portosaude);color:#fff}
+.car-btn.on-b{background:var(--bradesco);border-color:var(--bradesco);color:#fff}
 .car-panel{display:none}.car-panel.on{display:grid;grid-template-columns:1fr 280px;gap:1.1rem;align-items:start}
 .car-tbl{width:100%;border-collapse:collapse;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);font-size:11px}
 .car-tbl thead tr{background:var(--navy)}
@@ -568,6 +571,7 @@ body{-webkit-overflow-scrolling:touch}
     <button class="car-btn" onclick="showRede('medsenior',this)">MedSênior</button>
     <button class="car-btn" onclick="showRede('segurosunimed',this)">Seguros Unimed</button>
     <button class="car-btn" onclick="showRede('portosaude',this)">Porto Saúde</button>
+    <button class="car-btn" onclick="showRede('bradesco',this)">Bradesco Saúde</button>
   </div>
   <div class="rede-panel on" id="rede-unity">
     <div class="rede-card">
@@ -763,6 +767,42 @@ body{-webkit-overflow-scrolling:touch}
       <div class="rede-foot">Rede PME Porto Saúde no DF. Coparticipação parcial nos planos "Com copart". Confirme rede atualizada em portosaude.com.br ou com o corretor.</div>
     </div>
   </div>
+  <div class="rede-panel" id="rede-bradesco">
+    <div class="rede-card">
+      <div class="rede-head rh-b"><div class="rh-name">Bradesco Saúde</div><div class="rh-adm">Bradesco Seguros · PME · Rede Nacional</div></div>
+      <div class="rede-body">
+        <div class="rg"><div class="rg-title">Nacional Plus 4 e Premium 6 — Todos os planos Apt</div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Santa Helena <span class="rloc">Asa Norte</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Santa Lúcia Norte · Santa Lúcia Sul <span class="rloc">Asa Norte / Asa Sul</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Alvorada · H. Home · H. Daher<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. DF Star · H. do Coração do Brasil <span class="rloc">Asa Sul</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Santa Luzia · Santa Marta <span class="rloc">Asa Sul</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Sírio-Libanês Brasília IV <span class="rloc">Asa Sul</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. São Mateus <span class="rloc">Cruzeiro</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Anchieta <span class="rloc">Ceilândia / Taguatinga</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Santa Marta Taguatinga · H. Mantevida<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Brasília <span class="rloc">SHIS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Maternidade Brasília <span class="rloc">Sudoeste</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Águas Claras <span class="rloc">Brasília</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Sta Lúcia Gama <span class="rloc">Gama</span><span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">Nacional Flex — Enfermaria</div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Santa Helena · Sta Lúcia Norte/Sul/Gama<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Alvorada · H. Home · H. Daher · Maternidade Brasília<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Hosp. Anchieta Ceilândia · H. Mantevida · Sta Marta Taguatinga<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">Efetivo — Rede reduzida (Enfermaria)</div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Sta Lúcia Norte / Sul / Gama<span class="rtag rt-int">INT</span><span class="rtag rt-mat">MAT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Cto. Clínico Recanto<span class="rtag rt-int">INT</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">Laboratórios</div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Exame · Imeb · Sabin · Micra <span class="rloc">Todos os planos</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-b"></span><span>Brasiliense · Fleury <span class="rloc">Nacional Plus 4 e Premium 6</span></span></div>
+        </div>
+      </div>
+      <div class="rede-foot">Rede nacional Bradesco. Confirme rede atualizada em bradescosaude.com.br ou com o corretor.</div>
+    </div>
+  </div>
   <div class="card" style="padding:.75rem 1.25rem">
     <div class="legend">
       <span><span class="rtag rt-ps">PS</span> Pronto-Socorro 24h</span>
@@ -785,6 +825,7 @@ body{-webkit-overflow-scrolling:touch}
     <button class="car-btn" onclick="showCar('medsenior',this)">MedSênior</button>
     <button class="car-btn" onclick="showCar('segurosunimed',this)">Seguros Unimed</button>
     <button class="car-btn" onclick="showCar('portosaude',this)">Porto Saúde</button>
+    <button class="car-btn" onclick="showCar('bradesco',this)">Bradesco Saúde</button>
   </div>
   <div class="car-panel on" id="car-unity">
     <div><table class="car-tbl">
@@ -1007,12 +1048,44 @@ body{-webkit-overflow-scrolling:touch}
       <div class="sc-note">⚠️ Carências padrão ANS. Confirme tabela atualizada diretamente com o Porto Saúde / Porto Seguro.</div>
     </div>
   </div>
+  <div class="car-panel" id="car-bradesco">
+    <div><table class="car-tbl">
+      <thead><tr style="background:var(--bradesco)"><th>Procedimento</th><th>Padrão</th><th>Com ARC</th></tr></thead>
+      <tbody>
+        <tr><td><div class="proc">Urgência / Emergência</div></td><td class="cv-g">24h</td><td class="cv-g">24h</td></tr>
+        <tr><td><div class="proc">Consultas Eletivas</div></td><td class="cv-r">30 dias</td><td class="cv-g">Início vigência</td></tr>
+        <tr><td><div class="proc">Exames Simples</div><div class="proc-sub">Hemograma, glicose, urina, ECG</div></td><td class="cv-r">30 dias</td><td class="cv-g">Início vigência</td></tr>
+        <tr><td><div class="proc">Exames Complementares</div><div class="proc-sub">Ultrassom, RX, EEG</div></td><td class="cv-r">180 dias</td><td class="cv-y">90 dias</td></tr>
+        <tr><td><div class="proc">Exames / Proc. Especiais</div><div class="proc-sub">RM, tomografia, endoscopia, fisioterapia</div></td><td class="cv-r">180 dias</td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">Internações e Cirurgias</div></td><td class="cv-r">180 dias</td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">Parto a Termo</div></td><td class="cv-r">300 dias</td><td class="cv-r">300 dias</td></tr>
+        <tr><td><div class="proc">CPT — Doenças Preexistentes</div></td><td colspan="2" style="text-align:center" class="cv-r">24 meses</td></tr>
+      </tbody>
+    </table></div>
+    <div class="car-side">
+      <div class="sc"><div class="sc-title">Planos PME disponíveis</div>
+        <div class="sc-item"><strong>Nacional Plus 4</strong> — Sem e copart total · Apt e Enf</div>
+        <div class="sc-item"><strong>Premium 6</strong> — Sem copart · Apartamento</div>
+        <div class="sc-item"><strong>Efetivo</strong> — Sem e copart total · Enfermaria</div>
+        <div class="sc-item"><strong>Nacional Flex</strong> — Sem e copart total · Enfermaria</div>
+        <div class="sc-item">Coparticipação: completa 30% por procedimento</div>
+        <div class="sc-item">Modalidade PME · Abrangência Nacional</div>
+      </div>
+      <div class="sc"><div class="sc-title">Aproveitamento de Carência (ARC) <span class="sc-badge">Requisitos</span></div>
+        <div class="sc-item">Plano anterior regulamentado pela Lei nº 9.656/98</div>
+        <div class="sc-item">Mínimo 6 meses de permanência no plano anterior</div>
+        <div class="sc-item">Cancelado há no máximo 30 dias</div>
+        <div class="sc-item">Sem CPT ativa no plano anterior</div>
+      </div>
+      <div class="sc-note">⚠️ Carências padrão ANS. Confirme tabela atualizada diretamente com o Bradesco Saúde.</div>
+    </div>
+  </div>
 </div><!-- /carencias -->
 
 </div><!-- /page -->
 
 <footer style="text-align:center;padding:.75rem;font-size:10px;color:var(--ink3);border-top:1px solid var(--line);background:var(--white)">
-  Saúde Prime Seguros e Saúde · Unity (mai/2026 · Adm. Esplendor) · Evo (reaj. set/2026 · Adm. Easyplan) · Plenum (reaj. mar/2027 · Adm. Easyplan) · Amil (mai/2026 · Adm. própria) · Porto Saúde (PME · Porto Seguro) · Valores sujeitos a alteração sem aviso prévio
+  Saúde Prime Seguros e Saúde · Unity (mai/2026 · Adm. Esplendor) · Evo (reaj. set/2026 · Adm. Easyplan) · Plenum (reaj. mar/2027 · Adm. Easyplan) · Amil (mai/2026 · Adm. própria) · Porto Saúde (PME · Porto Seguro) · Bradesco Saúde (PME · jan/2026) · Valores sujeitos a alteração sem aviso prévio
 </footer>
 
 <script>
@@ -1231,7 +1304,7 @@ function buildOpConfig() {
   const body = document.getElementById('op-config-body');
   body.innerHTML = '';
   const sfxMap = {portosaude:'ps'};
-  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude'].forEach(op => {
+  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco'].forEach(op => {
     const meta = OP_META[op];
     const planos = planosFiltered(op);
     const isActive = activeOps[op];
@@ -1296,12 +1369,13 @@ function render() {
   const mP  = planAvailable(mPraw) ? mPraw : null;
   const suP = activeOps.segurosunimed && planosFiltered('segurosunimed').length > 0 ? PLANOS.find(p=>p.id===selPlanos.segurosunimed) : null;
   const psP = activeOps.portosaude   && planosFiltered('portosaude').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.portosaude)   : null;
+  const bdP = activeOps.bradesco     && planosFiltered('bradesco').length     > 0 ? PLANOS.find(p=>p.id===selPlanos.bradesco)     : null;
 
   document.getElementById('placeholder').style.display = tv===0 ? 'block' : 'none';
   document.getElementById('result-wrap').style.display = tv>0 ? 'block' : 'none';
   document.getElementById('totais-section').style.display = tv>0 ? 'block' : 'none';
 
-  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP); return; }
+  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP); return; }
 
   // Cabeçalho tabela
   const rh = document.getElementById('rt-head');
@@ -1313,6 +1387,7 @@ function render() {
   if(mP)  th += `<th style="color:var(--medsenior)">${mP.nome.split('—')[0].trim()}</th><th style="color:var(--medsenior)">MedSênior subtotal</th>`;
   if(suP) th += `<th style="color:var(--seguros-unimed)">${suP.nome.split('—')[0].trim()}</th><th style="color:var(--seguros-unimed)">Seguros Unimed subtotal</th>`;
   if(psP) th += `<th style="color:var(--portosaude)">${psP.nome.split('—')[0].trim()}</th><th style="color:var(--portosaude)">Porto Saúde subtotal</th>`;
+  if(bdP) th += `<th style="color:var(--bradesco)">${bdP.nome.split('—')[0].trim()}</th><th style="color:var(--bradesco)">Bradesco subtotal</th>`;
   rh.innerHTML = th + '</tr>';
 
   // Linhas — só faixas com qtd > 0
@@ -1328,7 +1403,8 @@ function render() {
     const mS  = mP  ? mP.precos[i]*q  : null;
     const suS = suP ? suP.precos[i]*q : null;
     const psS = psP ? psP.precos[i]*q : null;
-    const vs = [uS,eS,pS,aS,mS,suS,psS].filter(v=>v!=null);
+    const bdS = bdP ? bdP.precos[i]*q : null;
+    const vs = [uS,eS,pS,aS,mS,suS,psS,bdS].filter(v=>v!=null);
     const mn = vs.length ? Math.min(...vs) : null;
     const mk = v => v!=null ? f(v)+(v===mn&&vs.length>1?'<span class="best">✓</span>':'') : '—';
     const tr = document.createElement('tr');
@@ -1340,6 +1416,7 @@ function render() {
     if(mP)  h += `<td class="price-cell">${f(mP.precos[i])}</td><td class="sub-ms">${mk(mS)}</td>`;
     if(suP) h += `<td class="price-cell">${f(suP.precos[i])}</td><td class="sub-su">${mk(suS)}</td>`;
     if(psP) h += `<td class="price-cell">${f(psP.precos[i])}</td><td class="sub-ps">${mk(psS)}</td>`;
+    if(bdP) h += `<td class="price-cell">${f(bdP.precos[i])}</td><td class="sub-bd">${mk(bdS)}</td>`;
     tr.innerHTML = h;
     rb.appendChild(tr);
   });
@@ -1352,6 +1429,7 @@ function render() {
   const mT  = mP  ? qtds.reduce((a,q,i)=>a+q*mP.precos[i],0)  : null;
   const suT = suP ? qtds.reduce((a,q,i)=>a+q*suP.precos[i],0) : null;
   const psT = psP ? qtds.reduce((a,q,i)=>a+q*psP.precos[i],0) : null;
+  const bdT = bdP ? qtds.reduce((a,q,i)=>a+q*bdP.precos[i],0) : null;
   const trTot = document.createElement('tr');
   trTot.className = 'row-total';
   let ht = `<td style="font-size:11px;font-weight:600;color:var(--ink2)">Total · ${tv} vida(s)</td>`;
@@ -1362,12 +1440,13 @@ function render() {
   if(mP)  ht += `<td></td><td class="sub-ms" style="font-size:13px">${f(mT)}</td>`;
   if(suP) ht += `<td></td><td class="sub-su" style="font-size:13px">${f(suT)}</td>`;
   if(psP) ht += `<td></td><td class="sub-ps" style="font-size:13px">${f(psT)}</td>`;
+  if(bdP) ht += `<td></td><td class="sub-bd" style="font-size:13px">${f(bdT)}</td>`;
   trTot.innerHTML = ht;
   rb.appendChild(trTot);
 
   // Blocos totais
   const tg = document.getElementById('total-grid');
-  const cnt = [uT,eT,pT,aT,mT,suT,psT].filter(v=>v!==null).length || 1;
+  const cnt = [uT,eT,pT,aT,mT,suT,psT,bdT].filter(v=>v!==null).length || 1;
   tg.style.gridTemplateColumns = `repeat(${cnt},1fr)`;
   tg.innerHTML = '';
   const addT = (t, cls, lbl, sub) => {
@@ -1383,11 +1462,12 @@ function render() {
   addT(aT,'tb-a', 'Amil',           aP?aP.nome:'');
   addT(mT,'tb-ms','MedSênior',      mP?mP.nome:'');
   addT(suT,'tb-su','Seguros Unimed',suP?suP.nome:'');
-  addT(psT,'tb-ps','Porto Saúde',   psP?psP.nome:'');
+  addT(psT,'tb-ps','Porto Saúde',    psP?psP.nome:'');
+  addT(bdT,'tb-bd','Bradesco Saúde', bdP?bdP.nome:'');
 
   // Vencedora
   const w = document.getElementById('winner');
-  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT}].filter(x=>x.v!==null);
+  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT},{n:'Bradesco Saúde',v:bdT}].filter(x=>x.v!==null);
   if (arr.length > 1) {
     arr.sort((a,b)=>a.v-b.v);
     const diff = arr[arr.length-1].v - arr[0].v;
@@ -1396,13 +1476,13 @@ function render() {
       `<strong>${arr[0].n}</strong> é a opção mais econômica — <strong>${f(diff)}</strong> de diferença no total mensal.`;
   } else w.classList.remove('on');
 
-  renderNotes(uP,eP,pP,aP,mP,suP,psP);
+  renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP);
 }
 
-function renderNotes(uP,eP,pP,aP,mP,suP,psP) {
+function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP) {
   const oc = document.getElementById('op-notes');
   oc.innerHTML = '';
-  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP]].forEach(([op,p]) => {
+  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP],['bradesco',bdP]].forEach(([op,p]) => {
     if (!p) return;
     const m = OP_META[op];
     const d = document.createElement('div');
@@ -1414,7 +1494,7 @@ function renderNotes(uP,eP,pP,aP,mP,suP,psP) {
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
 function criarApresentacao() {
-  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude'];
+  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco'];
   const opsInfo = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
     .filter(op => planAvailable(PLANOS.find(x => x.id === selPlanos[op])))

@@ -268,6 +268,23 @@ window.SP_DATA = [
       { id:'ps_7', nome:'Sem copart — Ouro Brasília Pro',    aco:'apt', tipo:'pme', valores:[381.88,463.11,558.66,639.57,692.98,715.67,854.89,920.32,1137.13,1911.42] },
       { id:'ps_8', nome:'Com copart — Ouro Brasília Pro',    aco:'apt', tipo:'pme', valores:[313.14,379.75,458.10,524.45,568.25,586.85,701.01,754.66,932.44,1567.36] },
     ]
+  },
+
+  // ── BRADESCO SAÚDE ────────────────────────────────────────────────────
+  {
+    key: 'bradesco', nome: 'Bradesco Saúde',
+    cor: 'var(--bradesco)', cls: 'on-b',
+    reajuste: 'A definir',
+    info: 'PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros',
+    produtos: [
+      { id:'bd_1', nome:'Sem copart — Nacional Plus 4 (Apt)', aco:'apt', tipo:'pme', valores:[1111.89,1312.03,1587.55,1905.08,2171.76,2236.91,2723.58,3203.48,3812.14,6670.86] },
+      { id:'bd_2', nome:'Sem copart — Premium 6 (Apt)',       aco:'apt', tipo:'pme', valores:[1535.55,1811.95,2192.44,2630.95,2999.26,3089.24,3761.34,4424.09,5264.67,9212.65] },
+      { id:'bd_3', nome:'Copart total — Nacional Plus 4 (Apt)',aco:'apt', tipo:'pme', valores:[ 889.51,1049.62,1270.03,1524.05,1737.40,1789.52,2178.85,2562.76,3049.68,5336.64] },
+      { id:'bd_4', nome:'Sem copart — Efetivo (Enf)',         aco:'enf', tipo:'pme', valores:[ 400.01, 472.01, 571.13, 685.36, 781.30, 804.74, 979.81,1152.46,1371.43,2399.87] },
+      { id:'bd_5', nome:'Sem copart — Nacional Flex (Enf)',   aco:'enf', tipo:'pme', valores:[ 466.28, 550.22, 665.76, 798.91, 910.76, 938.08,1142.16,1343.41,1598.66,2797.50] },
+      { id:'bd_6', nome:'Copart total — Efetivo (Enf)',       aco:'enf', tipo:'pme', valores:[ 308.01, 363.45, 439.77, 527.73, 601.60, 619.65, 754.46, 887.39,1056.00,1847.90] },
+      { id:'bd_7', nome:'Copart total — Nacional Flex (Enf)', aco:'enf', tipo:'pme', valores:[ 359.04, 423.67, 512.63, 615.16, 701.28, 722.32, 879.47,1034.43,1230.97,2154.07] },
+    ]
   }
 
 ];
