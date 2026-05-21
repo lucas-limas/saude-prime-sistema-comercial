@@ -270,6 +270,24 @@ window.SP_DATA = [
     ]
   },
 
+  // ── BEST SÊNIOR ───────────────────────────────────────────────────────
+  {
+    key: 'bestsenior', nome: 'Best Sênior',
+    cor: 'var(--bestsenior)', cls: 'on-bs',
+    reajuste: 'Mar/2026',
+    info: 'PF e PME · Planos exclusivos para 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde',
+    produtos: [
+      { id:'bse_pf1', nome:'Sem copart — Classic (Enf)',    aco:'enf', tipo:'pf',  valores:[0,0,0,0,0,0, 795.40, 1002.21, 1282.83, 1770.29] },
+      { id:'bse_pf2', nome:'Sem copart — Classic (Apt)',    aco:'apt', tipo:'pf',  valores:[0,0,0,0,0,0, 976.06, 1229.85, 1574.20, 2172.40] },
+      { id:'bse_pf3', nome:'Sem copart — Prime (Apt)',      aco:'apt', tipo:'pf',  valores:[0,0,0,0,0,0,1155.86, 1456.40, 1864.19, 2572.58] },
+      { id:'bse_pf4', nome:'Sem copart — Platinum (Apt)',   aco:'apt', tipo:'pf',  valores:[0,0,0,0,0,0,1399.88, 1763.86, 2257.74, 3115.68] },
+      { id:'bse_pme1', nome:'Sem copart — Classic PJ (Enf)',aco:'enf', tipo:'pme', valores:[0,0,0,0,0,0, 715.86,  901.99, 1154.54, 1592.51] },
+      { id:'bse_pme2', nome:'Sem copart — Classic PJ (Apt)',aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0, 878.46, 1106.86, 1416.78, 1955.16] },
+      { id:'bse_pme3', nome:'Sem copart — Prime PJ (Apt)',  aco:'apt', tipo:'pme', valores:[0,0,0,0,0,0,1040.28, 1310.76, 1677.77, 2315.32] },
+      { id:'bse_pme4', nome:'Sem copart — Platinum PJ (Apt)',aco:'apt',tipo:'pme', valores:[0,0,0,0,0,0,1259.89, 1587.48, 2031.96, 2804.11] },
+    ]
+  },
+
   // ── BRADESCO SAÚDE ────────────────────────────────────────────────────
   {
     key: 'bradesco', nome: 'Bradesco Saúde',

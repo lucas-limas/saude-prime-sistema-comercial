@@ -19,6 +19,7 @@
   --seguros-unimed:#0074BE;--seguros-unimed-bg:#e0eefd;
   --portosaude:#005CB9;--portosaude-bg:#e6f0fc;
   --bradesco:#CC0000;--bradesco-bg:#fdecea;
+  --bestsenior:#1B3A8A;--bestsenior-bg:#e8edf8;
   --green:#0a6b3a;--green-bg:#e8f5ee;
   --red:#8b2515;--amber:#8b5e0a;
   --r:8px;--r-sm:5px;--r-lg:14px;
@@ -137,9 +138,9 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .op-config-item:last-child{border-bottom:none}
 .op-config-head{display:flex;align-items:center;gap:7px;margin-bottom:6px}
 .op-dot{width:8px;height:8px;border-radius:50%}
-.dot-u{background:var(--unity)}.dot-e{background:var(--evo)}.dot-p{background:var(--plenum)}.dot-a{background:var(--amil)}.dot-m{background:var(--medsenior)}.dot-s{background:var(--seguros-unimed)}.dot-ps{background:var(--portosaude)}.dot-b{background:var(--bradesco)}
+.dot-u{background:var(--unity)}.dot-e{background:var(--evo)}.dot-p{background:var(--plenum)}.dot-a{background:var(--amil)}.dot-m{background:var(--medsenior)}.dot-s{background:var(--seguros-unimed)}.dot-ps{background:var(--portosaude)}.dot-b{background:var(--bradesco)}.dot-bs{background:var(--bestsenior)}
 .op-config-name{font-size:11px;font-weight:600;letter-spacing:.03em}
-.cn-u{color:var(--unity)}.cn-e{color:var(--evo)}.cn-p{color:var(--plenum)}.cn-a{color:var(--amil)}.cn-m{color:var(--medsenior)}.cn-s{color:var(--seguros-unimed)}.cn-ps{color:var(--portosaude)}.cn-b{color:var(--bradesco)}
+.cn-u{color:var(--unity)}.cn-e{color:var(--evo)}.cn-p{color:var(--plenum)}.cn-a{color:var(--amil)}.cn-m{color:var(--medsenior)}.cn-s{color:var(--seguros-unimed)}.cn-ps{color:var(--portosaude)}.cn-b{color:var(--bradesco)}.cn-bs{color:var(--bestsenior)}
 .op-config-sel{
   width:100%;font-family:"Outfit",sans-serif;font-size:11px;
   color:var(--ink);background:var(--cream);
@@ -203,6 +204,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .sub-p{font-size:13px;font-weight:600;color:var(--plenum)}
 .sub-a{font-size:13px;font-weight:600;color:var(--amil)}
 .sub-ms{font-size:13px;font-weight:600;color:var(--medsenior)}
+.sub-bs{font-size:13px;font-weight:600;color:var(--bestsenior)}
 .sub-su{font-size:13px;font-weight:600;color:var(--seguros-unimed)}
 .sub-ps{font-size:13px;font-weight:600;color:var(--portosaude)}
 .sub-bd{font-size:13px;font-weight:600;color:var(--bradesco)}
@@ -218,7 +220,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
   border-radius:var(--r);padding:12px 16px;
   display:flex;align-items:center;justify-content:space-between;
 }
-.tb-u{background:var(--unity)}.tb-e{background:var(--evo)}.tb-p{background:var(--plenum)}.tb-a{background:var(--amil)}.tb-ms{background:var(--medsenior-dark)}.tb-su{background:var(--seguros-unimed)}.tb-ps{background:var(--portosaude)}.tb-bd{background:var(--bradesco)}
+.tb-u{background:var(--unity)}.tb-e{background:var(--evo)}.tb-p{background:var(--plenum)}.tb-a{background:var(--amil)}.tb-ms{background:var(--medsenior-dark)}.tb-su{background:var(--seguros-unimed)}.tb-ps{background:var(--portosaude)}.tb-bd{background:var(--bradesco)}.tb-bs{background:var(--bestsenior)}
 .tb-off{background:var(--cream);border:1px solid var(--line)}
 .tb-op{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px}
 .tb-op-off{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
@@ -247,6 +249,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .on-su{background:var(--seguros-unimed-bg);border-color:var(--seguros-unimed);color:var(--seguros-unimed)}
 .on-ps{background:var(--portosaude-bg);border-color:var(--portosaude);color:var(--portosaude)}
 .on-b{background:var(--bradesco-bg);border-color:var(--bradesco);color:var(--bradesco)}
+.on-bs{background:var(--bestsenior-bg);border-color:var(--bestsenior);color:var(--bestsenior)}
 .on-name{font-weight:700;font-size:9px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .disc{font-size:10px;color:var(--ink3);padding:0 16px 12px;line-height:1.5}
 
@@ -256,7 +259,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rede-panel{display:none}.rede-panel.on{display:block}
 .rede-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .rede-head{padding:11px 14px}
-.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}.rh-ps{background:var(--portosaude)}.rh-b{background:var(--bradesco)}
+.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}.rh-ps{background:var(--portosaude)}.rh-b{background:var(--bradesco)}.rh-bs{background:var(--bestsenior)}
 .rh-name{font-family:"Playfair Display",serif;font-size:17px;color:#fff;letter-spacing:-.1px}
 .rh-adm{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.04em}
 .rede-body{padding:10px 13px}
@@ -264,7 +267,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rg-title{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .rg-item{display:flex;gap:5px;font-size:11px;color:var(--ink);padding:2px 0;line-height:1.35;align-items:baseline}
 .rg-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}.gd-ps{background:var(--portosaude)}.gd-b{background:var(--bradesco)}
+.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}.gd-ps{background:var(--portosaude)}.gd-b{background:var(--bradesco)}.gd-bs{background:var(--bestsenior)}
 .rloc{font-size:10px;color:var(--ink3)}
 .rtag{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:2px;letter-spacing:.04em;vertical-align:middle;line-height:1.6}
 .rt-ps{background:#fee2e2;color:#991b1b}.rt-int{background:#dbeafe;color:#1e40af}
@@ -284,6 +287,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .car-btn.on-su{background:var(--seguros-unimed);border-color:var(--seguros-unimed);color:#fff}
 .car-btn.on-ps{background:var(--portosaude);border-color:var(--portosaude);color:#fff}
 .car-btn.on-b{background:var(--bradesco);border-color:var(--bradesco);color:#fff}
+.car-btn.on-bs{background:var(--bestsenior);border-color:var(--bestsenior);color:#fff}
 .car-panel{display:none}.car-panel.on{display:grid;grid-template-columns:1fr 280px;gap:1.1rem;align-items:start}
 .car-tbl{width:100%;border-collapse:collapse;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);font-size:11px}
 .car-tbl thead tr{background:var(--navy)}
@@ -540,6 +544,7 @@ body{-webkit-overflow-scrolling:touch}
     <button class="car-btn" onclick="showRede('segurosunimed',this)">Seguros Unimed</button>
     <button class="car-btn" onclick="showRede('portosaude',this)">Porto Saúde</button>
     <button class="car-btn" onclick="showRede('bradesco',this)">Bradesco Saúde</button>
+    <button class="car-btn" onclick="showRede('bestsenior',this)">Best Sênior</button>
   </div>
   <div class="rede-panel on" id="rede-unity">
     <div class="rede-card">
@@ -771,6 +776,31 @@ body{-webkit-overflow-scrolling:touch}
       <div class="rede-foot">Rede nacional Bradesco. Confirme rede atualizada em bradescosaude.com.br ou com o corretor.</div>
     </div>
   </div>
+  <div class="rede-panel" id="rede-bestsenior">
+    <div class="rede-card">
+      <div class="rede-head rh-bs"><div class="rh-name">Best Sênior</div><div class="rh-adm">Tabela Mar-Abr/2026 · Exclusivo 44+</div></div>
+      <div class="rede-body">
+        <div class="rg"><div class="rg-title">Classic — Enf e Apt (todos os planos)</div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>H. Santa Lúcia Gama<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>H. Anchieta Ceilândia<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>CBV Hospital de Olhos<span class="rtag rt-ps">PS</span><span class="rtag rt-amb">AMB</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>Lab. Santa Paula <span class="rloc">Todos os planos</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">Prime — adiciona à rede Classic</div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>H. Santa Lúcia Norte<span class="rtag rt-ps">PS</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>Un. Avançada Sta Lúcia Taguatinga<span class="rtag rt-ps">PS</span><span class="rtag rt-amb">AMB</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>H. Anchieta Taguatinga<span class="rtag rt-amb">AMB</span><span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>Lab. Sabin <span class="rloc">Prime e Platinum</span></span></div>
+        </div>
+        <div class="rg"><div class="rg-title">Platinum — adiciona à rede Prime</div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>H. Santa Lúcia Sul<span class="rtag rt-int">INT</span></span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>H. Anchieta Taguatinga<span class="rtag rt-ps">PS</span> 24h</span></div>
+          <div class="rg-item"><span class="rg-dot gd-bs"></span><span>Núcleos Radiologia <span class="rloc">Diagnóstico por imagem</span></span></div>
+        </div>
+      </div>
+      <div class="rede-foot">Rede DF exclusiva para 44+. Confirme rede atualizada com o corretor ou no site bestsenior.com.br.</div>
+    </div>
+  </div>
   <div class="card" style="padding:.75rem 1.25rem">
     <div class="legend">
       <span><span class="rtag rt-ps">PS</span> Pronto-Socorro 24h</span>
@@ -794,6 +824,7 @@ body{-webkit-overflow-scrolling:touch}
     <button class="car-btn" onclick="showCar('segurosunimed',this)">Seguros Unimed</button>
     <button class="car-btn" onclick="showCar('portosaude',this)">Porto Saúde</button>
     <button class="car-btn" onclick="showCar('bradesco',this)">Bradesco Saúde</button>
+    <button class="car-btn" onclick="showCar('bestsenior',this)">Best Sênior</button>
   </div>
   <div class="car-panel on" id="car-unity">
     <div><table class="car-tbl">
@@ -1048,12 +1079,36 @@ body{-webkit-overflow-scrolling:touch}
       <div class="sc-note">⚠️ Carências padrão ANS. Confirme tabela atualizada diretamente com o Bradesco Saúde.</div>
     </div>
   </div>
+  <div class="car-panel" id="car-bestsenior">
+    <div><table class="car-tbl">
+      <thead><tr style="background:var(--bestsenior)"><th>Procedimento</th><th>Padrão</th></tr></thead>
+      <tbody>
+        <tr><td><div class="proc">Urgência / Emergência</div></td><td class="cv-g">24h</td></tr>
+        <tr><td><div class="proc">Consultas Eletivas</div></td><td class="cv-r">30 dias</td></tr>
+        <tr><td><div class="proc">Exames Simples</div><div class="proc-sub">Hemograma, glicose, urina, ECG</div></td><td class="cv-r">30 dias</td></tr>
+        <tr><td><div class="proc">Exames Complementares</div><div class="proc-sub">Ultrassom, RX, EEG</div></td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">Exames / Proc. Especiais</div><div class="proc-sub">RM, tomografia, endoscopia, fisioterapia</div></td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">Internações e Cirurgias</div></td><td class="cv-r">180 dias</td></tr>
+        <tr><td><div class="proc">CPT — Doenças Preexistentes</div></td><td class="cv-r">24 meses</td></tr>
+      </tbody>
+    </table></div>
+    <div class="car-side">
+      <div class="sc"><div class="sc-title">Planos PF e PME disponíveis</div>
+        <div class="sc-item"><strong>Classic</strong> — Sem copart · Enf e Apt · PF e PJ</div>
+        <div class="sc-item"><strong>Prime</strong> — Sem copart · Apartamento · PF e PJ</div>
+        <div class="sc-item"><strong>Platinum</strong> — Sem copart · Apartamento · PF e PJ</div>
+        <div class="sc-item sub-bs">Planos exclusivos para beneficiários 44+</div>
+        <div class="sc-item">Sem coparticipação em todos os planos</div>
+      </div>
+      <div class="sc-note">⚠️ Carências padrão ANS. Confirme tabela atualizada diretamente com a Best Sênior Saúde.</div>
+    </div>
+  </div>
 </div><!-- /carencias -->
 
 </div><!-- /page -->
 
 <footer style="text-align:center;padding:.75rem;font-size:10px;color:var(--ink3);border-top:1px solid var(--line);background:var(--white)">
-  Saúde Prime Seguros e Saúde · Unity (mai/2026 · Adm. Esplendor) · Evo (reaj. set/2026 · Adm. Easyplan) · Plenum (reaj. mar/2027 · Adm. Easyplan) · Amil (mai/2026 · Adm. própria) · Porto Saúde (PME · Porto Seguro) · Bradesco Saúde (PME · jan/2026) · Valores sujeitos a alteração sem aviso prévio
+  Saúde Prime Seguros e Saúde · Unity (mai/2026 · Adm. Esplendor) · Evo (reaj. set/2026 · Adm. Easyplan) · Plenum (reaj. mar/2027 · Adm. Easyplan) · Amil (mai/2026 · Adm. própria) · Porto Saúde (PME · Porto Seguro) · Bradesco Saúde (PME · jan/2026) · Best Sênior (Mar-Abr/2026 · 44+) · Valores sujeitos a alteração sem aviso prévio
 </footer>
 
 <script>
@@ -1119,13 +1174,15 @@ const OP_META = window.OP_META || {
   amil:      {nome:'Amil',        cor:'var(--amil)',     cls:'on-a',  info:'Vigência mai/2026 · Amil Dental incluso 12 meses grátis (R$ 14,99/mês após) · Rede nacional · Reembolso disponível nos planos Platinum'},
   medsenior:   {nome:'MedSênior',   cor:'var(--medsenior)',  cls:'on-ms', info:'Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas'},
   segurosunimed:{nome:'Seguros Unimed',cor:'var(--seguros-unimed)',cls:'on-su',info:'PME · Compulsório e Facultativo · 2–99 vidas · Rede DF + UE nacional · Essencial I/II/III/IV disponíveis'},
-  portosaude:  {nome:'Porto Saúde', cor:'var(--portosaude)', cls:'on-ps', info:'PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde'},
+  portosaude:  {nome:'Porto Saúde',  cor:'var(--portosaude)',  cls:'on-ps', info:'PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde'},
+  bradesco:    {nome:'Bradesco Saúde',cor:'var(--bradesco)',   cls:'on-b',  info:'PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros'},
+  bestsenior:  {nome:'Best Sênior',  cor:'var(--bestsenior)', cls:'on-bs', info:'PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde'},
 };
 
 // Estado
 let qtds = Array(10).fill(0);
-let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'a1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4'};
-let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true};
+let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'a1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1'};
+let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true};
 let filtroTipo   = 'adesao'; // 'adesao' | 'pme' | 'pf'
 let filtroCopart = 'todos';  // 'todos' | 'sem' | 'parcial' | 'total'
 let filtroMod    = 'comp';   // 'comp' | 'fac' — só relevante para PME (Seguros Unimed)
@@ -1271,8 +1328,8 @@ function step(i, delta) {
 function buildOpConfig() {
   const body = document.getElementById('op-config-body');
   body.innerHTML = '';
-  const sfxMap = {portosaude:'ps'};
-  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco'].forEach(op => {
+  const sfxMap = {portosaude:'ps', bestsenior:'bs'};
+  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior'].forEach(op => {
     const meta = OP_META[op];
     const planos = planosFiltered(op);
     const isActive = activeOps[op];
@@ -1338,12 +1395,14 @@ function render() {
   const suP = activeOps.segurosunimed && planosFiltered('segurosunimed').length > 0 ? PLANOS.find(p=>p.id===selPlanos.segurosunimed) : null;
   const psP = activeOps.portosaude   && planosFiltered('portosaude').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.portosaude)   : null;
   const bdP = activeOps.bradesco     && planosFiltered('bradesco').length     > 0 ? PLANOS.find(p=>p.id===selPlanos.bradesco)     : null;
+  const bsPraw = activeOps.bestsenior && planosFiltered('bestsenior').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.bestsenior)   : null;
+  const bsP = planAvailable(bsPraw) ? bsPraw : null;
 
   document.getElementById('placeholder').style.display = tv===0 ? 'block' : 'none';
   document.getElementById('result-wrap').style.display = tv>0 ? 'block' : 'none';
   document.getElementById('totais-section').style.display = tv>0 ? 'block' : 'none';
 
-  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP); return; }
+  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP); return; }
 
   // Cabeçalho tabela
   const rh = document.getElementById('rt-head');
@@ -1356,6 +1415,7 @@ function render() {
   if(suP) th += `<th style="color:var(--seguros-unimed)">${suP.nome.split('—')[0].trim()}</th><th style="color:var(--seguros-unimed)">Seguros Unimed subtotal</th>`;
   if(psP) th += `<th style="color:var(--portosaude)">${psP.nome.split('—')[0].trim()}</th><th style="color:var(--portosaude)">Porto Saúde subtotal</th>`;
   if(bdP) th += `<th style="color:var(--bradesco)">${bdP.nome.split('—')[0].trim()}</th><th style="color:var(--bradesco)">Bradesco subtotal</th>`;
+  if(bsP) th += `<th style="color:var(--bestsenior)">${bsP.nome.split('—')[0].trim()}</th><th style="color:var(--bestsenior)">Best Sênior subtotal</th>`;
   rh.innerHTML = th + '</tr>';
 
   // Linhas — só faixas com qtd > 0
@@ -1372,7 +1432,8 @@ function render() {
     const suS = suP ? suP.precos[i]*q : null;
     const psS = psP ? psP.precos[i]*q : null;
     const bdS = bdP ? bdP.precos[i]*q : null;
-    const vs = [uS,eS,pS,aS,mS,suS,psS,bdS].filter(v=>v!=null);
+    const bsS = bsP ? bsP.precos[i]*q : null;
+    const vs = [uS,eS,pS,aS,mS,suS,psS,bdS,bsS].filter(v=>v!=null);
     const mn = vs.length ? Math.min(...vs) : null;
     const mk = v => v!=null ? f(v)+(v===mn&&vs.length>1?'<span class="best">✓</span>':'') : '—';
     const tr = document.createElement('tr');
@@ -1385,6 +1446,7 @@ function render() {
     if(suP) h += `<td class="price-cell">${f(suP.precos[i])}</td><td class="sub-su">${mk(suS)}</td>`;
     if(psP) h += `<td class="price-cell">${f(psP.precos[i])}</td><td class="sub-ps">${mk(psS)}</td>`;
     if(bdP) h += `<td class="price-cell">${f(bdP.precos[i])}</td><td class="sub-bd">${mk(bdS)}</td>`;
+    if(bsP) h += `<td class="price-cell">${f(bsP.precos[i])}</td><td class="sub-bs">${mk(bsS)}</td>`;
     tr.innerHTML = h;
     rb.appendChild(tr);
   });
@@ -1398,6 +1460,7 @@ function render() {
   const suT = suP ? qtds.reduce((a,q,i)=>a+q*suP.precos[i],0) : null;
   const psT = psP ? qtds.reduce((a,q,i)=>a+q*psP.precos[i],0) : null;
   const bdT = bdP ? qtds.reduce((a,q,i)=>a+q*bdP.precos[i],0) : null;
+  const bsT = bsP ? qtds.reduce((a,q,i)=>a+q*bsP.precos[i],0) : null;
   const trTot = document.createElement('tr');
   trTot.className = 'row-total';
   let ht = `<td style="font-size:11px;font-weight:600;color:var(--ink2)">Total · ${tv} vida(s)</td>`;
@@ -1409,12 +1472,13 @@ function render() {
   if(suP) ht += `<td></td><td class="sub-su" style="font-size:13px">${f(suT)}</td>`;
   if(psP) ht += `<td></td><td class="sub-ps" style="font-size:13px">${f(psT)}</td>`;
   if(bdP) ht += `<td></td><td class="sub-bd" style="font-size:13px">${f(bdT)}</td>`;
+  if(bsP) ht += `<td></td><td class="sub-bs" style="font-size:13px">${f(bsT)}</td>`;
   trTot.innerHTML = ht;
   rb.appendChild(trTot);
 
   // Blocos totais
   const tg = document.getElementById('total-grid');
-  const cnt = [uT,eT,pT,aT,mT,suT,psT,bdT].filter(v=>v!==null).length || 1;
+  const cnt = [uT,eT,pT,aT,mT,suT,psT,bdT,bsT].filter(v=>v!==null).length || 1;
   tg.style.gridTemplateColumns = `repeat(${cnt},1fr)`;
   tg.innerHTML = '';
   const addT = (t, cls, lbl, sub) => {
@@ -1432,10 +1496,11 @@ function render() {
   addT(suT,'tb-su','Seguros Unimed',suP?suP.nome:'');
   addT(psT,'tb-ps','Porto Saúde',    psP?psP.nome:'');
   addT(bdT,'tb-bd','Bradesco Saúde', bdP?bdP.nome:'');
+  addT(bsT,'tb-bs','Best Sênior',    bsP?bsP.nome:'');
 
   // Vencedora
   const w = document.getElementById('winner');
-  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT},{n:'Bradesco Saúde',v:bdT}].filter(x=>x.v!==null);
+  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT},{n:'Bradesco Saúde',v:bdT},{n:'Best Sênior',v:bsT}].filter(x=>x.v!==null);
   if (arr.length > 1) {
     arr.sort((a,b)=>a.v-b.v);
     const diff = arr[arr.length-1].v - arr[0].v;
@@ -1444,13 +1509,13 @@ function render() {
       `<strong>${arr[0].n}</strong> é a opção mais econômica — <strong>${f(diff)}</strong> de diferença no total mensal.`;
   } else w.classList.remove('on');
 
-  renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP);
+  renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP);
 }
 
-function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP) {
+function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP) {
   const oc = document.getElementById('op-notes');
   oc.innerHTML = '';
-  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP],['bradesco',bdP]].forEach(([op,p]) => {
+  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP],['bradesco',bdP],['bestsenior',bsP]].forEach(([op,p]) => {
     if (!p) return;
     const m = OP_META[op];
     const d = document.createElement('div');
@@ -1462,7 +1527,7 @@ function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP) {
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
 function criarApresentacao() {
-  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco'];
+  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior'];
   const opsInfo = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
     .filter(op => planAvailable(PLANOS.find(x => x.id === selPlanos[op])))
@@ -1503,7 +1568,7 @@ function showTab(id, btn) {
 }
 
 function showCar(op, btn) {
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps'};
+  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs'};
   document.querySelectorAll('.car-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('car-'+op).classList.add('on');
@@ -1511,7 +1576,7 @@ function showCar(op, btn) {
 }
 
 function showRede(op, btn) {
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps'};
+  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs'};
   document.querySelectorAll('.rede-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.rede-ops .car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('rede-'+op).classList.add('on');
