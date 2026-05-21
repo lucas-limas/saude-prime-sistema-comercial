@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0f2340;--navy2:#1a3a5c;--navy3:#0a1929;
+  --navy:#1f1e1e;--navy2:#2a2929;--navy3:#141414;
   --amil:#461BFF;--amil-bg:#ede8ff;
-  --gold:#c9a227;--gold2:#e8c83a;--gold-bg:#fffbeb;
-  --cream:#faf9f6;--white:#fff;
-  --line:#e8e4dc;--line2:#ccc9be;
-  --ink:#1a1916;--ink2:#4a5568;--ink3:#8a97a6;
+  --gold:#ffffff;--gold2:#e8e8e8;--gold-bg:rgba(255,255,255,.08);
+  --cream:#f7f7f7;--white:#fff;
+  --line:#e8e8e8;--line2:#d0d0d0;
+  --ink:#1a1a1a;--ink2:#4a5568;--ink3:#8a97a6;
   --unity:#0f2340;--evo:#5c1a40;--plenum:#0a4028;--medsenior:#95C13D;--seguros-unimed:#0074BE;--portosaude:#005CB9;--bradesco:#CC0000;--bestsenior:#1B3A8A;
   --unity-bg:#edf1f7;--evo-bg:#f7edf4;--plenum-bg:#edf5f0;--seguros-unimed-bg:#e0eefd;--portosaude-bg:#e6f0fc;
   --green:#0a6b3a;--green-bg:#e6f5ee;
@@ -25,15 +25,15 @@
 body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);font-size:13px;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
 /* ── TOPBAR ── */
-.topbar{background:var(--navy3);display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;height:54px;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(0,0,0,.25)}
-.logo-img{height:34px;object-fit:contain}
+.topbar{background:var(--navy3);display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;height:68px;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.logo-img{height:52px;object-fit:contain}
 .bar-right{display:flex;align-items:center;gap:7px}
-.pill{background:rgba(201,162,39,.25);border:1px solid rgba(201,162,39,.5);color:var(--gold2);font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.06em}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.06em}
 .btn{padding:7px 14px;border-radius:var(--r-sm);font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap}
 .btn-ghost{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2)}
 .btn-ghost:hover{background:rgba(255,255,255,.18)}
-.btn-gold{background:var(--gold);color:var(--navy);font-weight:600}
-.btn-gold:hover{background:var(--gold2)}
+.btn-gold{background:#ffffff;color:var(--navy);font-weight:600}
+.btn-gold:hover{background:#f0f0f0}
 .btn-navy{background:var(--navy);color:#fff}
 .btn-navy:hover{background:var(--navy2)}
 .btn-outline{background:transparent;border:1px solid var(--line2);color:var(--ink2)}
@@ -44,7 +44,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .tab-bar{background:var(--navy2);display:flex;padding:0 1.75rem;border-top:1px solid rgba(255,255,255,.07)}
 .tab-btn{padding:10px 18px;font-size:12px;font-weight:500;color:rgba(255,255,255,.45);background:transparent;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
 .tab-btn:hover{color:rgba(255,255,255,.8)}
-.tab-btn.active{color:#fff;border-bottom-color:var(--gold)}
+.tab-btn.active{color:#fff;border-bottom-color:rgba(255,255,255,.85)}
 .tab-panel{display:none}.tab-panel.on{display:block;animation:fu .25s ease}
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
@@ -137,14 +137,14 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
   background:linear-gradient(155deg,var(--navy3) 0%,#0d2a4a 40%,#1a3a5c 100%);
   padding:3.5rem 3rem 2.5rem;position:relative;overflow:hidden;
 }
-.capa::before{content:'';position:absolute;top:-80px;right:-60px;width:360px;height:360px;border-radius:50%;background:rgba(201,162,39,.1)}
+.capa::before{content:'';position:absolute;top:-80px;right:-60px;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.05)}
 .capa::after{content:'';position:absolute;bottom:-60px;left:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.04)}
-.capa-logo{height:40px;object-fit:contain;filter:brightness(0) invert(1);margin-bottom:2.25rem;position:relative;z-index:1}
-.capa-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,162,39,.2);border:1px solid rgba(201,162,39,.4);color:var(--gold2);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:1.25rem;position:relative;z-index:1}
+.capa-logo{height:58px;object-fit:contain;filter:brightness(0) invert(1);margin-bottom:2.25rem;position:relative;z-index:1}
+.capa-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:1.25rem;position:relative;z-index:1}
 .capa-tipo{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem;position:relative;z-index:1}
 .capa-title{font-family:"Cormorant Garamond",serif;font-size:42px;font-weight:400;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:1rem;position:relative;z-index:1}
-.capa-title em{color:var(--gold2);font-style:normal}
-.capa-diagnostico{font-size:14px;color:rgba(255,255,255,.75);max-width:560px;line-height:1.7;position:relative;z-index:1;border-left:2px solid var(--gold);padding-left:1rem}
+.capa-title em{color:rgba(255,255,255,.78);font-style:italic}
+.capa-diagnostico{font-size:14px;color:rgba(255,255,255,.75);max-width:560px;line-height:1.7;position:relative;z-index:1;border-left:2px solid rgba(255,255,255,.4);padding-left:1rem}
 .capa-footer{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.12);position:relative;z-index:1}
 .cf-item strong{display:block;font-size:13px;color:rgba(255,255,255,.85);margin-bottom:2px}
 .cf-item span{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.04em;text-transform:uppercase}
@@ -152,8 +152,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 /* SEÇÕES */
 .sec{padding:2rem 3rem;border-bottom:1px solid var(--line)}
 .sec:last-of-type{border-bottom:none}
-.sec-eyebrow{display:flex;align-items:center;gap:8px;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
-.sec-eyebrow::after{content:'';flex:0 0 24px;height:1.5px;background:var(--gold)}
+.sec-eyebrow{display:flex;align-items:center;gap:8px;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin-bottom:.5rem}
+.sec-eyebrow::after{content:'';flex:0 0 24px;height:1.5px;background:var(--line2)}
 .sec-title{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:500;color:var(--navy);letter-spacing:-.3px;line-height:1.2;margin-bottom:.75rem}
 .sec-intro{font-size:14px;color:var(--ink2);line-height:1.7;max-width:700px;margin-bottom:1.5rem}
 
@@ -178,7 +178,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .imp-rec{border-color:var(--gold);background:linear-gradient(135deg,#fffbf0,#fef9e7)}
 .imp-econ{border-color:var(--green);background:var(--green-bg)}
 .imp-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:.75rem}
-.it-gold{background:var(--gold);color:var(--navy)}
+.it-gold{background:var(--navy);color:#fff}
 .it-green{background:var(--green);color:#fff}
 .imp-val{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:500;letter-spacing:-.5px;line-height:1;margin-bottom:.25rem}
 .iv-gold{color:var(--navy)}
@@ -268,8 +268,8 @@ body{-webkit-overflow-scrolling:touch}
 
 @media(max-width:768px){
   /* Topbar e tabs */
-  .topbar{padding:0 1rem;height:48px}
-  .logo-img{height:28px}
+  .topbar{padding:0 1rem;height:58px}
+  .logo-img{height:40px}
   .pill{display:none}
   .bar-right .btn-ghost{display:none}
   .tab-bar{padding:0 .25rem}
@@ -298,7 +298,7 @@ body{-webkit-overflow-scrolling:touch}
 }
 @media(max-width:480px){
   /* Topbar mínimo */
-  .topbar{height:44px}
+  .topbar{height:52px}
   .tab-btn{padding:7px 8px;font-size:10px;letter-spacing:0}
   .bar-right{gap:4px}
   .bar-right .btn{padding:5px 9px;font-size:11px}
