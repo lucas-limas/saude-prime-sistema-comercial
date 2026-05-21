@@ -50,7 +50,7 @@ window.SP_DATA = [
     key: 'plenum', nome: 'Plenum Saúde',
     cor: 'var(--plenum)', cls: 'on-p',
     reajuste: 'Mar/2027',
-    info: 'Adm. Easyplan · Reajuste mar/2027 · Seguro Viagem AIG + UTI Móvel 24h · Sírio-Libanês (Sigma) · Taxa assoc. R$ 5,00',
+    info: 'Adm. Easyplan · Reajuste mar/2027 · Adesão e PME · Seguro Viagem AIG + UTI Móvel 24h · Sírio-Libanês (Sigma) · Taxa assoc. R$ 5,00',
     produtos: [
       { id:'p1', nome:'Copart parcial — Delta (Enf)',  aco:'enf', valores:[349.90, 437.38, 507.36, 577.34, 629.82, 664.81,  804.77,  874.75, 1084.69, 1679.52] },
       { id:'p2', nome:'Copart parcial — Ômega (Enf)',  aco:'enf', valores:[389.90, 487.38, 565.36, 643.34, 701.82, 740.81,  896.77,  974.75, 1208.69, 1871.52] },
@@ -60,6 +60,26 @@ window.SP_DATA = [
       { id:'p6', nome:'Copart parcial — Sigma (Apt)',  aco:'apt', valores:[499.90, 624.88, 724.86, 824.84, 899.82, 949.81, 1149.77, 1249.75, 1549.69, 2399.52] },
       { id:'p7', nome:'Copart total — Beta (Apt)',     aco:'apt', valores:[309.90, 387.38, 449.36, 511.34, 557.82, 588.81,  712.77,  774.75,  960.69, 1487.52] },
       { id:'p8', nome:'Copart total — Sigma (Apt)',    aco:'apt', valores:[389.90, 487.38, 565.36, 643.34, 701.82, 740.81,  896.77,  974.75, 1208.69, 1871.52] },
+      // ── PME Sem copart — 02-29 vidas ──
+      { id:'pp_sc29_1', nome:'Sem copart — Delta',  aco:'enf', tipo:'pme', fvidas:'02-29', valores:[289.95,362.44,420.43,478.42,521.91,550.91, 666.89, 724.88, 898.85,1391.76] },
+      { id:'pp_sc29_2', nome:'Sem copart — Ômega',  aco:'enf', tipo:'pme', fvidas:'02-29', valores:[329.95,412.44,478.43,544.42,593.91,626.91, 758.89, 824.88,1022.85,1583.76] },
+      { id:'pp_sc29_3', nome:'Sem copart — Beta',   aco:'apt', tipo:'pme', fvidas:'02-29', valores:[349.95,437.44,507.43,577.42,629.91,664.91, 804.89, 874.88,1084.85,1679.76] },
+      { id:'pp_sc29_4', nome:'Sem copart — Sigma',  aco:'apt', tipo:'pme', fvidas:'02-29', valores:[439.90,536.68,644.02,727.74,800.51,904.58,1099.75,1209.73,1572.65,2639.40] },
+      // ── PME Com copart — 02-29 vidas ──
+      { id:'pp_cc29_1', nome:'Com copart — Delta',  aco:'enf', tipo:'pme', fvidas:'02-29', valores:[209.95,262.44,304.43,346.42,377.91,398.91, 482.89, 524.88, 650.85,1007.76] },
+      { id:'pp_cc29_2', nome:'Com copart — Ômega',  aco:'enf', tipo:'pme', fvidas:'02-29', valores:[239.95,299.94,347.93,395.92,431.91,455.91, 551.89, 599.88, 743.85,1151.76] },
+      { id:'pp_cc29_3', nome:'Com copart — Beta',   aco:'apt', tipo:'pme', fvidas:'02-29', valores:[244.95,306.19,355.18,404.17,440.91,465.41, 563.39, 612.38, 759.35,1175.76] },
+      { id:'pp_cc29_4', nome:'Com copart — Sigma',  aco:'apt', tipo:'pme', fvidas:'02-29', valores:[299.90,365.88,439.06,496.14,545.75,616.70, 749.75, 824.73,1072.15,1799.40] },
+      // ── PME Sem copart — 30-99 vidas ──
+      { id:'pp_sc99_1', nome:'Sem copart — Delta',  aco:'enf', tipo:'pme', fvidas:'30-99', valores:[279.95,349.94,405.93,461.92,503.91,531.91, 643.89, 699.88, 867.85,1343.76] },
+      { id:'pp_sc99_2', nome:'Sem copart — Ômega',  aco:'enf', tipo:'pme', fvidas:'30-99', valores:[319.95,399.94,463.93,527.92,575.91,607.91, 735.89, 799.88, 991.85,1535.76] },
+      { id:'pp_sc99_3', nome:'Sem copart — Beta',   aco:'apt', tipo:'pme', fvidas:'30-99', valores:[339.95,424.94,492.93,560.92,611.91,645.91, 781.89, 849.88,1053.85,1631.76] },
+      { id:'pp_sc99_4', nome:'Sem copart — Sigma',  aco:'apt', tipo:'pme', fvidas:'30-99', valores:[429.90,524.48,629.38,711.20,782.32,884.02,1074.75,1182.23,1536.90,2579.40] },
+      // ── PME Com copart — 30-99 vidas ──
+      { id:'pp_cc99_1', nome:'Com copart — Delta',  aco:'enf', tipo:'pme', fvidas:'30-99', valores:[199.95,249.94,289.93,329.92,359.91,379.91, 459.89, 499.88, 619.85, 959.76] },
+      { id:'pp_cc99_2', nome:'Com copart — Ômega',  aco:'enf', tipo:'pme', fvidas:'30-99', valores:[229.95,287.44,333.43,379.42,413.91,436.91, 528.89, 574.88, 712.85,1103.76] },
+      { id:'pp_cc99_3', nome:'Com copart — Beta',   aco:'apt', tipo:'pme', fvidas:'30-99', valores:[234.95,293.69,340.68,387.67,422.91,446.41, 540.39, 587.38, 728.35,1127.76] },
+      { id:'pp_cc99_4', nome:'Com copart — Sigma',  aco:'apt', tipo:'pme', fvidas:'30-99', valores:[289.90,353.68,424.42,479.59,527.55,596.13, 724.75, 797.23,1036.40,1739.40] },
     ]
   },
 

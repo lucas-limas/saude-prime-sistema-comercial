@@ -1103,13 +1103,22 @@ function _updateFVidasHint() {
   const hint = document.getElementById('fvidas-hint');
   if (!hint) return;
   const tv = qtds.reduce((a,b)=>a+b,0);
-  if (filtroTipo === 'pme' && tv > 0 && activeOps.segurosunimed) {
-    const modLabel = filtroMod === 'comp' ? 'Compulsório' : 'Facultativo';
-    hint.textContent = `Seguros Unimed: ${modLabel} · ${getFVidas()} vidas`;
-    hint.style.display = 'block';
-  } else {
-    hint.style.display = 'none';
+  if (filtroTipo === 'pme' && tv > 0) {
+    const parts = [];
+    if (activeOps.segurosunimed) {
+      const modLabel = filtroMod === 'comp' ? 'Compulsório' : 'Facultativo';
+      parts.push(`Seguros Unimed: ${modLabel} · ${getFVidas()} vidas`);
+    }
+    if (activeOps.plenum) {
+      parts.push(`Plenum PME: ${getFVidasForOp('plenum')} vidas`);
+    }
+    if (parts.length > 0) {
+      hint.textContent = parts.join('  |  ');
+      hint.style.display = 'block';
+      return;
+    }
   }
+  hint.style.display = 'none';
 }
 
 function getCopart(nome) {
@@ -1119,12 +1128,19 @@ function getCopart(nome) {
   return 'parcial'; // "com copart" ou "copart parcial"
 }
 
+function getFVidasForOp(op) {
+  const tv = qtds.reduce((a,b)=>a+b,0);
+  if (op === 'plenum') return tv <= 29 ? '02-29' : '30-99';
+  return getFVidas();
+}
+
 function planosFiltered(op) {
+  const fv = getFVidasForOp(op);
   return PLANOS.filter(p => {
     if (p.op !== op) return false;
     if (p.tipo !== filtroTipo) return false;
     if (p.mod    && p.mod    !== filtroMod)   return false;
-    if (p.fvidas && p.fvidas !== getFVidas()) return false;
+    if (p.fvidas && p.fvidas !== fv) return false;
     if (filtroCopart !== 'todos' && getCopart(p.nome) !== filtroCopart) return false;
     return true;
   });
