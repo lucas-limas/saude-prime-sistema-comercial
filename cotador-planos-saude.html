@@ -20,6 +20,7 @@
   --portosaude:#005CB9;--portosaude-bg:#e6f0fc;
   --bradesco:#CC0000;--bradesco-bg:#fdecea;
   --bestsenior:#1B3A8A;--bestsenior-bg:#e8edf8;
+  --sulamerica:#D5531C;--sulamerica-bg:#fdf0ea;
   --green:#0a6b3a;--green-bg:#e8f5ee;
   --red:#8b2515;--amber:#8b5e0a;
   --r:8px;--r-sm:5px;--r-lg:14px;
@@ -138,9 +139,9 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .op-config-item:last-child{border-bottom:none}
 .op-config-head{display:flex;align-items:center;gap:7px;margin-bottom:6px}
 .op-dot{width:8px;height:8px;border-radius:50%}
-.dot-u{background:var(--unity)}.dot-e{background:var(--evo)}.dot-p{background:var(--plenum)}.dot-a{background:var(--amil)}.dot-m{background:var(--medsenior)}.dot-s{background:var(--seguros-unimed)}.dot-ps{background:var(--portosaude)}.dot-b{background:var(--bradesco)}.dot-bs{background:var(--bestsenior)}
+.dot-u{background:var(--unity)}.dot-e{background:var(--evo)}.dot-p{background:var(--plenum)}.dot-a{background:var(--amil)}.dot-m{background:var(--medsenior)}.dot-s{background:var(--seguros-unimed)}.dot-ps{background:var(--portosaude)}.dot-b{background:var(--bradesco)}.dot-bs{background:var(--bestsenior)}.dot-sa{background:var(--sulamerica)}
 .op-config-name{font-size:11px;font-weight:600;letter-spacing:.03em}
-.cn-u{color:var(--unity)}.cn-e{color:var(--evo)}.cn-p{color:var(--plenum)}.cn-a{color:var(--amil)}.cn-m{color:var(--medsenior)}.cn-s{color:var(--seguros-unimed)}.cn-ps{color:var(--portosaude)}.cn-b{color:var(--bradesco)}.cn-bs{color:var(--bestsenior)}
+.cn-u{color:var(--unity)}.cn-e{color:var(--evo)}.cn-p{color:var(--plenum)}.cn-a{color:var(--amil)}.cn-m{color:var(--medsenior)}.cn-s{color:var(--seguros-unimed)}.cn-ps{color:var(--portosaude)}.cn-b{color:var(--bradesco)}.cn-bs{color:var(--bestsenior)}.cn-sa{color:var(--sulamerica)}
 .op-config-sel{
   width:100%;font-family:"Outfit",sans-serif;font-size:11px;
   color:var(--ink);background:var(--cream);
@@ -219,6 +220,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .sub-su{font-size:13px;font-weight:600;color:var(--seguros-unimed)}
 .sub-ps{font-size:13px;font-weight:600;color:var(--portosaude)}
 .sub-bd{font-size:13px;font-weight:600;color:var(--bradesco)}
+.sub-sa{font-size:13px;font-weight:600;color:var(--sulamerica)}
 .best{
   display:inline-flex;align-items:center;justify-content:center;
   width:14px;height:14px;background:var(--green);color:#fff;
@@ -231,7 +233,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
   border-radius:var(--r);padding:12px 16px;
   display:flex;align-items:center;justify-content:space-between;
 }
-.tb-u{background:var(--unity)}.tb-e{background:var(--evo)}.tb-p{background:var(--plenum)}.tb-a{background:var(--amil)}.tb-ms{background:var(--medsenior-dark)}.tb-su{background:var(--seguros-unimed)}.tb-ps{background:var(--portosaude)}.tb-bd{background:var(--bradesco)}.tb-bs{background:var(--bestsenior)}
+.tb-u{background:var(--unity)}.tb-e{background:var(--evo)}.tb-p{background:var(--plenum)}.tb-a{background:var(--amil)}.tb-ms{background:var(--medsenior-dark)}.tb-su{background:var(--seguros-unimed)}.tb-ps{background:var(--portosaude)}.tb-bd{background:var(--bradesco)}.tb-bs{background:var(--bestsenior)}.tb-sa{background:var(--sulamerica)}
 .tb-off{background:var(--cream);border:1px solid var(--line)}
 .tb-op{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px}
 .tb-op-off{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
@@ -261,6 +263,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .on-ps{background:var(--portosaude-bg);border-color:var(--portosaude);color:var(--portosaude)}
 .on-b{background:var(--bradesco-bg);border-color:var(--bradesco);color:var(--bradesco)}
 .on-bs{background:var(--bestsenior-bg);border-color:var(--bestsenior);color:var(--bestsenior)}
+.on-sa{background:var(--sulamerica-bg);border-color:var(--sulamerica);color:var(--sulamerica)}
 .on-name{font-weight:700;font-size:9px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .disc{font-size:10px;color:var(--ink3);padding:0 16px 12px;line-height:1.5}
 
@@ -270,7 +273,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rede-panel{display:none}.rede-panel.on{display:block}
 .rede-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
 .rede-head{padding:11px 14px}
-.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}.rh-ps{background:var(--portosaude)}.rh-b{background:var(--bradesco)}.rh-bs{background:var(--bestsenior)}
+.rh-u{background:var(--unity)}.rh-e{background:var(--evo)}.rh-p{background:var(--plenum)}.rh-a{background:var(--amil)}.rh-ms{background:var(--medsenior-dark)}.rh-su{background:var(--seguros-unimed)}.rh-ps{background:var(--portosaude)}.rh-b{background:var(--bradesco)}.rh-bs{background:var(--bestsenior)}.rh-sa{background:var(--sulamerica)}
 .rh-name{font-family:"Playfair Display",serif;font-size:17px;color:#fff;letter-spacing:-.1px}
 .rh-adm{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.04em}
 .rede-body{padding:10px 13px}
@@ -278,7 +281,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .rg-title{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .rg-item{display:flex;gap:5px;font-size:11px;color:var(--ink);padding:2px 0;line-height:1.35;align-items:baseline}
 .rg-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}.gd-ps{background:var(--portosaude)}.gd-b{background:var(--bradesco)}.gd-bs{background:var(--bestsenior)}
+.gd-u{background:var(--unity)}.gd-e{background:var(--evo)}.gd-p{background:var(--plenum)}.gd-a{background:var(--amil)}.gd-ms{background:var(--medsenior)}.gd-su{background:var(--seguros-unimed)}.gd-ps{background:var(--portosaude)}.gd-b{background:var(--bradesco)}.gd-bs{background:var(--bestsenior)}.gd-sa{background:var(--sulamerica)}
 .rloc{font-size:10px;color:var(--ink3)}
 .rtag{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:2px;letter-spacing:.04em;vertical-align:middle;line-height:1.6}
 .rt-ps{background:#fee2e2;color:#991b1b}.rt-int{background:#dbeafe;color:#1e40af}
@@ -299,6 +302,7 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 .car-btn.on-ps{background:var(--portosaude);border-color:var(--portosaude);color:#fff}
 .car-btn.on-b{background:var(--bradesco);border-color:var(--bradesco);color:#fff}
 .car-btn.on-bs{background:var(--bestsenior);border-color:var(--bestsenior);color:#fff}
+.car-btn.on-sa{background:var(--sulamerica);border-color:var(--sulamerica);color:#fff}
 .car-panel{display:none}.car-panel.on{display:grid;grid-template-columns:1fr 280px;gap:1.1rem;align-items:start}
 .car-tbl{width:100%;border-collapse:collapse;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);font-size:11px}
 .car-tbl thead tr{background:var(--navy)}
@@ -472,6 +476,13 @@ body{-webkit-overflow-scrolling:touch}
             <div class="fb-row" id="fmod">
               <button class="fb-btn on" onclick="setFiltroMod('comp',this)">Compulsório</button>
               <button class="fb-btn" onclick="setFiltroMod('fac',this)">Facultativo</button>
+            </div>
+          </div>
+          <div id="fvig-row" style="display:none">
+            <div class="filtro-lbl">Vigência (SulAmérica)</div>
+            <div class="fb-row" id="fvig">
+              <button class="fb-btn on" onclick="setFiltroVig('12',this)">12 meses</button>
+              <button class="fb-btn" onclick="setFiltroVig('24',this)">24 meses</button>
             </div>
           </div>
         </div>
@@ -1188,16 +1199,18 @@ const OP_META = window.OP_META || {
   portosaude:  {nome:'Porto Saúde',  cor:'var(--portosaude)',  cls:'on-ps', info:'PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde'},
   bradesco:    {nome:'Bradesco Saúde',cor:'var(--bradesco)',   cls:'on-b',  info:'PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros'},
   bestsenior:  {nome:'Best Sênior',  cor:'var(--bestsenior)', cls:'on-bs', info:'PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde'},
+  sulamerica:  {nome:'SulAmérica Saúde', cor:'var(--sulamerica)', cls:'on-sa', info:'PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde'},
 };
 
 // Estado
 let qtds = Array(10).fill(0);
-let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'a1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1'};
-let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true};
+let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'a1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1', sulamerica:'sa_29_12_sc_1'};
+let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true, sulamerica:true};
 // tipo por operadora — permite cotação mista entre modalidades
-let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'adesao', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf'};
+let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'adesao', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf', sulamerica:'pme'};
 let filtroCopart = 'todos';  // 'todos' | 'sem' | 'parcial' | 'total'
 let filtroMod    = 'comp';   // 'comp' | 'fac' — só relevante para PME (Seguros Unimed)
+let filtroVig    = '12';     // '12' | '24'   — vigência SulAmérica
 
 const f = v => v != null ? 'R$ ' + v.toFixed(2).replace('.',',') : '—';
 
@@ -1213,6 +1226,7 @@ function _updateFVidasHint() {
   const hint = document.getElementById('fvidas-hint');
   if (!hint) return;
   const tv = qtds.reduce((a,b)=>a+b,0);
+  _checkFVigRow();
   if (tv > 0) {
     const parts = [];
     if (tipoOp.segurosunimed === 'pme' && activeOps.segurosunimed) {
@@ -1221,6 +1235,10 @@ function _updateFVidasHint() {
     }
     if (tipoOp.plenum === 'pme' && activeOps.plenum) {
       parts.push(`Plenum PME: ${getFVidasForOp('plenum')} vidas`);
+    }
+    if (activeOps.sulamerica) {
+      const vigLabel = filtroVig === '12' ? '12 meses' : '24 meses';
+      parts.push(`SulAmérica: ${vigLabel} · ${getFVidasForOp('sulamerica')} vidas`);
     }
     if (parts.length > 0) {
       hint.textContent = parts.join('  |  ');
@@ -1241,6 +1259,7 @@ function getCopart(nome) {
 function getFVidasForOp(op) {
   const tv = qtds.reduce((a,b)=>a+b,0);
   if (op === 'plenum') return tv <= 29 ? '02-29' : '30-99';
+  if (op === 'sulamerica') return tv <= 4 ? '03-04' : tv <= 29 ? '05-29' : '30-99';
   return getFVidas();
 }
 
@@ -1258,6 +1277,7 @@ function planosFiltered(op) {
     if ((p.tipo || 'adesao') !== opTipo) return false;
     if (p.mod    && p.mod    !== filtroMod)   return false;
     if (p.fvidas && p.fvidas !== fv) return false;
+    if (p.vig    && p.vig    !== parseInt(filtroVig)) return false;
     if (filtroCopart !== 'todos' && getCopart(p.nome) !== filtroCopart) return false;
     return true;
   });
@@ -1299,6 +1319,20 @@ function setFiltroMod(val, btn) {
   _updateFVidasHint();
   buildOpConfig();
   render();
+}
+
+function setFiltroVig(val, btn) {
+  filtroVig = val;
+  document.querySelectorAll('#fvig .fb-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  _updateFVidasHint();
+  buildOpConfig();
+  render();
+}
+
+function _checkFVigRow() {
+  const fvigRow = document.getElementById('fvig-row');
+  if (fvigRow) fvigRow.style.display = activeOps.sulamerica ? 'block' : 'none';
 }
 
 function setFiltroCopart(val, btn) {
@@ -1368,6 +1402,7 @@ function step(i, delta) {
   document.getElementById('total-vidas').textContent = tv;
   document.getElementById('total-badge').textContent = tv + ' vida(s)';
   _updateFVidasHint();
+  _checkFVigRow();
   // Reconstrói config se alguma operadora PME estiver ativa (fvidas altera os planos disponíveis)
   if (Object.entries(tipoOp).some(([op,t]) => t === 'pme' && activeOps[op])) buildOpConfig();
   render();
@@ -1377,11 +1412,11 @@ function step(i, delta) {
 function buildOpConfig() {
   const body = document.getElementById('op-config-body');
   body.innerHTML = '';
-  const sfxMap = {portosaude:'ps', bestsenior:'bs'};
+  const sfxMap = {portosaude:'ps', bestsenior:'bs', segurosunimed:'s', sulamerica:'sa'};
   const tipoLabel = {adesao:'Adesão', pme:'PME', pf:'PF'};
   const tipoOrder = ['adesao','pme','pf'];
 
-  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior'].forEach(op => {
+  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'].forEach(op => {
     const meta = OP_META[op];
     const isActive = activeOps[op];
     const sfx = sfxMap[op] || op[0];
@@ -1439,6 +1474,8 @@ function selPlan(op, id) {
 
 function toggleOp(op) {
   activeOps[op] = !activeOps[op];
+  _checkFVigRow();
+  _updateFVidasHint();
   buildOpConfig();
   render();
 }
@@ -1463,16 +1500,17 @@ function render() {
   const bdP = activeOps.bradesco     && planosFiltered('bradesco').length     > 0 ? PLANOS.find(p=>p.id===selPlanos.bradesco)     : null;
   const bsPraw = activeOps.bestsenior && planosFiltered('bestsenior').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.bestsenior)   : null;
   const bsP = planAvailable(bsPraw) ? bsPraw : null;
+  const saP = activeOps.sulamerica   && planosFiltered('sulamerica').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.sulamerica)   : null;
 
   document.getElementById('placeholder').style.display = tv===0 ? 'block' : 'none';
   document.getElementById('result-wrap').style.display = tv>0 ? 'block' : 'none';
   document.getElementById('totais-section').style.display = tv>0 ? 'block' : 'none';
 
-  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP); return; }
+  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP,saP); return; }
 
   // Cabeçalho tabela
   const usedTipos = [...new Set(
-    [uP&&'unity',eP&&'evo',pP&&'plenum',aP&&'amil',mP&&'medsenior',suP&&'segurosunimed',psP&&'portosaude',bdP&&'bradesco',bsP&&'bestsenior']
+    [uP&&'unity',eP&&'evo',pP&&'plenum',aP&&'amil',mP&&'medsenior',suP&&'segurosunimed',psP&&'portosaude',bdP&&'bradesco',bsP&&'bestsenior',saP&&'sulamerica']
       .filter(Boolean).map(op => tipoOp[op])
   )];
   const mixedTipos = usedTipos.length > 1;
@@ -1490,6 +1528,7 @@ function render() {
   if(psP) th += `<th style="color:var(--portosaude)">${psP.nome.split('—')[0].trim()}${tipoTag('portosaude')}</th><th style="color:var(--portosaude)">Porto Saúde subtotal</th>`;
   if(bdP) th += `<th style="color:var(--bradesco)">${bdP.nome.split('—')[0].trim()}${tipoTag('bradesco')}</th><th style="color:var(--bradesco)">Bradesco subtotal</th>`;
   if(bsP) th += `<th style="color:var(--bestsenior)">${bsP.nome.split('—')[0].trim()}${tipoTag('bestsenior')}</th><th style="color:var(--bestsenior)">Best Sênior subtotal</th>`;
+  if(saP) th += `<th style="color:var(--sulamerica)">${saP.nome.split('—')[0].trim()}${tipoTag('sulamerica')}</th><th style="color:var(--sulamerica)">SulAmérica subtotal</th>`;
   rh.innerHTML = th + '</tr>';
 
   // Linhas — só faixas com qtd > 0
@@ -1507,7 +1546,8 @@ function render() {
     const psS = psP ? psP.precos[i]*q : null;
     const bdS = bdP ? bdP.precos[i]*q : null;
     const bsS = bsP ? bsP.precos[i]*q : null;
-    const vs = [uS,eS,pS,aS,mS,suS,psS,bdS,bsS].filter(v=>v!=null);
+    const saS = saP ? saP.precos[i]*q : null;
+    const vs = [uS,eS,pS,aS,mS,suS,psS,bdS,bsS,saS].filter(v=>v!=null);
     const mn = vs.length ? Math.min(...vs) : null;
     const mk = v => v!=null ? f(v)+(v===mn&&vs.length>1?'<span class="best">✓</span>':'') : '—';
     const tr = document.createElement('tr');
@@ -1521,6 +1561,7 @@ function render() {
     if(psP) h += `<td class="price-cell">${f(psP.precos[i])}</td><td class="sub-ps">${mk(psS)}</td>`;
     if(bdP) h += `<td class="price-cell">${f(bdP.precos[i])}</td><td class="sub-bd">${mk(bdS)}</td>`;
     if(bsP) h += `<td class="price-cell">${f(bsP.precos[i])}</td><td class="sub-bs">${mk(bsS)}</td>`;
+    if(saP) h += `<td class="price-cell">${f(saP.precos[i])}</td><td class="sub-sa">${mk(saS)}</td>`;
     tr.innerHTML = h;
     rb.appendChild(tr);
   });
@@ -1535,6 +1576,7 @@ function render() {
   const psT = psP ? qtds.reduce((a,q,i)=>a+q*psP.precos[i],0) : null;
   const bdT = bdP ? qtds.reduce((a,q,i)=>a+q*bdP.precos[i],0) : null;
   const bsT = bsP ? qtds.reduce((a,q,i)=>a+q*bsP.precos[i],0) : null;
+  const saT = saP ? qtds.reduce((a,q,i)=>a+q*saP.precos[i],0) : null;
   const trTot = document.createElement('tr');
   trTot.className = 'row-total';
   let ht = `<td style="font-size:11px;font-weight:600;color:var(--ink2)">Total · ${tv} vida(s)</td>`;
@@ -1547,12 +1589,13 @@ function render() {
   if(psP) ht += `<td></td><td class="sub-ps" style="font-size:13px">${f(psT)}</td>`;
   if(bdP) ht += `<td></td><td class="sub-bd" style="font-size:13px">${f(bdT)}</td>`;
   if(bsP) ht += `<td></td><td class="sub-bs" style="font-size:13px">${f(bsT)}</td>`;
+  if(saP) ht += `<td></td><td class="sub-sa" style="font-size:13px">${f(saT)}</td>`;
   trTot.innerHTML = ht;
   rb.appendChild(trTot);
 
   // Blocos totais
   const tg = document.getElementById('total-grid');
-  const cnt = [uT,eT,pT,aT,mT,suT,psT,bdT,bsT].filter(v=>v!==null).length || 1;
+  const cnt = [uT,eT,pT,aT,mT,suT,psT,bdT,bsT,saT].filter(v=>v!==null).length || 1;
   tg.style.gridTemplateColumns = `repeat(${cnt},1fr)`;
   tg.innerHTML = '';
   const addT = (t, cls, lbl, sub) => {
@@ -1562,19 +1605,20 @@ function render() {
     d.innerHTML = `<div><div class="tb-op">${lbl}</div><div class="tb-val">${f(t)}</div><div class="tb-sub">${tv} vida(s) · ${sub}</div></div>`;
     tg.appendChild(d);
   };
-  addT(uT,'tb-u', 'Unity Saúde',    uP?uP.nome:'');
-  addT(eT,'tb-e', 'Evo Saúde',      eP?eP.nome:'');
-  addT(pT,'tb-p', 'Plenum Saúde',   pP?pP.nome:'');
-  addT(aT,'tb-a', 'Amil',           aP?aP.nome:'');
-  addT(mT,'tb-ms','MedSênior',      mP?mP.nome:'');
-  addT(suT,'tb-su','Seguros Unimed',suP?suP.nome:'');
-  addT(psT,'tb-ps','Porto Saúde',    psP?psP.nome:'');
-  addT(bdT,'tb-bd','Bradesco Saúde', bdP?bdP.nome:'');
-  addT(bsT,'tb-bs','Best Sênior',    bsP?bsP.nome:'');
+  addT(uT,'tb-u', 'Unity Saúde',      uP?uP.nome:'');
+  addT(eT,'tb-e', 'Evo Saúde',        eP?eP.nome:'');
+  addT(pT,'tb-p', 'Plenum Saúde',     pP?pP.nome:'');
+  addT(aT,'tb-a', 'Amil',             aP?aP.nome:'');
+  addT(mT,'tb-ms','MedSênior',        mP?mP.nome:'');
+  addT(suT,'tb-su','Seguros Unimed',  suP?suP.nome:'');
+  addT(psT,'tb-ps','Porto Saúde',     psP?psP.nome:'');
+  addT(bdT,'tb-bd','Bradesco Saúde',  bdP?bdP.nome:'');
+  addT(bsT,'tb-bs','Best Sênior',     bsP?bsP.nome:'');
+  addT(saT,'tb-sa','SulAmérica Saúde',saP?saP.nome:'');
 
   // Vencedora
   const w = document.getElementById('winner');
-  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT},{n:'Bradesco Saúde',v:bdT},{n:'Best Sênior',v:bsT}].filter(x=>x.v!==null);
+  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT},{n:'Bradesco Saúde',v:bdT},{n:'Best Sênior',v:bsT},{n:'SulAmérica Saúde',v:saT}].filter(x=>x.v!==null);
   if (arr.length > 1) {
     arr.sort((a,b)=>a.v-b.v);
     const diff = arr[arr.length-1].v - arr[0].v;
@@ -1583,13 +1627,13 @@ function render() {
       `<strong>${arr[0].n}</strong> é a opção mais econômica — <strong>${f(diff)}</strong> de diferença no total mensal.`;
   } else w.classList.remove('on');
 
-  renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP);
+  renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP,saP);
 }
 
-function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP) {
+function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP,saP) {
   const oc = document.getElementById('op-notes');
   oc.innerHTML = '';
-  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP],['bradesco',bdP],['bestsenior',bsP]].forEach(([op,p]) => {
+  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP],['bradesco',bdP],['bestsenior',bsP],['sulamerica',saP]].forEach(([op,p]) => {
     if (!p) return;
     const m = OP_META[op];
     const d = document.createElement('div');
@@ -1601,7 +1645,7 @@ function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP) {
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
 function criarApresentacao() {
-  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior'];
+  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
   const opsInfo = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
     .filter(op => planAvailable(PLANOS.find(x => x.id === selPlanos[op])))
@@ -1625,7 +1669,8 @@ function criarApresentacao() {
     opsInfo:     withTotal,
     tipoOp:      {...tipoOp},
     filtroCopart,
-    filtroMod
+    filtroMod,
+    filtroVig
   };
 
   if (window.parent && window.parent.syncApres) {
@@ -1642,7 +1687,7 @@ function showTab(id, btn) {
 }
 
 function showCar(op, btn) {
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs'};
+  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa'};
   document.querySelectorAll('.car-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('car-'+op).classList.add('on');
@@ -1650,7 +1695,7 @@ function showCar(op, btn) {
 }
 
 function showRede(op, btn) {
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs'};
+  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa'};
   document.querySelectorAll('.rede-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.rede-ops .car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('rede-'+op).classList.add('on');
@@ -1684,6 +1729,7 @@ function limpar() {
 buildFaixas();
 buildOpConfig();
 render();
+_checkFVigRow();
 ['ph-data','ph-data2','ph-data3'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.textContent = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});

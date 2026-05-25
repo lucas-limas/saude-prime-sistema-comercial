@@ -303,6 +303,124 @@ window.SP_DATA = [
       { id:'bd_6', nome:'Copart total — Efetivo (Enf)',       aco:'enf', tipo:'pme', valores:[ 308.01, 363.45, 439.77, 527.73, 601.60, 619.65, 754.46, 887.39,1056.00,1847.90] },
       { id:'bd_7', nome:'Copart total — Nacional Flex (Enf)', aco:'enf', tipo:'pme', valores:[ 359.04, 423.67, 512.63, 615.16, 701.28, 722.32, 879.47,1034.43,1230.97,2154.07] },
     ]
+  },
+
+  // ── SULAMERICA SAÚDE ──────────────────────────────────────────────────
+  {
+    key: 'sulamerica', nome: 'SulAmérica Saúde',
+    cor: 'var(--sulamerica)', cls: 'on-sa',
+    reajuste: 'A definir',
+    info: 'PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde',
+    produtos: [
+      // ── PME 12m | 03–04v | Sem copart ──────────────────────────────
+      { id:'sa_04_12_sc_1', nome:'Sem copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 388.10,  485.12,  601.55,  667.72,  714.46,  828.78,  990.72, 1161.13, 1382.33,  2328.55] },
+      { id:'sa_04_12_sc_2', nome:'Sem copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 429.21,  536.51,  665.27,  738.45,  790.15,  916.58, 1095.68, 1284.14, 1528.78,  2575.22] },
+      { id:'sa_04_12_sc_3', nome:'Sem copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 703.93,  879.90, 1091.07, 1211.10, 1295.87, 1503.21, 1796.94, 2106.00, 2507.19,  4223.36] },
+      { id:'sa_04_12_sc_4', nome:'Sem copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 740.97,  926.20, 1148.50, 1274.83, 1364.07, 1582.32, 1891.52, 2216.85, 2639.15,  4445.64] },
+      { id:'sa_04_12_sc_5', nome:'Sem copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[1409.78, 1762.21, 2185.14, 2425.50, 2595.27, 3010.52, 3598.77, 4217.76, 5021.24,  8458.27] },
+      { id:'sa_04_12_sc_6', nome:'Sem copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[1685.85, 2107.33, 2613.09, 2900.52, 3103.54, 3600.11, 4303.58, 5043.78, 6004.62, 10114.80] },
+      { id:'sa_04_12_sc_7', nome:'Sem copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[1883.16, 2353.96, 2918.91, 3239.99, 3466.79, 4021.47, 4807.28, 5634.13, 6707.43, 11298.65] },
+      { id:'sa_04_12_sc_8', nome:'Sem copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[2469.80, 3087.27, 3828.22, 4249.33, 4546.77, 5274.25, 6304.84, 7389.25, 8796.92, 14818.41] },
+      // ── PME 12m | 03–04v | Com copart 30% ──────────────────────────
+      { id:'sa_04_12_cc_1', nome:'Com copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 271.67,  339.58,  421.08,  467.41,  500.13,  580.14,  693.51,  812.79,  967.64,  1629.99] },
+      { id:'sa_04_12_cc_2', nome:'Com copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 300.45,  375.56,  465.69,  516.92,  553.11,  641.61,  766.98,  898.91, 1070.14,  1802.65] },
+      { id:'sa_04_12_cc_3', nome:'Com copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 527.94,  659.92,  818.31,  908.32,  971.90, 1127.41, 1347.71, 1579.50, 1880.40,  3167.51] },
+      { id:'sa_04_12_cc_4', nome:'Com copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[ 555.73,  694.65,  861.37,  956.14, 1023.06, 1186.74, 1418.64, 1662.63, 1979.37,  3334.24] },
+      { id:'sa_04_12_cc_5', nome:'Com copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[1198.30, 1497.88, 1857.37, 2061.66, 2205.99, 2558.94, 3058.96, 3585.10, 4268.06,  7189.54] },
+      { id:'sa_04_12_cc_6', nome:'Com copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[1432.98, 1791.23, 2221.11, 2465.44, 2638.01, 3060.09, 3658.03, 4287.23, 5103.93,  8597.57] },
+      { id:'sa_04_12_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[1600.69, 2000.88, 2481.07, 2754.00, 2946.78, 3418.26, 4086.18, 4789.01, 5701.31,  9603.86] },
+      { id:'sa_04_12_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'03-04', vig:12, valores:[2099.34, 2624.17, 3253.99, 3611.93, 3864.76, 4483.11, 5359.10, 6280.87, 7477.38, 12595.65] },
+      // ── PME 24m | 03–04v | Sem copart ──────────────────────────────
+      { id:'sa_04_24_sc_1', nome:'Sem copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 352.81,  441.01,  546.85,  607.02,  649.51,  753.43,  900.66, 1055.57, 1256.67,  2116.86] },
+      { id:'sa_04_24_sc_2', nome:'Sem copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 390.19,  487.74,  604.80,  671.32,  718.32,  833.26,  996.07, 1167.41, 1389.79,  2341.11] },
+      { id:'sa_04_24_sc_3', nome:'Sem copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 639.92,  799.91,  991.88, 1100.99, 1178.06, 1366.55, 1633.58, 1914.55, 2279.27,  3839.41] },
+      { id:'sa_04_24_sc_4', nome:'Sem copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 673.61,  842.01, 1044.09, 1158.94, 1240.07, 1438.48, 1719.55, 2015.31, 2399.23,  4041.49] },
+      { id:'sa_04_24_sc_5', nome:'Sem copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1281.60, 1602.01, 1986.49, 2205.00, 2359.34, 2736.83, 3271.61, 3834.33, 4564.76,  7689.35] },
+      { id:'sa_04_24_sc_6', nome:'Sem copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1532.60, 1915.74, 2375.53, 2636.83, 2821.40, 3272.83, 3912.34, 4585.27, 5458.74,  9195.27] },
+      { id:'sa_04_24_sc_7', nome:'Sem copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1711.96, 2139.97, 2653.56, 2945.45, 3151.63, 3655.89, 4370.25, 5121.94, 6097.67, 10271.51] },
+      { id:'sa_04_24_sc_8', nome:'Sem copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[2245.28, 2806.61, 3480.20, 3863.02, 4133.42, 4794.77, 5731.66, 6717.51, 7997.19, 13471.29] },
+      // ── PME 24m | 03–04v | Com copart 30% ──────────────────────────
+      { id:'sa_04_24_cc_1', nome:'Com copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 246.97,  308.71,  382.80,  424.91,  454.66,  527.40,  630.46,  738.91,  879.67,  1481.81] },
+      { id:'sa_04_24_cc_2', nome:'Com copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 273.14,  341.42,  423.36,  469.92,  502.82,  583.28,  697.25,  817.18,  972.86,  1638.78] },
+      { id:'sa_04_24_cc_3', nome:'Com copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 479.94,  599.92,  743.91,  825.75,  883.55, 1024.92, 1225.18, 1435.91, 1709.45,  2879.56] },
+      { id:'sa_04_24_cc_4', nome:'Com copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[ 505.21,  631.51,  783.07,  869.22,  930.06, 1078.87, 1289.67, 1511.49, 1799.42,  3031.12] },
+      { id:'sa_04_24_cc_5', nome:'Com copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1089.36, 1361.71, 1688.51, 1874.24, 2005.44, 2326.31, 2780.87, 3259.18, 3880.05,  6535.95] },
+      { id:'sa_04_24_cc_6', nome:'Com copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1302.71, 1628.38, 2019.19, 2241.31, 2398.20, 2781.90, 3325.49, 3897.48, 4639.93,  7815.97] },
+      { id:'sa_04_24_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1455.17, 1818.98, 2255.52, 2503.63, 2678.89, 3107.51, 3714.71, 4353.64, 5183.01,  8730.78] },
+      { id:'sa_04_24_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'03-04', vig:24, valores:[1908.49, 2385.62, 2958.17, 3283.58, 3513.41, 4075.56, 4871.92, 5709.88, 6797.62, 11450.59] },
+      // ── PME 12m | 05–29v | Sem copart ──────────────────────────────
+      { id:'sa_29_12_sc_1', nome:'Sem copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 329.88,  412.34,  511.32,  567.56,  607.29,  704.46,  842.12,  986.97, 1174.99,  1979.27] },
+      { id:'sa_29_12_sc_2', nome:'Sem copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 364.83,  456.04,  565.48,  627.69,  671.63,  779.09,  931.33, 1091.53, 1299.45,  2188.94] },
+      { id:'sa_29_12_sc_3', nome:'Sem copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 598.33,  747.92,  927.40, 1029.43, 1101.48, 1277.74, 1527.39, 1790.10, 2131.12,  3589.86] },
+      { id:'sa_29_12_sc_4', nome:'Sem copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 629.82,  787.28,  976.21, 1083.62, 1159.47, 1344.98, 1607.79, 1884.32, 2243.29,  3778.79] },
+      { id:'sa_29_12_sc_5', nome:'Sem copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1198.30, 1497.88, 1857.37, 2061.66, 2205.99, 2558.94, 3058.96, 3585.10, 4268.06,  7189.54] },
+      { id:'sa_29_12_sc_6', nome:'Sem copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1432.98, 1791.23, 2221.11, 2465.44, 2638.01, 3060.09, 3658.03, 4287.23, 5103.93,  8597.57] },
+      { id:'sa_29_12_sc_7', nome:'Sem copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1600.69, 2000.88, 2481.07, 2754.00, 2946.78, 3418.26, 4086.18, 4789.01, 5701.31,  9603.86] },
+      { id:'sa_29_12_sc_8', nome:'Sem copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[2099.34, 2624.17, 3253.99, 3611.93, 3864.76, 4483.11, 5359.10, 6280.87, 7477.38, 12595.65] },
+      // ── PME 12m | 05–29v | Com copart 30% ──────────────────────────
+      { id:'sa_29_12_cc_1', nome:'Com copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 230.91,  288.64,  357.92,  397.29,  425.10,  493.13,  589.48,  690.88,  822.49,  1385.46] },
+      { id:'sa_29_12_cc_2', nome:'Com copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 255.38,  319.23,  395.84,  439.38,  470.14,  545.36,  651.93,  764.07,  909.62,  1532.25] },
+      { id:'sa_29_12_cc_3', nome:'Com copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 448.74,  560.93,  695.56,  772.07,  826.12,  958.30, 1145.54, 1342.58, 1598.34,  2692.39] },
+      { id:'sa_29_12_cc_4', nome:'Com copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[ 472.37,  590.46,  732.17,  812.72,  869.60, 1008.73, 1205.84, 1413.25, 1682.46,  2834.10] },
+      { id:'sa_29_12_cc_5', nome:'Com copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1018.56, 1273.20, 1578.77, 1752.42, 1875.09, 2175.09, 2600.11, 3047.34, 3627.85,  6111.11] },
+      { id:'sa_29_12_cc_6', nome:'Com copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1218.03, 1522.54, 1887.95, 2095.61, 2242.31, 2601.09, 3109.33, 3644.14, 4338.35,  7307.94] },
+      { id:'sa_29_12_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1360.58, 1700.74, 2108.92, 2340.90, 2504.76, 2905.52, 3473.25, 4070.65, 4846.11,  8163.29] },
+      { id:'sa_29_12_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'05-29', vig:12, valores:[1784.43, 2230.54, 2765.90, 3070.15, 3285.04, 3810.64, 4555.25, 5338.74, 6355.78, 10706.30] },
+      // ── PME 24m | 05–29v | Sem copart ──────────────────────────────
+      { id:'sa_29_24_sc_1', nome:'Sem copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 299.89,  374.86,  464.83,  515.97,  552.08,  640.42,  765.56,  897.24, 1068.17,  1799.34] },
+      { id:'sa_29_24_sc_2', nome:'Sem copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 331.67,  414.58,  514.07,  570.62,  610.57,  708.27,  846.66,  992.30, 1181.32,  1989.95] },
+      { id:'sa_29_24_sc_3', nome:'Sem copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 543.95,  679.91,  843.10,  935.85, 1001.36, 1161.58, 1388.54, 1627.36, 1937.38,  3263.51] },
+      { id:'sa_29_24_sc_4', nome:'Sem copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 572.56,  715.71,  887.47,  985.10, 1054.06, 1222.71, 1461.62, 1713.01, 2039.35,  3435.27] },
+      { id:'sa_29_24_sc_5', nome:'Sem copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1089.36, 1361.71, 1688.51, 1874.24, 2005.44, 2326.31, 2780.87, 3259.18, 3880.05,  6535.95] },
+      { id:'sa_29_24_sc_6', nome:'Sem copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1302.71, 1628.38, 2019.19, 2241.31, 2398.20, 2781.90, 3325.49, 3897.48, 4639.93,  7815.97] },
+      { id:'sa_29_24_sc_7', nome:'Sem copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1455.17, 1818.98, 2255.52, 2503.63, 2678.89, 3107.51, 3714.71, 4353.64, 5183.01,  8730.78] },
+      { id:'sa_29_24_sc_8', nome:'Sem copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1908.49, 2385.62, 2958.17, 3283.58, 3513.41, 4075.56, 4871.92, 5709.88, 6797.62, 11450.59] },
+      // ── PME 24m | 05–29v | Com copart 30% ──────────────────────────
+      { id:'sa_29_24_cc_1', nome:'Com copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 209.92,  262.40,  325.38,  361.18,  386.46,  448.29,  535.89,  628.07,  747.72,  1259.52] },
+      { id:'sa_29_24_cc_2', nome:'Com copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 232.17,  290.21,  359.86,  399.44,  427.40,  495.79,  592.67,  694.60,  826.93,  1392.96] },
+      { id:'sa_29_24_cc_3', nome:'Com copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 407.95,  509.94,  632.32,  701.88,  751.01,  871.18, 1041.40, 1220.53, 1453.03,  2447.63] },
+      { id:'sa_29_24_cc_4', nome:'Com copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 429.43,  536.78,  665.60,  738.83,  790.54,  917.03, 1096.21, 1284.77, 1529.51,  2576.45] },
+      { id:'sa_29_24_cc_5', nome:'Com copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[ 925.96, 1157.46, 1435.23, 1593.11, 1704.62, 1977.36, 2363.73, 2770.31, 3298.05,  5555.55] },
+      { id:'sa_29_24_cc_6', nome:'Com copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1107.29, 1384.13, 1716.32, 1905.10, 2038.46, 2364.62, 2826.67, 3312.86, 3943.95,  6643.58] },
+      { id:'sa_29_24_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1236.90, 1546.13, 1917.20, 2128.09, 2277.06, 2641.38, 3157.51, 3700.60, 4405.57,  7421.17] },
+      { id:'sa_29_24_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'05-29', vig:24, valores:[1622.22, 2027.78, 2514.45, 2791.04, 2986.41, 3464.22, 4141.12, 4853.39, 5777.97,  9733.01] },
+      // ── PME 12m | 30–99v | Sem copart (DF Mais) ────────────────────
+      { id:'sa_99_12_sc_1', nome:'Sem copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 302.29,  377.86,  468.55,  520.09,  556.49,  645.53,  771.67,  904.40, 1076.68,  1813.67] },
+      { id:'sa_99_12_sc_2', nome:'Sem copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 334.32,  417.90,  518.20,  575.20,  615.46,  713.94,  853.44, 1000.23, 1190.77,  2005.86] },
+      { id:'sa_99_12_sc_3', nome:'Sem copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 549.38,  686.72,  851.53,  945.20, 1011.37, 1173.19, 1402.43, 1643.64, 1956.75,  3296.15] },
+      { id:'sa_99_12_sc_4', nome:'Sem copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 578.29,  722.86,  896.35,  994.94, 1064.59, 1234.93, 1476.23, 1730.14, 2059.73,  3469.62] },
+      { id:'sa_99_12_sc_5', nome:'Sem copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1106.79, 1383.49, 1715.53, 1904.24, 2037.53, 2363.54, 2825.38, 3311.34, 3942.14,  6640.54] },
+      { id:'sa_99_12_sc_6', nome:'Sem copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1323.54, 1654.43, 2051.49, 2277.16, 2436.56, 2826.41, 3378.69, 3959.83, 4714.17,  7941.02] },
+      { id:'sa_99_12_sc_7', nome:'Sem copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1478.46, 1848.08, 2291.62, 2543.70, 2721.76, 3157.24, 3774.17, 4423.32, 5265.96,  8870.51] },
+      { id:'sa_99_12_sc_8', nome:'Sem copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1939.03, 2423.79, 3005.50, 3336.10, 3569.64, 4140.78, 4949.89, 5801.27, 6906.40, 11633.83] },
+      // ── PME 12m | 30–99v | Com copart 30% (DF Mais) ────────────────
+      { id:'sa_99_12_cc_1', nome:'Com copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 211.60,  264.50,  327.98,  364.06,  389.54,  451.87,  540.16,  633.07,  753.67,  1269.56] },
+      { id:'sa_99_12_cc_2', nome:'Com copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 234.02,  292.53,  362.74,  402.64,  430.82,  499.76,  597.41,  700.16,  833.54,  1404.10] },
+      { id:'sa_99_12_cc_3', nome:'Com copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 412.03,  515.04,  638.65,  708.90,  758.53,  879.89, 1051.82, 1232.73, 1467.57,  2472.11] },
+      { id:'sa_99_12_cc_4', nome:'Com copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 433.71,  542.14,  672.25,  746.20,  798.44,  926.19, 1107.16, 1297.60, 1544.78,  2602.19] },
+      { id:'sa_99_12_cc_5', nome:'Com copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[ 940.78, 1175.97, 1458.20, 1618.61, 1731.91, 2009.02, 2401.58, 2814.65, 3350.83,  5644.48] },
+      { id:'sa_99_12_cc_6', nome:'Com copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1125.02, 1406.27, 1743.77, 1935.59, 2071.08, 2402.46, 2871.90, 3365.87, 4007.05,  6749.89] },
+      { id:'sa_99_12_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1256.70, 1570.87, 1947.88, 2162.15, 2313.50, 2683.66, 3208.05, 3759.83, 4476.07,  7539.94] },
+      { id:'sa_99_12_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'30-99', vig:12, valores:[1648.18, 2060.22, 2554.67, 2835.69, 3034.19, 3519.66, 4207.40, 4931.07, 5870.43,  9888.75] },
+      // ── PME 24m | 30–99v | Sem copart (DF Mais) ────────────────────
+      { id:'sa_99_24_sc_1', nome:'Sem copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 299.89,  374.86,  464.83,  515.96,  552.08,  640.41,  765.54,  897.22, 1068.13,  1799.27] },
+      { id:'sa_99_24_sc_2', nome:'Sem copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 331.66,  414.58,  514.08,  570.63,  610.57,  708.26,  846.66,  992.28, 1181.31,  1989.92] },
+      { id:'sa_99_24_sc_3', nome:'Sem copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 543.94,  679.93,  843.11,  935.86, 1001.37, 1161.59, 1388.56, 1627.39, 1937.41,  3263.56] },
+      { id:'sa_99_24_sc_4', nome:'Sem copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 572.57,  715.71,  887.48,  985.10, 1054.06, 1222.71, 1461.63, 1713.03, 2039.36,  3435.30] },
+      { id:'sa_99_24_sc_5', nome:'Sem copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1089.36, 1361.70, 1688.51, 1874.24, 2005.44, 2326.31, 2780.88, 3259.19, 3880.06,  6535.96] },
+      { id:'sa_99_24_sc_6', nome:'Sem copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1302.70, 1628.38, 2019.19, 2241.30, 2398.20, 2781.91, 3325.49, 3897.48, 4639.94,  7815.98] },
+      { id:'sa_99_24_sc_7', nome:'Sem copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1455.18, 1818.97, 2255.52, 2503.63, 2678.89, 3107.51, 3714.72, 4353.65, 5183.01,  8730.78] },
+      { id:'sa_99_24_sc_8', nome:'Sem copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1908.50, 2385.62, 2958.17, 3283.57, 3513.42, 4075.57, 4871.94, 5709.91, 6797.63, 11450.62] },
+      // ── PME 24m | 30–99v | Com copart 30% (DF Mais) ────────────────
+      { id:'sa_99_24_cc_1', nome:'Com copart — Direto Enf',      aco:'enf', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 209.93,  262.41,  325.39,  361.18,  386.46,  448.30,  535.90,  628.07,  747.72,  1259.53] },
+      { id:'sa_99_24_cc_2', nome:'Com copart — Direto Qto',      aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 232.17,  290.21,  359.86,  399.45,  427.41,  495.79,  592.67,  694.61,  826.93,  1392.96] },
+      { id:'sa_99_24_cc_3', nome:'Com copart — Especial RC',     aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 407.96,  509.95,  632.34,  701.90,  751.03,  871.19, 1041.42, 1220.55, 1453.06,  2447.68] },
+      { id:'sa_99_24_cc_4', nome:'Com copart — Especial 100 R1', aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 429.43,  536.79,  665.62,  738.84,  790.56,  917.05, 1096.24, 1284.79, 1529.54,  2576.51] },
+      { id:'sa_99_24_cc_5', nome:'Com copart — Executivo R1',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[ 925.96, 1157.45, 1435.24, 1593.11, 1704.63, 1977.38, 2363.76, 2770.32, 3298.06,  5555.59] },
+      { id:'sa_99_24_cc_6', nome:'Com copart — Executivo R2',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1107.30, 1384.12, 1716.31, 1905.10, 2038.46, 2364.62, 2826.66, 3312.85, 3943.94,  6643.57] },
+      { id:'sa_99_24_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1236.90, 1546.13, 1917.20, 2128.09, 2277.06, 2641.39, 3157.52, 3700.62, 4405.57,  7421.19] },
+      { id:'sa_99_24_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1622.22, 2027.77, 2514.43, 2791.02, 2986.40, 3464.22, 4141.13, 4853.41, 5777.97,  9732.99] },
+    ]
   }
 
 ];
@@ -321,6 +439,7 @@ window.PLANOS = window.SP_DATA.flatMap(op =>
     tipo:   p.tipo   || 'adesao',
     mod:    p.mod    || null,
     fvidas: p.fvidas || null,
+    vig:    p.vig    || null,
     precos: p.valores
   }))
 );
