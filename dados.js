@@ -88,7 +88,7 @@ window.SP_DATA = [
     key: 'amil', nome: 'Amil',
     cor: 'var(--amil)', cls: 'on-a',
     reajuste: 'Mai/2026',
-    info: 'PME Compulsório · Tabela mai/2026 · Porte I 2–29v / Porte II 30–99v · Amil Dental grátis 12 meses · Rede nacional · Reembolso nos planos Platinum',
+    info: 'PME e Adesão · Tabela mai/2026 · PME Porte I 2–29v / Porte II 30–99v · Amil Dental grátis 12 meses · Rede nacional · Reembolso nos planos Platinum',
     produtos: [
       // ── 02–04 vidas · Copart. Completa (30%) ──────────────────────────
       { id:'am_04_cc_1',  nome:'Copart. Completa — Bronze DF (Enf)',       aco:'enf', tipo:'pme', fvidas:'02-04', valores:[ 216.17, 293.56, 344.61, 344.61, 344.61,  384.93,  531.59,  634.72,  912.73, 1294.25] },
@@ -156,6 +156,28 @@ window.SP_DATA = [
       { id:'am_99_cp_8',  nome:'Copart. Parcial — Platinum Mais R2 (Apt)',aco:'apt',  tipo:'pme', fvidas:'30-99', valores:[ 556.76, 651.41, 794.72, 953.66,1001.34, 1101.47, 1376.84, 1514.52, 1893.15, 3313.01] },
       { id:'am_99_cp_9',  nome:'Copart. Parcial — Platinum R1 (Apt)',      aco:'apt', tipo:'pme', fvidas:'30-99', valores:[ 443.57, 518.98, 633.16, 759.79, 797.78,  877.56, 1096.95, 1206.65, 1508.31, 2639.54] },
       { id:'am_99_cp_10', nome:'Copart. Parcial — Platinum R2 (Apt)',      aco:'apt', tipo:'pme', fvidas:'30-99', valores:[ 447.98, 524.14, 639.45, 767.34, 805.71,  886.28, 1107.85, 1218.64, 1523.30, 2665.78] },
+      // ── Adesão · Copart. Completa (Coparticipação Total 30%) ──────────
+      { id:'am_ad_ct_1',  nome:'Copart. Completa — Bronze DF (Enf)',        aco:'enf', tipo:'adesao', valores:[ 320.90, 435.79, 511.57, 511.57, 511.57,  571.43,  789.14,  942.24, 1354.94, 1921.31] },
+      { id:'am_ad_ct_2',  nome:'Copart. Completa — Bronze DF (Apt)',        aco:'apt', tipo:'adesao', valores:[ 356.22, 483.74, 567.86, 567.86, 567.86,  634.31,  875.98, 1045.92, 1504.03, 2132.71] },
+      { id:'am_ad_ct_3',  nome:'Copart. Completa — Prata DF (Enf)',         aco:'enf', tipo:'adesao', valores:[ 448.22, 524.41, 639.79, 767.74, 806.12,  886.74, 1108.44, 1219.28, 1524.11, 2667.19] },
+      { id:'am_ad_ct_4',  nome:'Copart. Completa — Prata DF (Apt)',         aco:'apt', tipo:'adesao', valores:[ 497.52, 582.10, 710.15, 852.18, 894.80,  984.28, 1230.36, 1353.40, 1691.75, 2960.58] },
+      { id:'am_ad_ct_5',  nome:'Copart. Completa — Ouro (Enf)',             aco:'enf', tipo:'adesao', valores:[ 500.09, 585.11, 713.83, 856.60, 899.42,  989.38, 1236.72, 1360.39, 1700.48, 2975.86] },
+      { id:'am_ad_ct_6',  nome:'Copart. Completa — Ouro (Apt)',             aco:'apt', tipo:'adesao', valores:[ 555.10, 649.48, 792.35, 950.82, 998.36, 1098.19, 1372.74, 1510.02, 1887.53, 3303.18] },
+      { id:'am_ad_ct_7',  nome:'Copart. Completa — Platinum Mais R1 (Apt)', aco:'apt', tipo:'adesao', valores:[ 732.24, 856.72,1045.19,1254.24,1316.95, 1448.65, 1810.81, 1991.90, 2489.88, 4357.28] },
+      { id:'am_ad_ct_8',  nome:'Copart. Completa — Platinum Mais R2 (Apt)', aco:'apt', tipo:'adesao', valores:[ 739.48, 865.19,1055.54,1266.65,1330.00, 1462.99, 1828.75, 2011.62, 2514.52, 4400.42] },
+      { id:'am_ad_ct_9',  nome:'Copart. Completa — Platinum R1 (Apt)',      aco:'apt', tipo:'adesao', valores:[ 589.22, 689.38, 841.04,1009.26,1059.73, 1165.70, 1457.12, 1602.84, 2003.56, 3506.22] },
+      { id:'am_ad_ct_10', nome:'Copart. Completa — Platinum R2 (Apt)',      aco:'apt', tipo:'adesao', valores:[ 595.08, 696.24, 849.42,1019.30,1070.26, 1177.28, 1471.61, 1618.78, 2023.46, 3541.07] },
+      // ── Adesão · Copart. Parcial (Com coparticipação parcial) ─────────
+      { id:'am_ad_cp_1',  nome:'Copart. Parcial — Bronze DF (Enf)',         aco:'enf', tipo:'adesao', valores:[ 427.87, 581.05, 682.09, 682.09, 682.09,  761.89, 1052.17, 1256.29, 1806.55, 2561.69] },
+      { id:'am_ad_cp_2',  nome:'Copart. Parcial — Bronze DF (Apt)',         aco:'apt', tipo:'adesao', valores:[ 474.95, 644.98, 757.14, 757.14, 757.14,  845.72, 1167.95, 1394.53, 2005.33, 2843.56] },
+      { id:'am_ad_cp_3',  nome:'Copart. Parcial — Prata DF (Enf)',          aco:'enf', tipo:'adesao', valores:[ 597.62, 699.22, 853.04,1023.65,1074.84, 1182.31, 1477.91, 1625.71, 2032.14, 3556.26] },
+      { id:'am_ad_cp_4',  nome:'Copart. Parcial — Prata DF (Apt)',          aco:'apt', tipo:'adesao', valores:[ 663.36, 776.14, 946.87,1136.26,1193.06, 1312.38, 1640.48, 1804.54, 2255.68, 3947.45] },
+      { id:'am_ad_cp_5',  nome:'Copart. Parcial — Ouro (Enf)',              aco:'enf', tipo:'adesao', valores:[ 666.78, 780.12, 951.76,1142.10,1199.21, 1319.12, 1648.91, 1813.80, 2267.26, 3967.69] },
+      { id:'am_ad_cp_6',  nome:'Copart. Parcial — Ouro (Apt)',              aco:'apt', tipo:'adesao', valores:[ 740.11, 865.93,1056.43,1267.72,1331.10, 1464.20, 1830.26, 2013.29, 2516.62, 4404.08] },
+      { id:'am_ad_cp_7',  nome:'Copart. Parcial — Platinum Mais R1 (Apt)',  aco:'apt', tipo:'adesao', valores:[ 976.32,1142.28,1393.60,1672.32,1755.95, 1931.53, 2414.44, 2655.86, 3319.84, 5809.72] },
+      { id:'am_ad_cp_8',  nome:'Copart. Parcial — Platinum Mais R2 (Apt)',  aco:'apt', tipo:'adesao', valores:[ 985.99,1153.60,1407.40,1688.87,1773.34, 1950.66, 2438.34, 2682.17, 3352.69, 5867.23] },
+      { id:'am_ad_cp_9',  nome:'Copart. Parcial — Platinum R1 (Apt)',       aco:'apt', tipo:'adesao', valores:[ 785.62, 919.16,1121.39,1345.67,1412.94, 1554.24, 1942.81, 2137.09, 2671.37, 4674.90] },
+      { id:'am_ad_cp_10', nome:'Copart. Parcial — Platinum R2 (Apt)',       aco:'apt', tipo:'adesao', valores:[ 793.43, 928.31,1132.54,1359.04,1426.99, 1569.70, 1962.12, 2158.33, 2697.91, 4721.35] },
     ]
   },
 
