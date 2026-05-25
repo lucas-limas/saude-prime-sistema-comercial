@@ -464,8 +464,8 @@ body{-webkit-overflow-scrolling:touch}
             <div class="fb-row" id="fcopart">
               <button class="fb-btn on" onclick="setFiltroCopart('todos',this)">Todos</button>
               <button class="fb-btn" onclick="setFiltroCopart('sem',this)">Sem copart.</button>
-              <button class="fb-btn" onclick="setFiltroCopart('parcial',this)">Com copart.</button>
-              <button class="fb-btn" onclick="setFiltroCopart('total',this)">Copart. total</button>
+              <button class="fb-btn" onclick="setFiltroCopart('parcial',this)">Copart. Parcial</button>
+              <button class="fb-btn" onclick="setFiltroCopart('total',this)">Copart. Completa</button>
             </div>
           </div>
           <div id="fmod-row" style="display:none">
@@ -1207,10 +1207,10 @@ const OP_META = window.OP_META || {
 
 // Estado
 let qtds = Array(10).fill(0);
-let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'a1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1', sulamerica:'sa_29_12_sc_1'};
+let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'am_04_cc_1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1', sulamerica:'sa_29_12_sc_1'};
 let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true, sulamerica:true};
 // tipo por operadora — permite cotação mista entre modalidades
-let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'adesao', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf', sulamerica:'pme'};
+let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'pme', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf', sulamerica:'pme'};
 let filtroCopart = 'todos';  // 'todos' | 'sem' | 'parcial' | 'total'
 let filtroMod    = 'comp';   // 'comp' | 'fac' — só relevante para PME (Seguros Unimed)
 let filtroVig    = '12';     // '12' | '24'   — vigência SulAmérica
@@ -1239,6 +1239,9 @@ function _updateFVidasHint() {
     if (tipoOp.plenum === 'pme' && activeOps.plenum) {
       parts.push(`Plenum PME: ${getFVidasForOp('plenum')} vidas`);
     }
+    if (tipoOp.amil === 'pme' && activeOps.amil) {
+      parts.push(`Amil PME: ${getFVidasForOp('amil')} vidas`);
+    }
     if (activeOps.sulamerica) {
       const vigLabel = filtroVig === '12' ? '12 meses' : '24 meses';
       parts.push(`SulAmérica: ${vigLabel} · ${getFVidasForOp('sulamerica')} vidas`);
@@ -1255,13 +1258,14 @@ function _updateFVidasHint() {
 function getCopart(nome) {
   const n = nome.toLowerCase();
   if (n.includes('sem copart')) return 'sem';
-  if (n.includes('copart total')) return 'total';
-  return 'parcial'; // "com copart" ou "copart parcial"
+  if (n.includes('copart total') || n.includes('copart. completa')) return 'total';
+  return 'parcial';
 }
 
 function getFVidasForOp(op) {
   const tv = qtds.reduce((a,b)=>a+b,0);
   if (op === 'plenum') return tv <= 29 ? '02-29' : '30-99';
+  if (op === 'amil') return tv <= 4 ? '02-04' : tv <= 29 ? '05-29' : '30-99';
   if (op === 'sulamerica') return tv <= 4 ? '03-04' : tv <= 29 ? '05-29' : '30-99';
   return getFVidas();
 }
@@ -1349,7 +1353,7 @@ function setFiltroCopart(val, btn) {
 
 function _syncFiltroSubtitle() {
   const tipoMap   = {adesao:'Coletivo por Adesão', pme:'PME', pf:'Pessoa Física'};
-  const copartMap = {todos:'', sem:'· Sem copart.', parcial:'· Com copart.', total:'· Copart. total'};
+  const copartMap = {todos:'', sem:'· Sem copart.', parcial:'· Copart. Parcial', total:'· Copart. Completa'};
   const modMap    = {comp:'Compulsório', fac:'Facultativo'};
 
   const usedTipos = [...new Set(Object.values(tipoOp))];
