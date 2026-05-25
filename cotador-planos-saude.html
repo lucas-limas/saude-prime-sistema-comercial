@@ -524,20 +524,26 @@ body{-webkit-overflow-scrolling:touch}
           <div class="ph-sub">Use os botões + na coluna ao lado para informar as faixas etárias dos beneficiários.</div>
         </div>
 
-        <!-- TABELA -->
-        <div id="result-wrap" style="display:none;overflow-x:auto">
-          <table class="rt">
-            <thead id="rt-head"></thead>
-            <tbody id="rt-body"></tbody>
-          </table>
-        </div>
+        <!-- TABELA + TOTAIS (scroll horizontal conjunto) -->
+        <div style="overflow-x:auto">
+          <div style="width:max-content;min-width:100%">
 
-        <!-- TOTAIS -->
-        <div id="totais-section" style="display:none">
-          <div class="total-grid" id="total-grid" style="grid-template-columns:1fr 1fr 1fr"></div>
-          <div class="winner" id="winner">
-            <span style="font-size:16px">🏆</span>
-            <span id="winner-txt"></span>
+            <div id="result-wrap" style="display:none">
+              <table class="rt">
+                <thead id="rt-head"></thead>
+                <tbody id="rt-body"></tbody>
+              </table>
+            </div>
+
+            <!-- TOTAIS -->
+            <div id="totais-section" style="display:none">
+              <div class="total-grid" id="total-grid" style="grid-template-columns:1fr 1fr 1fr"></div>
+              <div class="winner" id="winner">
+                <span style="font-size:16px">🏆</span>
+                <span id="winner-txt"></span>
+              </div>
+            </div>
+
           </div>
         </div>
 
