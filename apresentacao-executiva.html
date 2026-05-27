@@ -1520,10 +1520,18 @@ async function exportarPDF(btn) {
   btn.innerHTML = '⏳ Gerando PDF...';
   btn.disabled = true;
   try {
-    const el = document.getElementById('apres-content');
+    const el = document.querySelector('#apres-content .apres-wrap') || document.getElementById('apres-content');
     const canvas = await html2canvas(el, {
-      scale: 2, useCORS: true, backgroundColor: '#faf9f6', logging: false,
-      windowWidth: el.scrollWidth, windowHeight: el.scrollHeight
+      scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      windowWidth: el.scrollWidth, windowHeight: el.scrollHeight,
+      onclone: (doc) => {
+        const wrap = doc.querySelector('.apres-wrap');
+        if (wrap) {
+          wrap.style.boxShadow = 'none';
+          wrap.style.borderRadius = '0';
+          wrap.style.margin = '0';
+        }
+      }
     });
     const { jsPDF } = window.jspdf;
     // Página única com altura proporcional ao conteúdo — sem cortes
