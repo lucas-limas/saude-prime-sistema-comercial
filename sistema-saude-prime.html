@@ -125,7 +125,6 @@ function show(id, btn) {
 function syncApres(data) {
   document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('iframe').forEach(f => f.classList.remove('visible'));
-  document.getElementById('btn-apres').classList.add('active');
   const apresFrame = document.getElementById('apres');
   apresFrame.classList.add('visible');
   if (apresFrame.contentWindow && apresFrame.contentWindow.receiveFromCotador) {
