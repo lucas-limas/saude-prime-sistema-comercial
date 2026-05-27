@@ -1526,22 +1526,12 @@ async function exportarPDF(btn) {
       windowWidth: el.scrollWidth, windowHeight: el.scrollHeight
     });
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p','mm','a4');
-    const pW = pdf.internal.pageSize.getWidth();
-    const pH = pdf.internal.pageSize.getHeight();
-    const ratio = pW / canvas.width;
-    const totalH = canvas.height * ratio;
+    // Página única com altura proporcional ao conteúdo — sem cortes
+    const pW = 210; // largura A4 em mm
+    const pH = Math.ceil(canvas.height * pW / canvas.width);
+    const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [pW, pH] });
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
-    let left = totalH;
-    let pos = 0;
-    pdf.addImage(imgData, 'JPEG', 0, pos, pW, totalH);
-    left -= pH;
-    while (left > 0) {
-      pos -= pH;
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, pos, pW, totalH);
-      left -= pH;
-    }
+    pdf.addImage(imgData, 'JPEG', 0, 0, pW, pH);
     const nome = (document.getElementById('g-nome')?.value || 'Proposta').replace(/[^a-zA-Z0-9À-ɏ\s]/g,'').trim().replace(/\s+/g,'_');
     pdf.save('SaudePrime_' + nome + '.pdf');
   } catch(e) {
