@@ -242,7 +242,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 /* REGRAS */
 .regra-block{border-radius:var(--r);border:1px solid var(--line);padding:1.25rem 1.5rem;margin-top:.875rem;display:flex;gap:1rem;align-items:flex-start}
 .rb-icon{font-size:2rem;flex-shrink:0;margin-top:2px}
-.rb-body{}
+.rb-body{flex:1}
 .rb-titulo{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:.25rem}
 .rb-sub{font-size:11px;color:var(--ink3);margin-bottom:.75rem;font-style:italic}
 .rb-txt{font-size:13px;color:var(--ink2);line-height:1.7}
@@ -374,7 +374,7 @@ body{-webkit-overflow-scrolling:touch}
   <div class="bar-right">
     <span class="pill">Apresentação Executiva</span>
     <button class="btn btn-ghost" id="btn-back" style="display:none" onclick="voltar()">← Editar</button>
-    <button class="btn btn-ghost" onclick="window.print()">🖨 Imprimir / PDF</button>
+    <button class="btn btn-ghost" onclick="exportarPDF(this)">⬇ Exportar PDF</button>
   </div>
 </header>
 <nav class="tab-bar">
@@ -575,7 +575,7 @@ body{-webkit-overflow-scrolling:touch}
   <div id="apres-content"></div>
   <div class="apres-actions">
     <button class="btn btn-outline" onclick="voltar()">← Editar dados</button>
-    <button class="btn btn-navy" onclick="window.print()">🖨 Salvar como PDF</button>
+    <button class="btn btn-navy" onclick="exportarPDF(this)">⬇ Salvar como PDF</button>
     <button class="btn btn-gold" onclick="compartilhar()">📤 Compartilhar</button>
   </div>
 </div>
@@ -1509,6 +1509,49 @@ document.getElementById('g-validade').value = d.toISOString().split('T')[0];
   const cb = document.querySelector(`input[name="vant"][value="${id}"]`);
   if(cb){cb.checked=true;cb.closest('.vant-item')?.classList.add('checked');}
 });
+
+// ─── EXPORTAR PDF ─────────────────────────────────────────────────────
+async function exportarPDF(btn) {
+  if (!window.html2canvas || !window.jspdf) {
+    alert('Biblioteca PDF ainda carregando. Tente novamente em instantes.');
+    return;
+  }
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando PDF...';
+  btn.disabled = true;
+  try {
+    const el = document.getElementById('apres-content');
+    const canvas = await html2canvas(el, {
+      scale: 2, useCORS: true, backgroundColor: '#faf9f6', logging: false,
+      windowWidth: el.scrollWidth, windowHeight: el.scrollHeight
+    });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p','mm','a4');
+    const pW = pdf.internal.pageSize.getWidth();
+    const pH = pdf.internal.pageSize.getHeight();
+    const ratio = pW / canvas.width;
+    const totalH = canvas.height * ratio;
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    let left = totalH;
+    let pos = 0;
+    pdf.addImage(imgData, 'JPEG', 0, pos, pW, totalH);
+    left -= pH;
+    while (left > 0) {
+      pos -= pH;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, pos, pW, totalH);
+      left -= pH;
+    }
+    const nome = (document.getElementById('g-nome')?.value || 'Proposta').replace(/[^a-zA-Z0-9À-ɏ\s]/g,'').trim().replace(/\s+/g,'_');
+    pdf.save('SaudePrime_' + nome + '.pdf');
+  } catch(e) {
+    alert('Erro ao gerar PDF: ' + e.message);
+  }
+  btn.innerHTML = orig;
+  btn.disabled = false;
+}
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
