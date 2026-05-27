@@ -1007,13 +1007,24 @@ const CARENCIAS_DB = {
   },
 };
 
+// ─── SANITIZAÇÃO DE INPUT (prevenção XSS) ─────────────────────────────
+function sanitize(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // ─── GERAR APRESENTAÇÃO ────────────────────────────────────────────────
 async function gerar() {
   // Coletar dados
-  const nome = document.getElementById('g-nome').value.trim() || 'Cliente';
+  const nome = sanitize(document.getElementById('g-nome').value.trim() || 'Cliente');
   const tipo = document.getElementById('g-tipo').value;
   const validade = document.getElementById('g-validade').value;
-  const dores = document.getElementById('g-dores').value.trim();
+  const dores = sanitize(document.getElementById('g-dores').value.trim());
   const isMulti = _opsData !== null;
   const opKey   = document.getElementById(isMulti ? 'g-op'       : 'g-op-s').value;
   const planoId = document.getElementById(isMulti ? 'g-plano'    : 'g-plano-s').value;
@@ -1022,9 +1033,9 @@ async function gerar() {
   const aco     = document.getElementById(isMulti ? 'g-aco'      : 'g-aco-s').value;
   const copTipo = document.getElementById('g-cop-tipo').value;
   const arc = document.getElementById('g-arc').value;
-  const p1 = document.getElementById('g-p1').value;
-  const p2 = document.getElementById('g-p2').value;
-  const p3 = document.getElementById('g-p3').value;
+  const p1 = sanitize(document.getElementById('g-p1').value);
+  const p2 = sanitize(document.getElementById('g-p2').value);
+  const p3 = sanitize(document.getElementById('g-p3').value);
   const planoInfo = PLANOS_DB[opKey].find(p=>p.id===planoId) || PLANOS_DB[opKey][0];
   const opMeta = OP_META[opKey];
 

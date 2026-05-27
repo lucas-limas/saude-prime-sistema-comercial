@@ -99,11 +99,18 @@ iframe.visible{display:block}
 
   <div class="sep"></div>
 
-  <button class="sw-btn active" onclick="show('cotador',this)">
+  <button class="sw-btn active" id="btn-cotador" onclick="show('cotador',this)">
     <svg viewBox="0 0 16 16" fill="currentColor">
       <path d="M1 12h3v2H1v-2zm4-4h3v6H5V8zm4-3h3v9H9V5zm4-3h3v12h-3V2z"/>
     </svg>
     Cotador
+  </button>
+
+  <button class="sw-btn" id="btn-apres" onclick="show('apres',this)">
+    <svg viewBox="0 0 16 16" fill="currentColor">
+      <path d="M2 2h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm1 2v8h10V4H3zm2 1h6v1H5V5zm0 2h6v1H5V7zm0 2h4v1H5V9z"/>
+    </svg>
+    Apresentação
   </button>
 
   <span class="badge">SISTEMA COMERCIAL</span>
@@ -125,6 +132,7 @@ function show(id, btn) {
 function syncApres(data) {
   document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('iframe').forEach(f => f.classList.remove('visible'));
+  document.getElementById('btn-apres').classList.add('active');
   const apresFrame = document.getElementById('apres');
   apresFrame.classList.add('visible');
   if (apresFrame.contentWindow && apresFrame.contentWindow.receiveFromCotador) {
