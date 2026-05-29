@@ -337,9 +337,10 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
   .tab-panel{display:block!important;page-break-after:always}
   .tab-panel:last-child{page-break-after:avoid}
   .card,.rede-card,.car-tbl,.sc{box-shadow:none;border:1px solid #ddd}
-  .cot-layout{grid-template-columns:220px 1fr}
-  .cot-sidebar{position:static;max-height:none;overflow-y:visible;}
-  .car-panel{display:none!important}.car-panel.on{display:grid!important}
+  .wizard-nav,.step-foot{display:none!important}
+  #step-1,#step-2{display:none!important}
+  #step-3{display:block!important}
+.car-panel{display:none!important}.car-panel.on{display:grid!important}
   .rede-grid{grid-template-columns:repeat(2,1fr)}
   .rede-panel{display:block!important}
   .print-hdr{display:flex!important}
@@ -412,6 +413,25 @@ body{-webkit-overflow-scrolling:touch}
 .hist-del:hover{color:#c0392b;background:#fef0f0}
 .hist-footer{padding:.65rem 1.25rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
 .hist-count{font-size:11px;color:var(--ink3)}
+
+/* ═══ WIZARD ═══ */
+.wizard-nav{display:flex;align-items:center;padding:1.25rem 0 1.5rem}
+.wz-step{display:flex;align-items:center;gap:8px}
+.wz-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;background:var(--line);color:var(--ink3);border:none;cursor:pointer;transition:all .2s;font-family:"Outfit",sans-serif}
+.wz-dot:hover{background:var(--line2)}
+.wz-dot.wz-active{background:var(--navy);color:#fff;cursor:default}
+.wz-dot.wz-done{background:var(--green);color:#fff}
+.wz-lbl{font-size:12px;font-weight:500;color:var(--ink3);white-space:nowrap;transition:color .2s}
+.wz-lbl.wz-active{color:var(--navy);font-weight:600}
+.wz-bar{flex:1;height:2px;background:var(--line);margin:0 12px;min-width:20px;transition:background .3s}
+.wz-bar.wz-done{background:var(--green)}
+.step-panel{display:none}
+.step-panel.on{display:block}
+.step-body{display:flex;flex-direction:column;gap:.875rem}
+#step-1 .step-body{max-width:640px;margin:0 auto;width:100%}
+.step-foot{display:flex;justify-content:space-between;align-items:center}
+.op-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:.875rem}
+.op-cards-grid .op-config-item{background:var(--white);border:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important;border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px}
 </style>
 <script src="dados.js"></script>
 </head>
@@ -449,14 +469,30 @@ body{-webkit-overflow-scrolling:touch}
     <div class="ph-info"><div id="ph-nome"></div><div>Coletivo por adesão · DF e entorno · Mai/2026</div><div id="ph-data"></div></div>
   </div>
 
-  <div class="cot-layout">
+  <!-- ── WIZARD NAV ── -->
+  <div class="wizard-nav">
+    <div class="wz-step">
+      <button class="wz-dot wz-active" id="wd-1" onclick="goToStep(1)">1</button>
+      <span class="wz-lbl wz-active" id="wl-txt-1">Dados do Cliente</span>
+    </div>
+    <div class="wz-bar" id="wb-1"></div>
+    <div class="wz-step">
+      <button class="wz-dot" id="wd-2" onclick="goToStep(2)">2</button>
+      <span class="wz-lbl" id="wl-txt-2">Planos</span>
+    </div>
+    <div class="wz-bar" id="wb-2"></div>
+    <div class="wz-step">
+      <button class="wz-dot" id="wd-3" onclick="goToStep(3)">3</button>
+      <span class="wz-lbl" id="wl-txt-3">Resultado</span>
+    </div>
+  </div>
 
-    <!-- ── COLUNA ESQUERDA ── -->
-    <div class="cot-sidebar">
+  <!-- ══ ETAPA 1: DADOS DO CLIENTE ══ -->
+  <div id="step-1" class="step-panel on">
+    <div class="step-body">
 
-      <!-- CLIENTE -->
       <div class="card">
-        <div class="card-head">Cliente</div>
+        <div class="card-head">Dados do cliente</div>
         <div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px">
           <div>
             <label style="display:block;font-size:10px;color:var(--ink3);margin-bottom:3px;font-weight:500;letter-spacing:.05em;text-transform:uppercase">Nome</label>
@@ -473,37 +509,18 @@ body{-webkit-overflow-scrolling:touch}
         </div>
       </div>
 
-      <!-- FILTROS DA COTAÇÃO -->
       <div class="card">
-        <div class="card-head">🎯 Filtros</div>
-        <div style="padding:10px 12px;display:flex;flex-direction:column;gap:10px">
-          <div>
-            <div class="filtro-lbl">Fator moderador</div>
-            <div class="fb-row" id="fcopart">
-              <button class="fb-btn on" onclick="setFiltroCopart('todos',this)">Todos</button>
-              <button class="fb-btn" onclick="setFiltroCopart('sem',this)">Sem copart.</button>
-              <button class="fb-btn" onclick="setFiltroCopart('parcial',this)">Copart. Parcial</button>
-              <button class="fb-btn" onclick="setFiltroCopart('total',this)">Copart. Completa</button>
-            </div>
-          </div>
-          <div id="fmod-row" style="display:none">
-            <div class="filtro-lbl">Modalidade PME (Seguros Unimed)</div>
-            <div class="fb-row" id="fmod">
-              <button class="fb-btn on" onclick="setFiltroMod('comp',this)">Compulsório</button>
-              <button class="fb-btn" onclick="setFiltroMod('fac',this)">Facultativo</button>
-            </div>
-          </div>
-          <div id="fvig-row" style="display:none">
-            <div class="filtro-lbl">Vigência (SulAmérica)</div>
-            <div class="fb-row" id="fvig">
-              <button class="fb-btn on" onclick="setFiltroVig('12',this)">12 meses</button>
-              <button class="fb-btn" onclick="setFiltroVig('24',this)">24 meses</button>
-            </div>
+        <div class="card-head">🎯 Fator moderador</div>
+        <div style="padding:10px 12px">
+          <div class="fb-row" id="fcopart">
+            <button class="fb-btn on" onclick="setFiltroCopart('todos',this)">Todos</button>
+            <button class="fb-btn" onclick="setFiltroCopart('sem',this)">Sem copart.</button>
+            <button class="fb-btn" onclick="setFiltroCopart('parcial',this)">Copart. Parcial</button>
+            <button class="fb-btn" onclick="setFiltroCopart('total',this)">Copart. Completa</button>
           </div>
         </div>
       </div>
 
-      <!-- FAIXAS ETÁRIAS -->
       <div class="card">
         <div class="card-head">
           <span>👤 Adicione as vidas</span>
@@ -517,16 +534,57 @@ body{-webkit-overflow-scrolling:touch}
         <div id="fvidas-hint" style="display:none;font-size:11px;color:var(--seguros-unimed);padding:4px 12px 8px;font-weight:600"></div>
       </div>
 
-      <!-- ACOMODAÇÃO POR OPERADORA -->
-      <div class="card">
-        <div class="card-head">Configuração por operadora</div>
-        <div id="op-config-body"></div>
+      <div class="step-foot">
+        <div></div>
+        <button class="btn btn-navy" onclick="goToStep(2)">Selecionar planos →</button>
       </div>
 
-    </div><!-- /left -->
+    </div>
+  </div>
 
-    <!-- ── COLUNA DIREITA ── -->
-    <div style="min-width:0">
+  <!-- ══ ETAPA 2: CONFIGURAÇÃO DOS PLANOS ══ -->
+  <div id="step-2" class="step-panel">
+    <div class="step-body">
+
+      <div id="fmod-row" style="display:none" class="card">
+        <div class="card-head">⚙️ Modalidade PME — Seguros Unimed</div>
+        <div style="padding:8px 12px">
+          <div class="fb-row" id="fmod">
+            <button class="fb-btn on" onclick="setFiltroMod('comp',this)">Compulsório</button>
+            <button class="fb-btn" onclick="setFiltroMod('fac',this)">Facultativo</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="fvig-row" style="display:none" class="card">
+        <div class="card-head">⚙️ Vigência — SulAmérica</div>
+        <div style="padding:8px 12px">
+          <div class="fb-row" id="fvig">
+            <button class="fb-btn on" onclick="setFiltroVig('12',this)">12 meses</button>
+            <button class="fb-btn" onclick="setFiltroVig('24',this)">24 meses</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="op-config-body" class="op-cards-grid"></div>
+
+      <div class="step-foot">
+        <button class="btn btn-outline" onclick="goToStep(1)">← Voltar</button>
+        <button class="btn btn-navy" onclick="goToStep(3)">Ver resultado →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ ETAPA 3: RESULTADO ══ -->
+  <div id="step-3" class="step-panel">
+    <div class="step-body">
+
+      <div class="step-foot">
+        <button class="btn btn-outline" onclick="goToStep(2)">✎ Editar seleção</button>
+        <button class="btn btn-navy" onclick="criarApresentacao()">✨ Criar Apresentação</button>
+      </div>
+
       <div class="card" style="overflow:hidden">
         <div class="result-hero">
           <div>
@@ -535,14 +593,12 @@ body{-webkit-overflow-scrolling:touch}
           </div>
         </div>
 
-        <!-- PLACEHOLDER -->
         <div class="placeholder" id="placeholder">
           <div class="ph-icon">👤</div>
           <div class="ph-title">Adicione as vidas para calcular</div>
-          <div class="ph-sub">Use os botões + na coluna ao lado para informar as faixas etárias dos beneficiários.</div>
+          <div class="ph-sub">Volte à etapa 1 e informe as faixas etárias dos beneficiários.</div>
         </div>
 
-        <!-- TABELA + TOTAIS (scroll horizontal conjunto) -->
         <div style="overflow-x:auto">
           <div style="width:max-content;min-width:100%">
 
@@ -553,7 +609,6 @@ body{-webkit-overflow-scrolling:touch}
               </table>
             </div>
 
-            <!-- TOTAIS -->
             <div id="totais-section" style="display:none">
               <div class="total-grid" id="total-grid" style="grid-template-columns:1fr 1fr 1fr"></div>
               <div class="winner" id="winner">
@@ -565,14 +620,14 @@ body{-webkit-overflow-scrolling:touch}
           </div>
         </div>
 
-        <!-- NOTES -->
         <div class="op-notes" id="op-notes"></div>
         <div class="disc">⚠️ Valores estimativos baseados nas tabelas vigentes. Confirme sempre com a operadora antes de apresentar proposta formal.</div>
 
       </div>
-    </div><!-- /right -->
 
+    </div>
   </div>
+
 </div><!-- /cotacao -->
 
 <!-- ════════════════ ABA REDE ════════════════ -->
@@ -1728,6 +1783,22 @@ function updateTitle() {
   document.getElementById('ph-nome').textContent = n ? 'Cliente: ' + n : '';
 }
 
+function goToStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step-'+i).classList.toggle('on', i===n);
+    const dot = document.getElementById('wd-'+i);
+    const lbl = document.getElementById('wl-txt-'+i);
+    dot.classList.toggle('wz-active', i===n);
+    dot.classList.toggle('wz-done', i<n);
+    if (i===n) dot.classList.remove('wz-done');
+    if (lbl) lbl.classList.toggle('wz-active', i===n);
+  });
+  [1,2].forEach(i => document.getElementById('wb-'+i).classList.toggle('wz-done', i<n));
+  if (n===2) buildOpConfig();
+  if (n===3) render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 function limpar() {
   qtds = Array(10).fill(0);
   FAIXAS.forEach((_,i) => {
@@ -1740,7 +1811,7 @@ function limpar() {
   document.getElementById('total-badge').textContent = '0 vida(s)';
   document.getElementById('nome').value = '';
   document.getElementById('obs').value = '';
-  updateTitle(); render();
+  updateTitle(); render(); goToStep(1);
 }
 
 
