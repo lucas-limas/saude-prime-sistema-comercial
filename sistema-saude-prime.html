@@ -136,64 +136,113 @@ iframe.visible{display:block}
 .auth-msg.error{color:#ff6b6b}
 .auth-msg.success{color:#86efac}
 
-/* ── ADMIN PANEL ── */
-#admin-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  display:flex;align-items:center;justify-content:center;
-  z-index:8000;
+/* ── PAINÉIS (admin / superadmin) ── */
+.painel-overlay{
+  position:fixed;inset:0;background:var(--navy3);
+  display:flex;flex-direction:column;z-index:8000;overflow:hidden;
 }
-#admin-overlay.hidden{display:none}
-.admin-box{
-  background:#1a1a1a;border:1px solid rgba(255,255,255,.12);
-  border-radius:14px;width:680px;max-width:95vw;max-height:85vh;
-  display:flex;flex-direction:column;overflow:hidden;
-  box-shadow:0 16px 60px rgba(0,0,0,.6);
-}
-.admin-header{
+.painel-overlay.hidden{display:none}
+.painel-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.08);
+  padding:14px 24px;border-bottom:1px solid rgba(255,255,255,.08);
+  background:var(--navy2);flex-shrink:0;
 }
-.admin-header h2{
-  font-size:16px;font-weight:600;color:#fff;font-family:"Outfit",sans-serif;
+.painel-header-left{display:flex;align-items:center;gap:16px}
+.painel-title{font-size:15px;font-weight:600;color:#fff;font-family:"Outfit",sans-serif}
+.painel-subtitle{font-size:12px;color:rgba(255,255,255,.4);font-family:"Outfit",sans-serif}
+.painel-tabs{display:flex;gap:4px}
+.painel-tab{
+  background:none;border:none;padding:6px 14px;border-radius:6px;
+  font-family:"Outfit",sans-serif;font-size:12px;font-weight:500;
+  color:rgba(255,255,255,.45);cursor:pointer;transition:all .15s;
 }
-.admin-close{
-  background:none;border:none;color:rgba(255,255,255,.4);
-  font-size:20px;cursor:pointer;padding:4px 8px;transition:color .15s;
+.painel-tab.active{background:rgba(255,255,255,.1);color:#fff}
+.painel-content{flex:1;overflow-y:auto;padding:24px}
+.painel-logout{
+  background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);
+  border-radius:6px;padding:6px 14px;font-family:"Outfit",sans-serif;font-size:12px;
+  cursor:pointer;transition:all .15s;
 }
-.admin-close:hover{color:#fff}
-.admin-body{overflow-y:auto;padding:20px 24px;flex:1}
+.painel-logout:hover{border-color:rgba(255,107,107,.5);color:#ff6b6b}
+/* tabela */
 .admin-table{width:100%;border-collapse:collapse;font-family:"Outfit",sans-serif;font-size:13px}
 .admin-table th{
-  text-align:left;padding:8px 10px;
-  color:rgba(255,255,255,.35);font-size:10px;font-weight:500;
-  letter-spacing:.08em;text-transform:uppercase;
+  text-align:left;padding:8px 10px;color:rgba(255,255,255,.35);
+  font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 .admin-table td{
-  padding:10px 10px;color:rgba(255,255,255,.75);
+  padding:10px;color:rgba(255,255,255,.75);
   border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle;
 }
 .admin-table tr:last-child td{border-bottom:none}
-.badge-role{
-  font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;
-  background:rgba(125,211,252,.12);color:#7dd3fc;
-}
+/* badges */
+.badge-role{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;background:rgba(125,211,252,.12);color:#7dd3fc}
 .badge-role.admin{background:rgba(251,191,36,.12);color:#fbbf24}
-.badge-status{
-  font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;
-}
+.badge-role.superadmin{background:rgba(167,139,250,.12);color:#a78bfa}
+.badge-status{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
 .badge-status.ativo{background:rgba(134,239,172,.12);color:#86efac}
 .badge-status.inativo{background:rgba(255,107,107,.12);color:#ff6b6b}
-.btn-toggle,.btn-del{
+.badge-expira{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;background:rgba(251,191,36,.12);color:#fbbf24}
+/* botões ação */
+.btn-toggle,.btn-del,.btn-edit{
   border:none;border-radius:5px;padding:4px 10px;
   font-size:11px;font-family:"Outfit",sans-serif;font-weight:500;
   cursor:pointer;transition:opacity .15s;
 }
 .btn-toggle{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
-.btn-toggle:hover{opacity:.75}
-.btn-del{background:rgba(255,107,107,.15);color:#ff6b6b;margin-left:6px}
-.btn-del:hover{opacity:.75}
-.admin-loading{color:rgba(255,255,255,.35);text-align:center;padding:32px;font-family:"Outfit",sans-serif;font-size:14px}
+.btn-edit{background:rgba(125,211,252,.12);color:#7dd3fc;margin-left:4px}
+.btn-del{background:rgba(255,107,107,.15);color:#ff6b6b;margin-left:4px}
+.btn-toggle:hover,.btn-edit:hover,.btn-del:hover{opacity:.75}
+.btn-toggle:disabled,.btn-del:disabled{opacity:.4;cursor:not-allowed}
+/* botão novo */
+.btn-novo{
+  background:#fff;color:#1a1a1a;border:none;border-radius:7px;
+  padding:8px 18px;font-family:"Outfit",sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:opacity .15s;
+}
+.btn-novo:hover{opacity:.88}
+/* barra info */
+.info-bar{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;padding:12px 16px;margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  font-family:"Outfit",sans-serif;font-size:13px;color:rgba(255,255,255,.6);
+}
+.info-bar strong{color:#fff}
+/* formulário inline */
+.form-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:20px;margin-bottom:20px;
+}
+.form-card h3{font-size:13px;font-weight:600;color:#fff;font-family:"Outfit",sans-serif;margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.form-field{display:flex;flex-direction:column;gap:5px}
+.form-field label{font-size:10px;font-weight:500;color:rgba(255,255,255,.45);letter-spacing:.05em;text-transform:uppercase}
+.form-field input,.form-field select{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:7px;padding:9px 12px;color:#fff;
+  font-family:"Outfit",sans-serif;font-size:13px;outline:none;transition:border-color .15s;
+}
+.form-field input:focus,.form-field select:focus{border-color:rgba(255,255,255,.4)}
+.form-field select option{background:#1a1a1a}
+.form-actions{display:flex;align-items:center;gap:10px;margin-top:14px}
+.form-msg{font-size:12px;font-family:"Outfit",sans-serif}
+.form-msg.error{color:#ff6b6b}
+.form-msg.success{color:#86efac}
+.admin-loading{color:rgba(255,255,255,.35);text-align:center;padding:40px;font-family:"Outfit",sans-serif;font-size:14px}
+/* seção título com botão */
+.section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-bar h3{font-size:13px;font-weight:600;color:#fff;font-family:"Outfit",sans-serif}
+/* limite badge */
+.vagas-bar{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.06);border-radius:6px;padding:4px 10px;
+  font-size:12px;font-family:"Outfit",sans-serif;color:rgba(255,255,255,.6);
+}
+.vagas-bar.cheio{background:rgba(255,107,107,.1);color:#ff6b6b}
+/* old admin overlay compat */
+#admin-overlay.hidden{display:none}
 </style>
 </head>
 <body>
@@ -206,41 +255,102 @@ iframe.visible{display:block}
       <small>Sistema Comercial</small>
     </div>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Entrar</button>
-      <button class="auth-tab" id="tab-reg" onclick="switchTab('reg')">Cadastrar</button>
-    </div>
-
     <!-- LOGIN -->
     <div class="auth-form" id="form-login">
       <label>Usuário<input type="text" id="lg-user" autocomplete="username" placeholder="seu usuário"></label>
       <label>Senha<input type="password" id="lg-pass" autocomplete="current-password" placeholder="••••••••"></label>
-      <div class="auth-msg error" id="lg-err">Usuário ou senha incorretos.</div>
+      <div class="auth-msg error" id="lg-err"></div>
       <button class="auth-btn" id="lg-btn" onclick="doLogin()">Entrar</button>
-    </div>
-
-    <!-- CADASTRO -->
-    <div class="auth-form hidden" id="form-reg">
-      <label>Nome completo<input type="text" id="rg-nome" autocomplete="name" placeholder="Ex: João Silva"></label>
-      <label>Usuário<input type="text" id="rg-user" autocomplete="username" placeholder="sem espaços, ex: joaosilva"></label>
-      <label>Senha<input type="password" id="rg-pass" autocomplete="new-password" placeholder="mínimo 6 caracteres"></label>
-      <label>Confirmar senha<input type="password" id="rg-pass2" autocomplete="new-password" placeholder="repita a senha"></label>
-      <div class="auth-msg error" id="rg-err"></div>
-      <button class="auth-btn" id="rg-btn" onclick="doRegister()">Criar conta</button>
     </div>
   </div>
 </div>
 
-<!-- ADMIN OVERLAY -->
-<div id="admin-overlay" class="hidden">
-  <div class="admin-box">
-    <div class="admin-header">
-      <h2>Gerenciar Corretores</h2>
-      <button class="admin-close" onclick="closeAdmin()">✕</button>
+<!-- PAINEL SUPERADMIN -->
+<div id="superadmin-overlay" class="painel-overlay hidden">
+  <div class="painel-header">
+    <div class="painel-header-left">
+      <div>
+        <div class="painel-title">Super Admin — Saúde Prime</div>
+        <div class="painel-subtitle" id="sa-nome-bar"></div>
+      </div>
+      <div class="painel-tabs">
+        <button class="painel-tab active" onclick="saTab('corretoras',this)">Corretoras</button>
+        <button class="painel-tab" onclick="saTab('usuarios',this)">Usuários</button>
+        <button class="painel-tab" onclick="saTab('audit',this)">Auditoria</button>
+      </div>
     </div>
-    <div class="admin-body" id="admin-body">
-      <div class="admin-loading">Carregando...</div>
+    <button class="painel-logout" onclick="doLogout()">Sair</button>
+  </div>
+  <div class="painel-content">
+    <div id="sa-tab-corretoras">
+      <div class="form-card">
+        <h3>Nova Corretora</h3>
+        <div class="form-grid">
+          <div class="form-field"><label>Nome da corretora</label><input type="text" id="sa-c-nome" placeholder="Ex: Corretora Silva"></div>
+          <div class="form-field"><label>Limite de colaboradores</label><input type="number" id="sa-c-limite" value="5" min="1"></div>
+          <div class="form-field"><label>Validade da assinatura</label><input type="date" id="sa-c-expira"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-novo" onclick="criarCorretora()">Criar Corretora</button>
+          <span class="form-msg" id="sa-c-msg"></span>
+        </div>
+      </div>
+      <div class="section-bar"><h3>Corretoras cadastradas</h3></div>
+      <div id="sa-corretoras-body"><div class="admin-loading">Carregando...</div></div>
     </div>
+    <div id="sa-tab-usuarios" style="display:none">
+      <div class="form-card">
+        <h3>Novo Usuário</h3>
+        <div class="form-grid">
+          <div class="form-field"><label>Nome completo</label><input type="text" id="sa-u-nome" placeholder="Ex: João Silva"></div>
+          <div class="form-field"><label>Usuário (login)</label><input type="text" id="sa-u-user" placeholder="sem espaços"></div>
+          <div class="form-field"><label>Senha</label><input type="password" id="sa-u-pass" placeholder="mín. 8 car., 1 maiúscula, 1 número"></div>
+          <div class="form-field"><label>Perfil</label>
+            <select id="sa-u-role"><option value="admin">Admin de Corretora</option><option value="corretor">Colaborador</option></select>
+          </div>
+          <div class="form-field"><label>Corretora</label><select id="sa-u-corretora"><option value="">— Selecione —</option></select></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-novo" onclick="criarUsuarioSA()">Criar Usuário</button>
+          <span class="form-msg" id="sa-u-msg"></span>
+        </div>
+      </div>
+      <div class="section-bar"><h3>Todos os usuários</h3></div>
+      <div id="sa-usuarios-body"><div class="admin-loading">Carregando...</div></div>
+    </div>
+    <div id="sa-tab-audit" style="display:none">
+      <div id="sa-audit-body"><div class="admin-loading">Carregando...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAINEL ADMIN DA CORRETORA -->
+<div id="admin-overlay" class="painel-overlay hidden">
+  <div class="painel-header">
+    <div class="painel-header-left">
+      <div>
+        <div class="painel-title" id="adm-corretora-nome">Painel Administrativo</div>
+        <div class="painel-subtitle" id="adm-nome-bar"></div>
+      </div>
+    </div>
+    <button class="painel-logout" onclick="doLogout()">Sair</button>
+  </div>
+  <div class="painel-content">
+    <div id="adm-info-bar" class="info-bar" style="display:none"></div>
+    <div class="form-card">
+      <h3>Adicionar Colaborador</h3>
+      <div class="form-grid">
+        <div class="form-field"><label>Nome completo</label><input type="text" id="adm-u-nome" placeholder="Ex: Ana Lima"></div>
+        <div class="form-field"><label>Usuário (login)</label><input type="text" id="adm-u-user" placeholder="sem espaços"></div>
+        <div class="form-field"><label>Senha</label><input type="password" id="adm-u-pass" placeholder="mín. 8 car., 1 maiúscula, 1 número"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-novo" onclick="criarColaborador()">Adicionar</button>
+        <span class="form-msg" id="adm-u-msg"></span>
+      </div>
+    </div>
+    <div class="section-bar"><h3>Colaboradores</h3></div>
+    <div id="adm-users-body"><div class="admin-loading">Carregando...</div></div>
   </div>
 </div>
 
@@ -271,22 +381,8 @@ iframe.visible{display:block}
 <script>
 const API = window.location.origin;
 
-/* ── Tabs login/cadastro ── */
-function switchTab(tab) {
-  const isLogin = tab === 'login';
-  document.getElementById('tab-login').classList.toggle('active', isLogin);
-  document.getElementById('tab-reg').classList.toggle('active', !isLogin);
-  document.getElementById('form-login').classList.toggle('hidden', !isLogin);
-  document.getElementById('form-reg').classList.toggle('hidden', isLogin);
-  clearMsgs();
-}
-
-function clearMsgs() {
-  ['lg-err','rg-err'].forEach(id => {
-    const el = document.getElementById(id);
-    el.style.display = 'none'; el.textContent = '';
-  });
-}
+function token() { return sessionStorage.getItem('sp_token'); }
+function authH() { return {Authorization:`Bearer ${token()}`, 'Content-Type':'application/json'}; }
 
 /* ── Login ── */
 async function doLogin() {
@@ -301,142 +397,283 @@ async function doLogin() {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({username: user, password: pass})
     });
-    if (!res.ok) throw new Error();
     const data = await res.json();
+    if (!res.ok) {
+      err.textContent = data.detail || 'Usuário ou senha incorretos.';
+      err.style.display = 'block'; btn.disabled = false; return;
+    }
     onAuthSuccess(data);
   } catch {
-    err.style.display = 'block';
-    btn.disabled = false;
+    err.textContent = 'Servidor indisponível. Tente novamente.';
+    err.style.display = 'block'; btn.disabled = false;
   }
-}
-
-/* ── Cadastro ── */
-async function doRegister() {
-  const btn = document.getElementById('rg-btn');
-  const err = document.getElementById('rg-err');
-  const nome = document.getElementById('rg-nome').value.trim();
-  const user = document.getElementById('rg-user').value.trim();
-  const pass = document.getElementById('rg-pass').value;
-  const pass2 = document.getElementById('rg-pass2').value;
-
-  err.style.display = 'none';
-  if (!nome || !user || !pass) { showErr(err, 'Preencha todos os campos.'); return; }
-  if (pass !== pass2) { showErr(err, 'As senhas não coincidem.'); return; }
-  if (pass.length < 6) { showErr(err, 'Senha deve ter ao menos 6 caracteres.'); return; }
-
-  btn.disabled = true;
-  try {
-    const res = await fetch(`${API}/api/register`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({nome, username: user, password: pass})
-    });
-    const data = await res.json();
-    if (!res.ok) { showErr(err, data.detail || 'Erro ao cadastrar.'); btn.disabled = false; return; }
-    onAuthSuccess(data);
-  } catch {
-    showErr(err, 'Servidor indisponível. Tente novamente.');
-    btn.disabled = false;
-  }
-}
-
-function showErr(el, msg) {
-  el.textContent = msg; el.style.display = 'block';
 }
 
 /* ── Pós-autenticação ── */
 function onAuthSuccess(data) {
   sessionStorage.setItem('sp_token', data.access_token);
-  sessionStorage.setItem('sp_nome', data.nome || '');
   sessionStorage.setItem('sp_role', data.role || 'corretor');
+  sessionStorage.setItem('sp_nome', data.nome || '');
   document.getElementById('auth-overlay').classList.add('hidden');
-  applyUserUI(data.nome, data.role);
+  routeByRole(data.role, data.nome);
 }
 
-function applyUserUI(nome, role) {
-  document.getElementById('user-nome-bar').textContent = nome || '';
-  const adminBtn = document.getElementById('btn-admin-panel');
-  if (role === 'admin') adminBtn.classList.remove('hidden');
-  else adminBtn.classList.add('hidden');
+function routeByRole(role, nome) {
+  // Esconde tudo
+  document.getElementById('superadmin-overlay').classList.add('hidden');
+  document.getElementById('admin-overlay').classList.add('hidden');
+  document.querySelector('.switcher').style.display = 'none';
+  document.querySelector('.frames').style.display = 'none';
+
+  if (role === 'superadmin') {
+    document.getElementById('sa-nome-bar').textContent = nome || '';
+    document.getElementById('superadmin-overlay').classList.remove('hidden');
+    loadCorretoras();
+  } else if (role === 'admin') {
+    document.getElementById('adm-nome-bar').textContent = nome || '';
+    document.getElementById('admin-overlay').classList.remove('hidden');
+    loadColaboradores();
+  } else {
+    // corretor — mostra cotador
+    document.getElementById('user-nome-bar').textContent = nome || '';
+    document.querySelector('.switcher').style.display = '';
+    document.querySelector('.frames').style.display = '';
+  }
 }
 
 function doLogout() {
   sessionStorage.clear();
-  document.getElementById('auth-overlay').classList.remove('hidden');
-  document.getElementById('user-nome-bar').textContent = '';
-  document.getElementById('btn-admin-panel').classList.add('hidden');
-  switchTab('login');
-}
-
-/* ── Admin panel ── */
-async function openAdmin() {
-  document.getElementById('admin-overlay').classList.remove('hidden');
-  await loadUsers();
-}
-
-function closeAdmin() {
+  document.getElementById('superadmin-overlay').classList.add('hidden');
   document.getElementById('admin-overlay').classList.add('hidden');
+  document.querySelector('.switcher').style.display = 'none';
+  document.querySelector('.frames').style.display = 'none';
+  document.getElementById('auth-overlay').classList.remove('hidden');
+  document.getElementById('lg-err').style.display = 'none';
+  document.getElementById('lg-user').value = '';
+  document.getElementById('lg-pass').value = '';
+  document.getElementById('lg-btn').disabled = false;
 }
 
-async function loadUsers() {
-  const body = document.getElementById('admin-body');
-  body.innerHTML = '<div class="admin-loading">Carregando...</div>';
-  const token = sessionStorage.getItem('sp_token');
-  try {
-    const res = await fetch(`${API}/api/admin/users`, {
-      headers: {Authorization: `Bearer ${token}`}
-    });
-    const users = await res.json();
-    body.innerHTML = renderUsersTable(users);
-  } catch {
-    body.innerHTML = '<div class="admin-loading">Erro ao carregar usuários.</div>';
-  }
+/* ════════════════════════════════════════
+   SUPERADMIN
+════════════════════════════════════════ */
+let _corretoras = [];
+
+function saTab(tab, btn) {
+  ['corretoras','usuarios','audit'].forEach(t => {
+    document.getElementById(`sa-tab-${t}`).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.painel-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'corretoras') loadCorretoras();
+  else if (tab === 'usuarios') loadUsuariosSA();
+  else loadAudit();
 }
 
-function renderUsersTable(users) {
-  const rows = users.map(u => `
-    <tr>
-      <td>${u.nome || '—'}</td>
+async function loadCorretoras() {
+  const el = document.getElementById('sa-corretoras-body');
+  el.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const res = await fetch(`${API}/api/superadmin/corretoras`, {headers: authH()});
+  _corretoras = await res.json();
+  // Atualiza select de corretoras no form de usuário
+  const sel = document.getElementById('sa-u-corretora');
+  sel.innerHTML = '<option value="">— Selecione —</option>' +
+    _corretoras.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  if (!_corretoras.length) { el.innerHTML = '<div class="admin-loading">Nenhuma corretora cadastrada.</div>'; return; }
+  const hoje = new Date().toISOString().slice(0,10);
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr><th>Corretora</th><th>Colaboradores</th><th>Validade</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>${_corretoras.map(c => {
+      const expirado = c.data_expiracao < hoje;
+      const vaga = `${c.total_usuarios}/${c.limite_usuarios}`;
+      return `<tr>
+        <td><strong style="color:#fff">${c.nome}</strong></td>
+        <td>${vaga}</td>
+        <td><span class="${expirado ? 'badge-status inativo' : 'badge-expira'}">${c.data_expiracao}</span></td>
+        <td><span class="badge-status ${c.ativo ? 'ativo' : 'inativo'}">${c.ativo ? 'Ativa' : 'Inativa'}</span></td>
+        <td style="white-space:nowrap">
+          <button class="btn-toggle" onclick="toggleCorretora(${c.id},this)">${c.ativo ? 'Suspender' : 'Ativar'}</button>
+          <button class="btn-del" onclick="deletarCorretora(${c.id},this)">Excluir</button>
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+async function criarCorretora() {
+  const nome = document.getElementById('sa-c-nome').value.trim();
+  const limite = document.getElementById('sa-c-limite').value;
+  const expira = document.getElementById('sa-c-expira').value;
+  const msg = document.getElementById('sa-c-msg');
+  if (!nome || !expira) { msg.className='form-msg error'; msg.textContent='Preencha nome e validade.'; return; }
+  msg.textContent = ''; msg.className = 'form-msg';
+  const res = await fetch(`${API}/api/superadmin/corretoras`, {
+    method:'POST', headers: authH(),
+    body: JSON.stringify({nome, limite_usuarios: parseInt(limite), data_expiracao: expira})
+  });
+  const data = await res.json();
+  if (!res.ok) { msg.className='form-msg error'; msg.textContent = data.detail || 'Erro.'; return; }
+  msg.className='form-msg success'; msg.textContent = 'Corretora criada!';
+  document.getElementById('sa-c-nome').value = '';
+  document.getElementById('sa-c-expira').value = '';
+  await loadCorretoras();
+}
+
+async function toggleCorretora(id, btn) {
+  btn.disabled = true;
+  const c = _corretoras.find(x => x.id === id);
+  const res = await fetch(`${API}/api/superadmin/corretoras/${id}`, {
+    method:'PATCH', headers: authH(),
+    body: JSON.stringify({ativo: c.ativo ? 0 : 1})
+  });
+  if (res.ok) await loadCorretoras(); else btn.disabled = false;
+}
+
+async function deletarCorretora(id, btn) {
+  const c = _corretoras.find(x => x.id === id);
+  if (!confirm(`Excluir a corretora "${c.nome}" e todos os seus usuários? Esta ação não pode ser desfeita.`)) return;
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/superadmin/corretoras/${id}`, {method:'DELETE', headers: authH()});
+  if (res.ok) await loadCorretoras(); else btn.disabled = false;
+}
+
+async function loadUsuariosSA() {
+  const el = document.getElementById('sa-usuarios-body');
+  el.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const res = await fetch(`${API}/api/superadmin/users`, {headers: authH()});
+  const users = await res.json();
+  if (!users.length) { el.innerHTML = '<div class="admin-loading">Nenhum usuário cadastrado.</div>'; return; }
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Corretora</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>${users.map(u => `<tr>
+      <td>${u.nome||'—'}</td>
       <td style="color:rgba(255,255,255,.5)">${u.username}</td>
       <td><span class="badge-role ${u.role}">${u.role}</span></td>
-      <td><span class="badge-status ${u.ativo ? 'ativo' : 'inativo'}">${u.ativo ? 'Ativo' : 'Inativo'}</span></td>
+      <td>${u.corretora_nome||'—'}</td>
+      <td><span class="badge-status ${u.ativo?'ativo':'inativo'}">${u.ativo?'Ativo':'Inativo'}</span></td>
       <td style="white-space:nowrap">
-        ${u.role !== 'admin' ? `
-          <button class="btn-toggle" onclick="toggleUser(${u.id}, this)">${u.ativo ? 'Desativar' : 'Ativar'}</button>
-          <button class="btn-del" onclick="deleteUser(${u.id}, this)">Remover</button>
-        ` : '—'}
+        <button class="btn-toggle" onclick="toggleUsuarioSA(${u.id},this)">${u.ativo?'Suspender':'Ativar'}</button>
+        <button class="btn-del" onclick="deletarUsuarioSA(${u.id},this)">Remover</button>
       </td>
-    </tr>`).join('');
-  return `
-    <table class="admin-table">
-      <thead><tr>
-        <th>Nome</th><th>Usuário</th><th>Perfil</th><th>Status</th><th>Ações</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+    </tr>`).join('')}</tbody>
+  </table>`;
 }
 
-async function toggleUser(id, btn) {
-  btn.disabled = true;
-  const token = sessionStorage.getItem('sp_token');
-  const res = await fetch(`${API}/api/admin/users/${id}/toggle`, {
-    method:'PATCH', headers:{Authorization:`Bearer ${token}`}
+async function criarUsuarioSA() {
+  const nome = document.getElementById('sa-u-nome').value.trim();
+  const username = document.getElementById('sa-u-user').value.trim();
+  const password = document.getElementById('sa-u-pass').value;
+  const role = document.getElementById('sa-u-role').value;
+  const corretora_id = document.getElementById('sa-u-corretora').value || null;
+  const msg = document.getElementById('sa-u-msg');
+  if (!nome || !username || !password) { msg.className='form-msg error'; msg.textContent='Preencha todos os campos.'; return; }
+  msg.textContent = ''; msg.className = 'form-msg';
+  const res = await fetch(`${API}/api/superadmin/users`, {
+    method:'POST', headers: authH(),
+    body: JSON.stringify({nome, username, password, role, corretora_id: corretora_id ? parseInt(corretora_id) : null})
   });
-  if (res.ok) await loadUsers();
-  else btn.disabled = false;
+  const data = await res.json();
+  if (!res.ok) { msg.className='form-msg error'; msg.textContent = data.detail || 'Erro.'; return; }
+  msg.className='form-msg success'; msg.textContent = 'Usuário criado!';
+  ['sa-u-nome','sa-u-user','sa-u-pass'].forEach(id => document.getElementById(id).value = '');
+  await loadUsuariosSA();
 }
 
-async function deleteUser(id, btn) {
-  if (!confirm('Remover este corretor? Esta ação não pode ser desfeita.')) return;
+async function toggleUsuarioSA(id, btn) {
   btn.disabled = true;
-  const token = sessionStorage.getItem('sp_token');
-  const res = await fetch(`${API}/api/admin/users/${id}`, {
-    method:'DELETE', headers:{Authorization:`Bearer ${token}`}
-  });
-  if (res.ok) await loadUsers();
-  else btn.disabled = false;
+  const res = await fetch(`${API}/api/superadmin/users/${id}/toggle`, {method:'PATCH', headers: authH()});
+  if (res.ok) await loadUsuariosSA(); else btn.disabled = false;
 }
 
-/* ── Navegação ── */
+async function deletarUsuarioSA(id, btn) {
+  if (!confirm('Remover este usuário? Esta ação não pode ser desfeita.')) return;
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/superadmin/users/${id}`, {method:'DELETE', headers: authH()});
+  if (res.ok) await loadUsuariosSA(); else btn.disabled = false;
+}
+
+async function loadAudit() {
+  const el = document.getElementById('sa-audit-body');
+  el.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const res = await fetch(`${API}/api/superadmin/audit`, {headers: authH()});
+  const logs = await res.json();
+  if (!logs.length) { el.innerHTML = '<div class="admin-loading">Nenhum registro de auditoria.</div>'; return; }
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhes</th><th>IP</th></tr></thead>
+    <tbody>${logs.map(l => `<tr>
+      <td style="color:rgba(255,255,255,.45);font-size:11px">${l.criado_em||''}</td>
+      <td>${l.usuario||'—'}</td>
+      <td><span class="badge-role">${l.acao}</span></td>
+      <td style="color:rgba(255,255,255,.55)">${l.detalhes||'—'}</td>
+      <td style="color:rgba(255,255,255,.35);font-size:11px">${l.ip||'—'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+/* ════════════════════════════════════════
+   ADMIN DA CORRETORA
+════════════════════════════════════════ */
+async function loadColaboradores() {
+  const el = document.getElementById('adm-users-body');
+  const bar = document.getElementById('adm-info-bar');
+  el.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const res = await fetch(`${API}/api/admin/users`, {headers: authH()});
+  const data = await res.json();
+  // Info bar
+  const cheio = data.total >= data.limite;
+  if (data.corretora) {
+    document.getElementById('adm-corretora-nome').textContent = data.corretora.nome;
+    bar.style.display = '';
+    bar.innerHTML = `<span>Colaboradores: <strong>${data.total}/${data.limite}</strong></span>
+      <span class="vagas-bar ${cheio ? 'cheio' : ''}">${cheio ? 'Limite atingido' : `${data.limite - data.total} vaga(s) disponível(is)`}</span>`;
+  }
+  if (!data.usuarios.length) { el.innerHTML = '<div class="admin-loading">Nenhum colaborador cadastrado ainda.</div>'; return; }
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr><th>Nome</th><th>Usuário</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>${data.usuarios.map(u => `<tr>
+      <td>${u.nome||'—'}</td>
+      <td style="color:rgba(255,255,255,.5)">${u.username}</td>
+      <td><span class="badge-status ${u.ativo?'ativo':'inativo'}">${u.ativo?'Ativo':'Inativo'}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn-toggle" onclick="toggleColaborador(${u.id},this)">${u.ativo?'Suspender':'Ativar'}</button>
+        <button class="btn-del" onclick="deletarColaborador(${u.id},this)">Remover</button>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+async function criarColaborador() {
+  const nome = document.getElementById('adm-u-nome').value.trim();
+  const username = document.getElementById('adm-u-user').value.trim();
+  const password = document.getElementById('adm-u-pass').value;
+  const msg = document.getElementById('adm-u-msg');
+  if (!nome || !username || !password) { msg.className='form-msg error'; msg.textContent='Preencha todos os campos.'; return; }
+  msg.textContent = ''; msg.className = 'form-msg';
+  const res = await fetch(`${API}/api/admin/users`, {
+    method:'POST', headers: authH(),
+    body: JSON.stringify({nome, username, password})
+  });
+  const data = await res.json();
+  if (!res.ok) { msg.className='form-msg error'; msg.textContent = data.detail || 'Erro.'; return; }
+  msg.className='form-msg success'; msg.textContent = 'Colaborador adicionado!';
+  ['adm-u-nome','adm-u-user','adm-u-pass'].forEach(id => document.getElementById(id).value = '');
+  await loadColaboradores();
+}
+
+async function toggleColaborador(id, btn) {
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/admin/users/${id}/toggle`, {method:'PATCH', headers: authH()});
+  if (res.ok) await loadColaboradores(); else btn.disabled = false;
+}
+
+async function deletarColaborador(id, btn) {
+  if (!confirm('Remover este colaborador? Esta ação não pode ser desfeita.')) return;
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/admin/users/${id}`, {method:'DELETE', headers: authH()});
+  if (res.ok) await loadColaboradores(); else btn.disabled = false;
+}
+
+/* ── Navegação cotador ── */
 function show(id, btn) {
   document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('iframe').forEach(f => f.classList.remove('visible'));
@@ -456,20 +693,23 @@ function syncApres(data) {
   }
 }
 
-/* ── Enter nos inputs ── */
+/* ── Enter no login ── */
 document.getElementById('lg-pass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
-document.getElementById('rg-pass2').addEventListener('keydown', e => { if (e.key==='Enter') doRegister(); });
+
+/* ── Esconde cotador até autenticar ── */
+document.querySelector('.switcher').style.display = 'none';
+document.querySelector('.frames').style.display = 'none';
 
 /* ── Verifica sessão ao carregar ── */
 (async function checkSession() {
-  const token = sessionStorage.getItem('sp_token');
-  if (!token) return;
+  const tk = token();
+  if (!tk) return;
   try {
-    const res = await fetch(`${API}/api/me`, {headers:{Authorization:`Bearer ${token}`}});
+    const res = await fetch(`${API}/api/me`, {headers:{Authorization:`Bearer ${tk}`}});
     if (res.ok) {
       const data = await res.json();
       document.getElementById('auth-overlay').classList.add('hidden');
-      applyUserUI(data.nome, data.role);
+      routeByRole(data.role, data.nome);
     }
   } catch {}
 })();

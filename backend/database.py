@@ -36,18 +36,64 @@ def get_connection():
     return conn
 
 
+def _migrations_pg(conn):
+    safe = [
+        "ALTER TABLE users ADD COLUMN email TEXT",
+        "ALTER TABLE users ADD COLUMN corretora_id INTEGER",
+        "ALTER TABLE users ADD COLUMN tentativas_login INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN bloqueado_ate TEXT",
+        "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
+    ]
+    for sql in safe:
+        try:
+            conn.execute(sql)
+            conn.commit()
+        except Exception:
+            pass
+
+
+def _migrations_sqlite(c):
+    safe = [
+        "ALTER TABLE users ADD COLUMN email TEXT",
+        "ALTER TABLE users ADD COLUMN corretora_id INTEGER",
+        "ALTER TABLE users ADD COLUMN tentativas_login INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN bloqueado_ate TEXT",
+        "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'corretor'",
+        "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
+    ]
+    for sql in safe:
+        try:
+            c.execute(sql)
+        except Exception:
+            pass
+
+
 def init_db():
     conn = get_connection()
 
     if DATABASE_URL:
         conn.execute("""
+            CREATE TABLE IF NOT EXISTS corretoras (
+                id SERIAL PRIMARY KEY,
+                nome TEXT NOT NULL,
+                limite_usuarios INTEGER DEFAULT 5,
+                data_expiracao TEXT NOT NULL,
+                ativo INTEGER DEFAULT 1,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
+        conn.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 username TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE,
                 hashed_password TEXT NOT NULL,
                 nome TEXT,
                 role TEXT DEFAULT 'corretor',
+                corretora_id INTEGER REFERENCES corretoras(id) ON DELETE CASCADE,
                 ativo INTEGER DEFAULT 1,
+                tentativas_login INTEGER DEFAULT 0,
+                bloqueado_ate TEXT,
                 criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
             )
         """)
@@ -55,37 +101,72 @@ def init_db():
             CREATE TABLE IF NOT EXISTS cotacoes (
                 id SERIAL PRIMARY KEY,
                 usuario TEXT NOT NULL,
+                corretora_id INTEGER,
                 cliente TEXT,
                 dados TEXT,
                 criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS audit_log (
+                id SERIAL PRIMARY KEY,
+                usuario TEXT,
+                acao TEXT NOT NULL,
+                detalhes TEXT,
+                ip TEXT,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
+        conn.commit()
+        _migrations_pg(conn)
     else:
         c = conn.cursor()
         c.execute("""
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS corretoras (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT UNIQUE NOT NULL,
-                hashed_password TEXT NOT NULL,
-                nome TEXT,
-                role TEXT DEFAULT 'corretor',
+                nome TEXT NOT NULL,
+                limite_usuarios INTEGER DEFAULT 5,
+                data_expiracao TEXT NOT NULL,
                 ativo INTEGER DEFAULT 1,
                 criado_em TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        try:
-            c.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'corretor'")
-        except Exception:
-            pass
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE,
+                hashed_password TEXT NOT NULL,
+                nome TEXT,
+                role TEXT DEFAULT 'corretor',
+                corretora_id INTEGER,
+                ativo INTEGER DEFAULT 1,
+                tentativas_login INTEGER DEFAULT 0,
+                bloqueado_ate TEXT,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
         c.execute("""
             CREATE TABLE IF NOT EXISTS cotacoes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 usuario TEXT NOT NULL,
+                corretora_id INTEGER,
                 cliente TEXT,
                 dados TEXT,
                 criado_em TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS audit_log (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                usuario TEXT,
+                acao TEXT NOT NULL,
+                detalhes TEXT,
+                ip TEXT,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        _migrations_sqlite(c)
+        conn.commit()
 
-    conn.commit()
     conn.close()
