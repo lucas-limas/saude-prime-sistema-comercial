@@ -26,16 +26,15 @@ security = HTTPBearer()
 def startup():
     init_db()
     conn = get_connection()
-    c = conn.cursor()
-    c.execute("SELECT COUNT(*) FROM users")
-    if c.fetchone()[0] == 0:
-        c.execute(
+    row = conn.execute("SELECT COUNT(*) as cnt FROM users").fetchone()
+    if row["cnt"] == 0:
+        conn.execute(
             "INSERT INTO users (username, hashed_password, nome, role) VALUES (?, ?, ?, ?)",
             ("admin", hash_password("saude@2026"), "Administrador", "admin"),
         )
         conn.commit()
     else:
-        c.execute("UPDATE users SET role='admin' WHERE username='admin'")
+        conn.execute("UPDATE users SET role='admin' WHERE username='admin'")
         conn.commit()
     conn.close()
 
