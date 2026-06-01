@@ -1805,8 +1805,12 @@ function saveToHistory() {
   const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
   const withTotal = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
-    .filter(op => planAvailable(PLANOS.find(x => x.id === selPlanos[op])))
-    .map(op => { const p = PLANOS.find(x=>x.id===selPlanos[op]); return {op, total: p?qtds.reduce((a,q,i)=>a+q*p.precos[i],0):0}; })
+    .filter(op => (selPlanos[op]||[]).some(pid => planAvailable(PLANOS.find(x=>x.id===pid))))
+    .map(op => {
+      const pid = (selPlanos[op]||[])[0];
+      const p = PLANOS.find(x=>x.id===pid);
+      return {op, total: p?qtds.reduce((a,q,i)=>a+q*p.precos[i],0):0};
+    })
     .filter(x => x.total > 0);
   const winner = withTotal.length ? withTotal.slice().sort((a,b)=>a.total-b.total)[0].op : null;
   const entry = {
@@ -1854,7 +1858,9 @@ function closeHistorico() { document.getElementById('hist-overlay').classList.re
 function restaurarCotacao(id) {
   const e = loadHistory().find(x=>String(x.id)===String(id));
   if (!e) return;
-  qtds=[...e.qtds]; selPlanos={...e.selPlanos}; activeOps={...e.activeOps}; tipoOp={...e.tipoOp};
+  qtds=[...e.qtds];
+  selPlanos=Object.fromEntries(Object.entries(e.selPlanos||{}).map(([k,v])=>[k,Array.isArray(v)?v:[v].filter(Boolean)]));
+  activeOps={...e.activeOps}; tipoOp={...e.tipoOp};
   filtroCopart=e.filtroCopart||'todos'; filtroMod=e.filtroMod||'comp'; filtroVig=e.filtroVig||'vigentes';
   document.getElementById('nome').value = e.nome||'';
   if (e.obs) document.getElementById('obs').value = e.obs;
