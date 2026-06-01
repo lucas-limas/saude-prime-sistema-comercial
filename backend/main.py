@@ -171,13 +171,11 @@ def seed_catalogo():
 
     # (codigo, op_chave, nome, aco, tipo, fvidas, mod, vig, precos, ordem)
     _PLANOS = [
-        # UNITY
-        ("u1","unity","Sem copart — Life Vital","amb",None,None,None,None,[189.94,201.35,231.55,259.32,311.19,357.87,450.91,554.62,721.01,1045.46],1),
-        ("u2","unity","Com copart — Life Vital","amb",None,None,None,None,[138.34,146.64,168.64,188.87,226.65,260.65,328.41,403.95,525.13,761.45],2),
-        ("u3","unity","Sem copart — Unity Vida","enf",None,None,None,None,[348.34,369.25,424.63,475.59,570.69,656.31,826.94,1017.15,1322.28,1917.30],3),
-        ("u4","unity","Com copart — Unity Vida","enf",None,None,None,None,[248.94,263.88,303.46,339.87,407.85,469.02,590.97,726.90,944.97,1370.20],4),
-        ("u5","unity","Sem copart — Unity Star","apt",None,None,None,None,[433.42,459.42,528.34,591.74,710.08,816.60,1028.91,1265.56,1645.23,2385.58],5),
-        ("u6","unity","Com copart — Unity Star","apt",None,None,None,None,[371.26,393.54,452.57,506.88,608.25,699.46,881.36,1084.07,1409.30,2043.48],6),
+        # UNITY (u3-u6 batem com dados.js; u1/u2 removidos pois não existem mais)
+        ("u3","unity","Sem copart — Unity Vida","enf",None,None,None,None,[348.34,369.25,424.63,475.59,570.69,656.31,826.94,1017.15,1322.28,1917.30],1),
+        ("u4","unity","Com copart — Unity Vida","enf",None,None,None,None,[248.94,263.88,303.46,339.87,407.85,469.02,590.97,726.90,944.97,1370.20],2),
+        ("u5","unity","Sem copart — Unity Star","apt",None,None,None,None,[433.42,459.42,528.34,591.74,710.08,816.60,1028.91,1265.56,1645.23,2385.58],3),
+        ("u6","unity","Com copart — Unity Star","apt",None,None,None,None,[371.26,393.54,452.57,506.88,608.25,699.46,881.36,1084.07,1409.30,2043.48],4),
         # EVO
         ("e1","evo","Sem copart — NOW Enfermaria","enf",None,None,None,None,[329.69,352.17,383.37,450.31,541.95,612.67,747.64,917.58,1233.41,1637.60],1),
         ("e2","evo","Com copart — ONE Enfermaria","enf",None,None,None,None,[249.30,266.30,289.90,340.52,409.81,463.29,565.35,693.86,932.68,1238.32],2),
@@ -194,28 +192,28 @@ def seed_catalogo():
         ("p6","plenum","Copart parcial — Sigma (Apt)","apt",None,None,None,None,[499.90,624.88,724.86,824.84,899.82,949.81,1149.77,1249.75,1549.69,2399.52],6),
         ("p7","plenum","Copart total — Beta (Apt)","apt",None,None,None,None,[309.90,387.38,449.36,511.34,557.82,588.81,712.77,774.75,960.69,1487.52],7),
         ("p8","plenum","Copart total — Sigma (Apt)","apt",None,None,None,None,[389.90,487.38,565.36,643.34,701.82,740.81,896.77,974.75,1208.69,1871.52],8),
-        # AMIL — copart total
-        ("a1","amil","Bronze DF QC (Enf) — Copart Total","enf","adesao",None,None,None,[320.90,435.79,511.57,511.57,511.57,571.43,789.14,942.24,1354.94,1921.31],1),
-        ("a2","amil","Bronze DF QP (Apt) — Copart Total","apt","adesao",None,None,None,[356.22,483.74,567.86,567.86,567.86,634.31,875.98,1045.92,1504.03,2132.71],2),
-        ("a3","amil","Prata DF QC (Enf) — Copart Total","enf","adesao",None,None,None,[448.22,524.41,639.79,767.74,806.12,886.74,1108.44,1219.28,1524.11,2667.19],3),
-        ("a4","amil","Prata DF QP (Apt) — Copart Total","apt","adesao",None,None,None,[497.52,582.10,710.15,852.18,894.80,984.28,1230.36,1353.40,1691.75,2960.58],4),
-        ("a5","amil","Ouro QC (Enf) — Copart Total","enf","adesao",None,None,None,[500.09,585.11,713.83,856.60,899.42,989.38,1236.72,1360.39,1700.48,2975.86],5),
-        ("a6","amil","Ouro QP (Apt) — Copart Total","apt","adesao",None,None,None,[555.10,649.48,792.35,950.82,998.36,1098.19,1372.74,1510.02,1887.53,3303.18],6),
-        ("a7","amil","Platinum R1 QP (Apt) — Copart Total","apt","adesao",None,None,None,[589.22,689.38,841.04,1009.26,1059.73,1165.70,1457.12,1602.84,2003.56,3506.22],7),
-        ("a8","amil","Platinum R2 QP (Apt) — Copart Total","apt","adesao",None,None,None,[595.08,696.24,849.42,1019.30,1070.26,1177.28,1471.61,1618.78,2023.46,3541.07],8),
-        ("a9","amil","Platinum Mais R1 QP (Apt) — Copart Total","apt","adesao",None,None,None,[732.24,856.72,1045.19,1254.24,1316.95,1448.65,1810.81,1991.90,2489.88,4357.28],9),
-        ("a10","amil","Platinum Mais R2 QP (Apt) — Copart Total","apt","adesao",None,None,None,[739.48,865.19,1055.54,1266.65,1330.00,1462.99,1828.75,2011.62,2514.52,4400.42],10),
-        # AMIL — copart parcial
-        ("a11","amil","Bronze DF QC (Enf) — Copart Parcial","enf","adesao",None,None,None,[427.87,581.05,682.09,682.09,682.09,761.89,1052.17,1256.29,1806.55,2561.69],11),
-        ("a12","amil","Bronze DF QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[474.95,644.98,757.14,757.14,757.14,845.72,1167.95,1394.53,2005.33,2843.56],12),
-        ("a13","amil","Prata DF QC (Enf) — Copart Parcial","enf","adesao",None,None,None,[597.62,699.22,853.04,1023.65,1074.84,1182.31,1477.91,1625.71,2032.14,3556.26],13),
-        ("a14","amil","Prata DF QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[663.36,776.14,946.87,1136.26,1193.06,1312.38,1640.48,1804.54,2255.68,3947.45],14),
-        ("a15","amil","Ouro QC (Enf) — Copart Parcial","enf","adesao",None,None,None,[666.78,780.12,951.76,1142.10,1199.21,1319.12,1648.91,1813.80,2267.26,3967.69],15),
-        ("a16","amil","Ouro QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[740.11,865.93,1056.43,1267.72,1331.10,1464.20,1830.26,2013.29,2516.62,4404.08],16),
-        ("a17","amil","Platinum R1 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[785.62,919.16,1121.39,1345.67,1412.94,1554.24,1942.81,2137.09,2671.37,4674.90],17),
-        ("a18","amil","Platinum R2 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[793.43,928.31,1132.54,1359.04,1426.99,1569.70,1962.12,2158.33,2697.91,4721.35],18),
-        ("a19","amil","Platinum Mais R1 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[976.32,1142.28,1393.60,1672.32,1755.95,1931.53,2414.44,2655.86,3319.84,5809.72],19),
-        ("a20","amil","Platinum Mais R2 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[985.99,1153.60,1407.40,1688.87,1773.34,1950.66,2438.34,2682.17,3352.69,5867.23],20),
+        # AMIL — Adesão Copart. Completa (IDs batem com dados.js am_ad_ct_*)
+        ("am_ad_ct_1", "amil","Copart. Completa — Bronze DF (Enf)","enf","adesao",None,None,None,[ 320.90, 435.79, 511.57, 511.57, 511.57,  571.43,  789.14,  942.24, 1354.94, 1921.31], 1),
+        ("am_ad_ct_2", "amil","Copart. Completa — Bronze DF (Apt)","apt","adesao",None,None,None,[ 356.22, 483.74, 567.86, 567.86, 567.86,  634.31,  875.98, 1045.92, 1504.03, 2132.71], 2),
+        ("am_ad_ct_3", "amil","Copart. Completa — Prata DF (Enf)", "enf","adesao",None,None,None,[ 448.22, 524.41, 639.79, 767.74, 806.12,  886.74, 1108.44, 1219.28, 1524.11, 2667.19], 3),
+        ("am_ad_ct_4", "amil","Copart. Completa — Prata DF (Apt)", "apt","adesao",None,None,None,[ 497.52, 582.10, 710.15, 852.18, 894.80,  984.28, 1230.36, 1353.40, 1691.75, 2960.58], 4),
+        ("am_ad_ct_5", "amil","Copart. Completa — Ouro (Enf)",     "enf","adesao",None,None,None,[ 500.09, 585.11, 713.83, 856.60, 899.42,  989.38, 1236.72, 1360.39, 1700.48, 2975.86], 5),
+        ("am_ad_ct_6", "amil","Copart. Completa — Ouro (Apt)",     "apt","adesao",None,None,None,[ 555.10, 649.48, 792.35, 950.82, 998.36, 1098.19, 1372.74, 1510.02, 1887.53, 3303.18], 6),
+        ("am_ad_ct_7", "amil","Copart. Completa — Platinum Mais R1 (Apt)","apt","adesao",None,None,None,[ 732.24, 856.72,1045.19,1254.24,1316.95, 1448.65, 1810.81, 1991.90, 2489.88, 4357.28], 7),
+        ("am_ad_ct_8", "amil","Copart. Completa — Platinum Mais R2 (Apt)","apt","adesao",None,None,None,[ 739.48, 865.19,1055.54,1266.65,1330.00, 1462.99, 1828.75, 2011.62, 2514.52, 4400.42], 8),
+        ("am_ad_ct_9", "amil","Copart. Completa — Platinum R1 (Apt)",     "apt","adesao",None,None,None,[ 589.22, 689.38, 841.04,1009.26,1059.73, 1165.70, 1457.12, 1602.84, 2003.56, 3506.22], 9),
+        ("am_ad_ct_10","amil","Copart. Completa — Platinum R2 (Apt)",     "apt","adesao",None,None,None,[ 595.08, 696.24, 849.42,1019.30,1070.26, 1177.28, 1471.61, 1618.78, 2023.46, 3541.07],10),
+        # AMIL — Adesão Copart. Parcial (IDs batem com dados.js am_ad_cp_*)
+        ("am_ad_cp_1", "amil","Copart. Parcial — Bronze DF (Enf)","enf","adesao",None,None,None,[ 427.87, 581.05, 682.09, 682.09, 682.09,  761.89, 1052.17, 1256.29, 1806.55, 2561.69],11),
+        ("am_ad_cp_2", "amil","Copart. Parcial — Bronze DF (Apt)","apt","adesao",None,None,None,[ 474.95, 644.98, 757.14, 757.14, 757.14,  845.72, 1167.95, 1394.53, 2005.33, 2843.56],12),
+        ("am_ad_cp_3", "amil","Copart. Parcial — Prata DF (Enf)", "enf","adesao",None,None,None,[ 597.62, 699.22, 853.04,1023.65,1074.84, 1182.31, 1477.91, 1625.71, 2032.14, 3556.26],13),
+        ("am_ad_cp_4", "amil","Copart. Parcial — Prata DF (Apt)", "apt","adesao",None,None,None,[ 663.36, 776.14, 946.87,1136.26,1193.06, 1312.38, 1640.48, 1804.54, 2255.68, 3947.45],14),
+        ("am_ad_cp_5", "amil","Copart. Parcial — Ouro (Enf)",     "enf","adesao",None,None,None,[ 666.78, 780.12, 951.76,1142.10,1199.21, 1319.12, 1648.91, 1813.80, 2267.26, 3967.69],15),
+        ("am_ad_cp_6", "amil","Copart. Parcial — Ouro (Apt)",     "apt","adesao",None,None,None,[ 740.11, 865.93,1056.43,1267.72,1331.10, 1464.20, 1830.26, 2013.29, 2516.62, 4404.08],16),
+        ("am_ad_cp_7", "amil","Copart. Parcial — Platinum Mais R1 (Apt)","apt","adesao",None,None,None,[ 976.32,1142.28,1393.60,1672.32,1755.95, 1931.53, 2414.44, 2655.86, 3319.84, 5809.72],17),
+        ("am_ad_cp_8", "amil","Copart. Parcial — Platinum Mais R2 (Apt)","apt","adesao",None,None,None,[ 985.99,1153.60,1407.40,1688.87,1773.34, 1950.66, 2438.34, 2682.17, 3352.69, 5867.23],18),
+        ("am_ad_cp_9", "amil","Copart. Parcial — Platinum R1 (Apt)",     "apt","adesao",None,None,None,[ 785.62, 919.16,1121.39,1345.67,1412.94, 1554.24, 1942.81, 2137.09, 2671.37, 4674.90],19),
+        ("am_ad_cp_10","amil","Copart. Parcial — Platinum R2 (Apt)",     "apt","adesao",None,None,None,[ 793.43, 928.31,1132.54,1359.04,1426.99, 1569.70, 1962.12, 2158.33, 2697.91, 4721.35],20),
     ]
     for i, (codigo, op_chave, nome, aco, tipo, fvidas, mod, vig, precos, ordem) in enumerate(_PLANOS):
         op_id = ops_map.get(op_chave)
@@ -281,7 +279,7 @@ class PlanoRequest(BaseModel):
     nome: str
     aco: str
     tipo: Optional[str] = None
-    fvidas: Optional[int] = None
+    fvidas: Optional[str] = None
     mod: Optional[str] = None
     vig: Optional[int] = None
     precos: list
@@ -292,7 +290,7 @@ class UpdatePlanoRequest(BaseModel):
     nome: Optional[str] = None
     aco: Optional[str] = None
     tipo: Optional[str] = None
-    fvidas: Optional[int] = None
+    fvidas: Optional[str] = None
     mod: Optional[str] = None
     vig: Optional[int] = None
     precos: Optional[list] = None
@@ -721,11 +719,17 @@ def catalogo_publico():
     operadoras = {r["chave"]: {"nome": r["nome"], "cor": r["cor"] or "", "cls": r["cls"] or "", "info": r["info"] or ""} for r in ops_rows}
     planos = []
     for r in planos_rows:
-        p = {"id": r["codigo"], "op": r["op"], "nome": r["nome"], "aco": r["aco"], "precos": json.loads(r["precos"])}
-        if r["tipo"]:  p["tipo"] = r["tipo"]
+        p = {
+            "id":     r["codigo"],
+            "op":     r["op"],
+            "nome":   r["nome"],
+            "aco":    r["aco"],
+            "tipo":   r["tipo"] or "adesao",
+            "precos": json.loads(r["precos"]),
+        }
         if r["fvidas"]: p["fvidas"] = r["fvidas"]
-        if r["mod"]:   p["mod"] = r["mod"]
-        if r["vig"]:   p["vig"] = r["vig"]
+        if r["mod"]:    p["mod"] = r["mod"]
+        if r["vig"]:    p["vig"] = r["vig"]
         planos.append(p)
     return {"faixas": FAIXAS, "operadoras": operadoras, "planos": planos}
 

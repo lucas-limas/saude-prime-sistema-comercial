@@ -46,6 +46,29 @@ def _migrations_pg(conn):
         "ALTER TABLE users ADD COLUMN bloqueado_ate TEXT",
         "ALTER TABLE users ADD COLUMN session_token TEXT",
         "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
+        # Renomeia códigos Amil para bater com IDs de dados.js (mapeamento por preço)
+        "UPDATE planos SET codigo = 'am_ad_ct_1'  WHERE codigo = 'a1'",
+        "UPDATE planos SET codigo = 'am_ad_ct_2'  WHERE codigo = 'a2'",
+        "UPDATE planos SET codigo = 'am_ad_ct_3'  WHERE codigo = 'a3'",
+        "UPDATE planos SET codigo = 'am_ad_ct_4'  WHERE codigo = 'a4'",
+        "UPDATE planos SET codigo = 'am_ad_ct_5'  WHERE codigo = 'a5'",
+        "UPDATE planos SET codigo = 'am_ad_ct_6'  WHERE codigo = 'a6'",
+        "UPDATE planos SET codigo = 'am_ad_ct_9'  WHERE codigo = 'a7'",
+        "UPDATE planos SET codigo = 'am_ad_ct_10' WHERE codigo = 'a8'",
+        "UPDATE planos SET codigo = 'am_ad_ct_7'  WHERE codigo = 'a9'",
+        "UPDATE planos SET codigo = 'am_ad_ct_8'  WHERE codigo = 'a10'",
+        "UPDATE planos SET codigo = 'am_ad_cp_1'  WHERE codigo = 'a11'",
+        "UPDATE planos SET codigo = 'am_ad_cp_2'  WHERE codigo = 'a12'",
+        "UPDATE planos SET codigo = 'am_ad_cp_3'  WHERE codigo = 'a13'",
+        "UPDATE planos SET codigo = 'am_ad_cp_4'  WHERE codigo = 'a14'",
+        "UPDATE planos SET codigo = 'am_ad_cp_5'  WHERE codigo = 'a15'",
+        "UPDATE planos SET codigo = 'am_ad_cp_6'  WHERE codigo = 'a16'",
+        "UPDATE planos SET codigo = 'am_ad_cp_9'  WHERE codigo = 'a17'",
+        "UPDATE planos SET codigo = 'am_ad_cp_10' WHERE codigo = 'a18'",
+        "UPDATE planos SET codigo = 'am_ad_cp_7'  WHERE codigo = 'a19'",
+        "UPDATE planos SET codigo = 'am_ad_cp_8'  WHERE codigo = 'a20'",
+        # Desativa planos Unity Life Vital (u1/u2) removidos do dados.js
+        "UPDATE planos SET ativo = 0 WHERE codigo IN ('u1', 'u2')",
     ]
     for sql in safe:
         try:
@@ -69,6 +92,29 @@ def _migrations_sqlite(c):
         "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'corretor'",
         "ALTER TABLE users ADD COLUMN session_token TEXT",
         "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
+        # Renomeia códigos Amil para bater com IDs de dados.js (mapeamento por preço)
+        "UPDATE planos SET codigo = 'am_ad_ct_1'  WHERE codigo = 'a1'",
+        "UPDATE planos SET codigo = 'am_ad_ct_2'  WHERE codigo = 'a2'",
+        "UPDATE planos SET codigo = 'am_ad_ct_3'  WHERE codigo = 'a3'",
+        "UPDATE planos SET codigo = 'am_ad_ct_4'  WHERE codigo = 'a4'",
+        "UPDATE planos SET codigo = 'am_ad_ct_5'  WHERE codigo = 'a5'",
+        "UPDATE planos SET codigo = 'am_ad_ct_6'  WHERE codigo = 'a6'",
+        "UPDATE planos SET codigo = 'am_ad_ct_9'  WHERE codigo = 'a7'",
+        "UPDATE planos SET codigo = 'am_ad_ct_10' WHERE codigo = 'a8'",
+        "UPDATE planos SET codigo = 'am_ad_ct_7'  WHERE codigo = 'a9'",
+        "UPDATE planos SET codigo = 'am_ad_ct_8'  WHERE codigo = 'a10'",
+        "UPDATE planos SET codigo = 'am_ad_cp_1'  WHERE codigo = 'a11'",
+        "UPDATE planos SET codigo = 'am_ad_cp_2'  WHERE codigo = 'a12'",
+        "UPDATE planos SET codigo = 'am_ad_cp_3'  WHERE codigo = 'a13'",
+        "UPDATE planos SET codigo = 'am_ad_cp_4'  WHERE codigo = 'a14'",
+        "UPDATE planos SET codigo = 'am_ad_cp_5'  WHERE codigo = 'a15'",
+        "UPDATE planos SET codigo = 'am_ad_cp_6'  WHERE codigo = 'a16'",
+        "UPDATE planos SET codigo = 'am_ad_cp_9'  WHERE codigo = 'a17'",
+        "UPDATE planos SET codigo = 'am_ad_cp_10' WHERE codigo = 'a18'",
+        "UPDATE planos SET codigo = 'am_ad_cp_7'  WHERE codigo = 'a19'",
+        "UPDATE planos SET codigo = 'am_ad_cp_8'  WHERE codigo = 'a20'",
+        # Desativa planos Unity Life Vital (u1/u2) removidos do dados.js
+        "UPDATE planos SET ativo = 0 WHERE codigo IN ('u1', 'u2')",
     ]
     for sql in safe:
         try:
