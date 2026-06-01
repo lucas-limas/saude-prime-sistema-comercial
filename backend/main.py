@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import secrets
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
@@ -76,6 +77,16 @@ def get_current_user(creds: HTTPAuthorizationCredentials = Depends(security)):
     payload = decode_token(creds.credentials)
     if not payload:
         raise HTTPException(401, "Token inválido ou expirado")
+    # Sessão única: verifica se o session_token ainda é o ativo no banco
+    session_tok = payload.get("session_token")
+    if session_tok:
+        conn = get_connection()
+        row = conn.execute(
+            "SELECT session_token FROM users WHERE username = ?", (payload["sub"],)
+        ).fetchone()
+        conn.close()
+        if not row or row["session_token"] != session_tok:
+            raise HTTPException(401, "Sessão encerrada. Outro dispositivo fez login com esta conta.")
     return payload
 
 
@@ -233,10 +244,11 @@ def login(req: LoginRequest, request: Request):
                 conn.close()
                 raise HTTPException(403, "Assinatura expirada. Contate o suporte para renovar.")
 
-    # Reseta tentativas
+    # Reseta tentativas e grava novo session_token (invalida sessões anteriores)
+    session_tok = secrets.token_hex(32)
     conn.execute(
-        "UPDATE users SET tentativas_login = 0, bloqueado_ate = NULL WHERE username = ?",
-        (req.username.strip(),),
+        "UPDATE users SET tentativas_login = 0, bloqueado_ate = NULL, session_token = ? WHERE username = ?",
+        (session_tok, req.username.strip()),
     )
     conn.commit()
     conn.close()
@@ -248,6 +260,7 @@ def login(req: LoginRequest, request: Request):
         "nome": row["nome"],
         "role": row["role"],
         "corretora_id": row["corretora_id"],
+        "session_token": session_tok,
     })
     return {
         "access_token": token,
@@ -266,6 +279,16 @@ def me(user=Depends(get_current_user)):
         "role": user.get("role"),
         "corretora_id": user.get("corretora_id"),
     }
+
+
+@app.post("/api/logout")
+def logout(user=Depends(get_current_user)):
+    conn = get_connection()
+    conn.execute("UPDATE users SET session_token = NULL WHERE username = ?", (user["sub"],))
+    conn.commit()
+    conn.close()
+    log_action(user["sub"], "logout", "Sessão encerrada")
+    return {"ok": True}
 
 
 # ── Superadmin: Corretoras ────────────────────────────────────────────────────

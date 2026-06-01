@@ -42,6 +42,7 @@ def _migrations_pg(conn):
         "ALTER TABLE users ADD COLUMN corretora_id INTEGER",
         "ALTER TABLE users ADD COLUMN tentativas_login INTEGER DEFAULT 0",
         "ALTER TABLE users ADD COLUMN bloqueado_ate TEXT",
+        "ALTER TABLE users ADD COLUMN session_token TEXT",
         "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
     ]
     for sql in safe:
@@ -59,6 +60,7 @@ def _migrations_sqlite(c):
         "ALTER TABLE users ADD COLUMN tentativas_login INTEGER DEFAULT 0",
         "ALTER TABLE users ADD COLUMN bloqueado_ate TEXT",
         "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'corretor'",
+        "ALTER TABLE users ADD COLUMN session_token TEXT",
         "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
     ]
     for sql in safe:

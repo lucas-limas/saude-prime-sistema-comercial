@@ -442,6 +442,10 @@ function routeByRole(role, nome) {
 }
 
 function doLogout() {
+  // Invalida a sessão no servidor antes de limpar localmente
+  if (token()) {
+    fetch(API + '/api/logout', { method: 'POST', headers: authH() }).catch(() => {});
+  }
   sessionStorage.clear();
   document.getElementById('superadmin-overlay').classList.add('hidden');
   document.getElementById('admin-overlay').classList.add('hidden');
