@@ -26,6 +26,8 @@ def get_connection():
                 return _Result(c)
             def commit(self):
                 self._pg.commit()
+            def rollback(self):
+                self._pg.rollback()
             def close(self):
                 self._pg.close()
 
@@ -50,7 +52,12 @@ def _migrations_pg(conn):
             conn.execute(sql)
             conn.commit()
         except Exception:
-            pass
+            # psycopg2 coloca a conexão em estado "aborted" ao falhar;
+            # é preciso fazer rollback para liberar a próxima migração.
+            try:
+                conn.rollback()
+            except Exception:
+                pass
 
 
 def _migrations_sqlite(c):
