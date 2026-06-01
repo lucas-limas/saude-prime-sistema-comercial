@@ -138,6 +138,95 @@ def startup():
             )
         conn.commit()
     conn.close()
+    seed_catalogo()
+
+
+def seed_catalogo():
+    conn = get_connection()
+    cnt = conn.execute("SELECT COUNT(*) as cnt FROM operadoras").fetchone()
+    if cnt["cnt"] > 0:
+        conn.close()
+        return
+
+    _OPS = [
+        ("unity",        "Unity Saúde",       "var(--unity)",        "on-u",  "Adm. Esplendor · Mai/2026 · Taxa assoc. R$ 5,00 · Assoc: UEB, UVA, UNIPRO, ANC, UNSP · Telemedicina gratuita", 1),
+        ("evo",          "Evo Saúde",          "var(--evo)",          "on-e",  "Adm. Easyplan · Reajuste set/2026 · Odonto ODONTOGROUP incluso · Telemedicina 24h · Taxa assoc. R$ 5,00", 2),
+        ("plenum",       "Plenum Saúde",       "var(--plenum)",       "on-p",  "Adm. Easyplan · Reajuste mar/2027 · Seguro Viagem AIG + UTI Móvel 24h · Sírio-Libanês (Sigma) · Taxa assoc. R$ 5,00", 3),
+        ("amil",         "Amil",               "var(--amil)",         "on-a",  "Vigência mai/2026 · Amil Dental incluso 12 meses grátis (R$ 14,99/mês após) · Rede nacional · Reembolso disponível nos planos Platinum", 4),
+        ("medsenior",    "MedSênior",          "var(--medsenior)",    "on-ms", "Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas", 5),
+        ("segurosunimed","Seguros Unimed",      "var(--seguros-unimed)","on-su","PME · Compulsório e Facultativo · 2–99 vidas · Rede DF + UE nacional · Essencial I/II/III/IV disponíveis", 6),
+        ("portosaude",   "Porto Saúde",        "var(--portosaude)",   "on-ps", "PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde", 7),
+        ("bradesco",     "Bradesco Saúde",     "var(--bradesco)",     "on-b",  "PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros", 8),
+        ("bestsenior",   "Best Sênior",        "var(--bestsenior)",   "on-bs", "PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde", 9),
+        ("sulamerica",   "SulAmérica Saúde",   "var(--sulamerica)",   "on-sa", "PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde", 10),
+    ]
+    for chave, nome, cor, cls, info, ordem in _OPS:
+        conn.execute(
+            "INSERT INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES (?, ?, ?, ?, ?, ?)",
+            (chave, nome, cor, cls, info, ordem),
+        )
+    conn.commit()
+
+    ops_map = {r["chave"]: r["id"] for r in conn.execute("SELECT id, chave FROM operadoras").fetchall()}
+
+    # (codigo, op_chave, nome, aco, tipo, fvidas, mod, vig, precos, ordem)
+    _PLANOS = [
+        # UNITY
+        ("u1","unity","Sem copart — Life Vital","amb",None,None,None,None,[189.94,201.35,231.55,259.32,311.19,357.87,450.91,554.62,721.01,1045.46],1),
+        ("u2","unity","Com copart — Life Vital","amb",None,None,None,None,[138.34,146.64,168.64,188.87,226.65,260.65,328.41,403.95,525.13,761.45],2),
+        ("u3","unity","Sem copart — Unity Vida","enf",None,None,None,None,[348.34,369.25,424.63,475.59,570.69,656.31,826.94,1017.15,1322.28,1917.30],3),
+        ("u4","unity","Com copart — Unity Vida","enf",None,None,None,None,[248.94,263.88,303.46,339.87,407.85,469.02,590.97,726.90,944.97,1370.20],4),
+        ("u5","unity","Sem copart — Unity Star","apt",None,None,None,None,[433.42,459.42,528.34,591.74,710.08,816.60,1028.91,1265.56,1645.23,2385.58],5),
+        ("u6","unity","Com copart — Unity Star","apt",None,None,None,None,[371.26,393.54,452.57,506.88,608.25,699.46,881.36,1084.07,1409.30,2043.48],6),
+        # EVO
+        ("e1","evo","Sem copart — NOW Enfermaria","enf",None,None,None,None,[329.69,352.17,383.37,450.31,541.95,612.67,747.64,917.58,1233.41,1637.60],1),
+        ("e2","evo","Com copart — ONE Enfermaria","enf",None,None,None,None,[249.30,266.30,289.90,340.52,409.81,463.29,565.35,693.86,932.68,1238.32],2),
+        ("e3","evo","Com copart — NOW Enfermaria","enf",None,None,None,None,[286.68,306.24,333.37,391.58,471.26,532.76,650.13,797.90,1072.54,1424.01],3),
+        ("e4","evo","Sem copart — NOW Apartamento","apt",None,None,None,None,[394.15,421.03,458.33,538.36,647.91,732.47,893.83,1097.00,1474.58,1957.80],4),
+        ("e5","evo","Com copart — ONE Apartamento","apt",None,None,None,None,[292.74,312.71,340.41,399.85,481.22,544.02,663.86,814.76,1095.20,1454.10],5),
+        ("e6","evo","Com copart — NOW Apartamento","apt",None,None,None,None,[348.80,372.59,405.60,476.42,573.37,648.20,790.99,970.79,1304.93,1732.56],6),
+        # PLENUM
+        ("p1","plenum","Copart parcial — Delta (Enf)","enf",None,None,None,None,[349.90,437.38,507.36,577.34,629.82,664.81,804.77,874.75,1084.69,1679.52],1),
+        ("p2","plenum","Copart parcial — Ômega (Enf)","enf",None,None,None,None,[389.90,487.38,565.36,643.34,701.82,740.81,896.77,974.75,1208.69,1871.52],2),
+        ("p3","plenum","Copart total — Delta (Enf)","enf",None,None,None,None,[269.90,337.38,391.36,445.34,485.82,512.81,620.77,674.75,836.69,1295.52],3),
+        ("p4","plenum","Copart total — Ômega (Enf)","enf",None,None,None,None,[299.90,374.88,434.86,494.84,539.82,569.81,689.77,749.75,929.69,1439.52],4),
+        ("p5","plenum","Copart parcial — Beta (Apt)","apt",None,None,None,None,[399.90,499.88,579.86,659.84,719.82,759.81,919.77,999.75,1239.69,1919.52],5),
+        ("p6","plenum","Copart parcial — Sigma (Apt)","apt",None,None,None,None,[499.90,624.88,724.86,824.84,899.82,949.81,1149.77,1249.75,1549.69,2399.52],6),
+        ("p7","plenum","Copart total — Beta (Apt)","apt",None,None,None,None,[309.90,387.38,449.36,511.34,557.82,588.81,712.77,774.75,960.69,1487.52],7),
+        ("p8","plenum","Copart total — Sigma (Apt)","apt",None,None,None,None,[389.90,487.38,565.36,643.34,701.82,740.81,896.77,974.75,1208.69,1871.52],8),
+        # AMIL — copart total
+        ("a1","amil","Bronze DF QC (Enf) — Copart Total","enf","adesao",None,None,None,[320.90,435.79,511.57,511.57,511.57,571.43,789.14,942.24,1354.94,1921.31],1),
+        ("a2","amil","Bronze DF QP (Apt) — Copart Total","apt","adesao",None,None,None,[356.22,483.74,567.86,567.86,567.86,634.31,875.98,1045.92,1504.03,2132.71],2),
+        ("a3","amil","Prata DF QC (Enf) — Copart Total","enf","adesao",None,None,None,[448.22,524.41,639.79,767.74,806.12,886.74,1108.44,1219.28,1524.11,2667.19],3),
+        ("a4","amil","Prata DF QP (Apt) — Copart Total","apt","adesao",None,None,None,[497.52,582.10,710.15,852.18,894.80,984.28,1230.36,1353.40,1691.75,2960.58],4),
+        ("a5","amil","Ouro QC (Enf) — Copart Total","enf","adesao",None,None,None,[500.09,585.11,713.83,856.60,899.42,989.38,1236.72,1360.39,1700.48,2975.86],5),
+        ("a6","amil","Ouro QP (Apt) — Copart Total","apt","adesao",None,None,None,[555.10,649.48,792.35,950.82,998.36,1098.19,1372.74,1510.02,1887.53,3303.18],6),
+        ("a7","amil","Platinum R1 QP (Apt) — Copart Total","apt","adesao",None,None,None,[589.22,689.38,841.04,1009.26,1059.73,1165.70,1457.12,1602.84,2003.56,3506.22],7),
+        ("a8","amil","Platinum R2 QP (Apt) — Copart Total","apt","adesao",None,None,None,[595.08,696.24,849.42,1019.30,1070.26,1177.28,1471.61,1618.78,2023.46,3541.07],8),
+        ("a9","amil","Platinum Mais R1 QP (Apt) — Copart Total","apt","adesao",None,None,None,[732.24,856.72,1045.19,1254.24,1316.95,1448.65,1810.81,1991.90,2489.88,4357.28],9),
+        ("a10","amil","Platinum Mais R2 QP (Apt) — Copart Total","apt","adesao",None,None,None,[739.48,865.19,1055.54,1266.65,1330.00,1462.99,1828.75,2011.62,2514.52,4400.42],10),
+        # AMIL — copart parcial
+        ("a11","amil","Bronze DF QC (Enf) — Copart Parcial","enf","adesao",None,None,None,[427.87,581.05,682.09,682.09,682.09,761.89,1052.17,1256.29,1806.55,2561.69],11),
+        ("a12","amil","Bronze DF QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[474.95,644.98,757.14,757.14,757.14,845.72,1167.95,1394.53,2005.33,2843.56],12),
+        ("a13","amil","Prata DF QC (Enf) — Copart Parcial","enf","adesao",None,None,None,[597.62,699.22,853.04,1023.65,1074.84,1182.31,1477.91,1625.71,2032.14,3556.26],13),
+        ("a14","amil","Prata DF QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[663.36,776.14,946.87,1136.26,1193.06,1312.38,1640.48,1804.54,2255.68,3947.45],14),
+        ("a15","amil","Ouro QC (Enf) — Copart Parcial","enf","adesao",None,None,None,[666.78,780.12,951.76,1142.10,1199.21,1319.12,1648.91,1813.80,2267.26,3967.69],15),
+        ("a16","amil","Ouro QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[740.11,865.93,1056.43,1267.72,1331.10,1464.20,1830.26,2013.29,2516.62,4404.08],16),
+        ("a17","amil","Platinum R1 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[785.62,919.16,1121.39,1345.67,1412.94,1554.24,1942.81,2137.09,2671.37,4674.90],17),
+        ("a18","amil","Platinum R2 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[793.43,928.31,1132.54,1359.04,1426.99,1569.70,1962.12,2158.33,2697.91,4721.35],18),
+        ("a19","amil","Platinum Mais R1 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[976.32,1142.28,1393.60,1672.32,1755.95,1931.53,2414.44,2655.86,3319.84,5809.72],19),
+        ("a20","amil","Platinum Mais R2 QP (Apt) — Copart Parcial","apt","adesao",None,None,None,[985.99,1153.60,1407.40,1688.87,1773.34,1950.66,2438.34,2682.17,3352.69,5867.23],20),
+    ]
+    for i, (codigo, op_chave, nome, aco, tipo, fvidas, mod, vig, precos, ordem) in enumerate(_PLANOS):
+        op_id = ops_map.get(op_chave)
+        if not op_id:
+            continue
+        conn.execute(
+            "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (codigo, op_id, nome, aco, tipo, fvidas, mod, vig, json.dumps(precos), ordem),
+        )
+    conn.commit()
+    conn.close()
 
 
 # ── Modelos ───────────────────────────────────────────────────────────────────
@@ -168,6 +257,47 @@ class CreateUserRequest(BaseModel):
 class CotacaoRequest(BaseModel):
     cliente: str
     dados: dict
+
+class OperadoraRequest(BaseModel):
+    chave: str
+    nome: str
+    cor: Optional[str] = None
+    cls: Optional[str] = None
+    info: Optional[str] = None
+    ativo: Optional[int] = 1
+    ordem: Optional[int] = 0
+
+class UpdateOperadoraRequest(BaseModel):
+    nome: Optional[str] = None
+    cor: Optional[str] = None
+    cls: Optional[str] = None
+    info: Optional[str] = None
+    ativo: Optional[int] = None
+    ordem: Optional[int] = None
+
+class PlanoRequest(BaseModel):
+    codigo: str
+    operadora_id: int
+    nome: str
+    aco: str
+    tipo: Optional[str] = None
+    fvidas: Optional[int] = None
+    mod: Optional[str] = None
+    vig: Optional[int] = None
+    precos: list
+    ativo: Optional[int] = 1
+    ordem: Optional[int] = 0
+
+class UpdatePlanoRequest(BaseModel):
+    nome: Optional[str] = None
+    aco: Optional[str] = None
+    tipo: Optional[str] = None
+    fvidas: Optional[int] = None
+    mod: Optional[str] = None
+    vig: Optional[int] = None
+    precos: Optional[list] = None
+    ativo: Optional[int] = None
+    ordem: Optional[int] = None
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
@@ -569,6 +699,171 @@ def listar_cotacoes(user=Depends(require_corretor)):
         {"id": r["id"], "cliente": r["cliente"], "dados": json.loads(r["dados"]), "criado_em": r["criado_em"]}
         for r in rows
     ]
+
+
+# ── Catálogo público (usado pelo cotador) ─────────────────────────────────────
+
+FAIXAS = ['0 a 18','19 a 23','24 a 28','29 a 33','34 a 38','39 a 43','44 a 48','49 a 53','54 a 58','59 ou mais']
+
+@app.get("/api/catalogo")
+def catalogo_publico():
+    conn = get_connection()
+    ops_rows = conn.execute(
+        "SELECT id, chave, nome, cor, cls, info FROM operadoras WHERE ativo = 1 ORDER BY ordem, id"
+    ).fetchall()
+    planos_rows = conn.execute(
+        """SELECT p.codigo, o.chave as op, p.nome, p.aco, p.tipo, p.fvidas, p.mod, p.vig, p.precos
+           FROM planos p JOIN operadoras o ON p.operadora_id = o.id
+           WHERE p.ativo = 1 AND o.ativo = 1
+           ORDER BY o.ordem, p.ordem, p.id"""
+    ).fetchall()
+    conn.close()
+    operadoras = {r["chave"]: {"nome": r["nome"], "cor": r["cor"] or "", "cls": r["cls"] or "", "info": r["info"] or ""} for r in ops_rows}
+    planos = []
+    for r in planos_rows:
+        p = {"id": r["codigo"], "op": r["op"], "nome": r["nome"], "aco": r["aco"], "precos": json.loads(r["precos"])}
+        if r["tipo"]:  p["tipo"] = r["tipo"]
+        if r["fvidas"]: p["fvidas"] = r["fvidas"]
+        if r["mod"]:   p["mod"] = r["mod"]
+        if r["vig"]:   p["vig"] = r["vig"]
+        planos.append(p)
+    return {"faixas": FAIXAS, "operadoras": operadoras, "planos": planos}
+
+
+# ── Superadmin: Catálogo — Operadoras ─────────────────────────────────────────
+
+@app.get("/api/superadmin/catalogo/operadoras")
+def listar_operadoras(admin=Depends(require_superadmin)):
+    conn = get_connection()
+    rows = conn.execute("SELECT * FROM operadoras ORDER BY ordem, id").fetchall()
+    result = []
+    for r in rows:
+        d = dict(r)
+        cnt = conn.execute("SELECT COUNT(*) as cnt FROM planos WHERE operadora_id = ?", (d["id"],)).fetchone()
+        d["total_planos"] = cnt["cnt"]
+        result.append(d)
+    conn.close()
+    return result
+
+@app.post("/api/superadmin/catalogo/operadoras")
+def criar_operadora(body: OperadoraRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if conn.execute("SELECT id FROM operadoras WHERE chave = ?", (body.chave.strip(),)).fetchone():
+        conn.close()
+        raise HTTPException(409, "Chave de operadora já existe.")
+    conn.execute(
+        "INSERT INTO operadoras (chave, nome, cor, cls, info, ativo, ordem) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (body.chave.strip(), body.nome.strip(), body.cor, body.cls, body.info, body.ativo, body.ordem),
+    )
+    conn.commit()
+    row = conn.execute("SELECT * FROM operadoras WHERE chave = ?", (body.chave.strip(),)).fetchone()
+    conn.close()
+    log_action(admin["sub"], "criar_operadora", f"Operadora: {body.nome}")
+    return dict(row)
+
+@app.patch("/api/superadmin/catalogo/operadoras/{op_id}")
+def atualizar_operadora(op_id: int, body: UpdateOperadoraRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if not conn.execute("SELECT id FROM operadoras WHERE id = ?", (op_id,)).fetchone():
+        conn.close()
+        raise HTTPException(404, "Operadora não encontrada")
+    updates, params = [], []
+    for field in ("nome", "cor", "cls", "info", "ativo", "ordem"):
+        val = getattr(body, field)
+        if val is not None:
+            updates.append(f"{field} = ?"); params.append(val.strip() if isinstance(val, str) else val)
+    if updates:
+        params.append(op_id)
+        conn.execute(f"UPDATE operadoras SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+    conn.close()
+    return {"ok": True}
+
+@app.delete("/api/superadmin/catalogo/operadoras/{op_id}")
+def deletar_operadora(op_id: int, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    row = conn.execute("SELECT nome FROM operadoras WHERE id = ?", (op_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Operadora não encontrada")
+    conn.execute("DELETE FROM planos WHERE operadora_id = ?", (op_id,))
+    conn.execute("DELETE FROM operadoras WHERE id = ?", (op_id,))
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "deletar_operadora", f"Operadora {row['nome']} removida")
+    return {"ok": True}
+
+
+# ── Superadmin: Catálogo — Planos ─────────────────────────────────────────────
+
+@app.get("/api/superadmin/catalogo/planos")
+def listar_planos(admin=Depends(require_superadmin)):
+    conn = get_connection()
+    rows = conn.execute(
+        """SELECT p.*, o.nome as op_nome, o.chave as op_chave
+           FROM planos p JOIN operadoras o ON p.operadora_id = o.id
+           ORDER BY o.ordem, p.ordem, p.id"""
+    ).fetchall()
+    conn.close()
+    result = []
+    for r in rows:
+        d = dict(r)
+        d["precos"] = json.loads(d["precos"])
+        result.append(d)
+    return result
+
+@app.post("/api/superadmin/catalogo/planos")
+def criar_plano(body: PlanoRequest, admin=Depends(require_superadmin)):
+    if len(body.precos) != 10:
+        raise HTTPException(400, "precos deve ter exatamente 10 valores (um por faixa etária)")
+    conn = get_connection()
+    if conn.execute("SELECT id FROM planos WHERE codigo = ?", (body.codigo.strip(),)).fetchone():
+        conn.close()
+        raise HTTPException(409, "Código de plano já existe.")
+    conn.execute(
+        "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ativo, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (body.codigo.strip(), body.operadora_id, body.nome.strip(), body.aco, body.tipo, body.fvidas, body.mod, body.vig, json.dumps(body.precos), body.ativo, body.ordem),
+    )
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "criar_plano", f"Plano {body.codigo} — {body.nome}")
+    return {"ok": True}
+
+@app.patch("/api/superadmin/catalogo/planos/{plano_id}")
+def atualizar_plano(plano_id: int, body: UpdatePlanoRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if not conn.execute("SELECT id FROM planos WHERE id = ?", (plano_id,)).fetchone():
+        conn.close()
+        raise HTTPException(404, "Plano não encontrado")
+    if body.precos is not None and len(body.precos) != 10:
+        conn.close()
+        raise HTTPException(400, "precos deve ter exatamente 10 valores")
+    updates, params = [], []
+    for field in ("nome", "aco", "tipo", "fvidas", "mod", "vig", "ativo", "ordem"):
+        val = getattr(body, field)
+        if val is not None:
+            updates.append(f"{field} = ?"); params.append(val.strip() if isinstance(val, str) else val)
+    if body.precos is not None:
+        updates.append("precos = ?"); params.append(json.dumps(body.precos))
+    if updates:
+        params.append(plano_id)
+        conn.execute(f"UPDATE planos SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+    conn.close()
+    return {"ok": True}
+
+@app.delete("/api/superadmin/catalogo/planos/{plano_id}")
+def deletar_plano(plano_id: int, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    row = conn.execute("SELECT codigo, nome FROM planos WHERE id = ?", (plano_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Plano não encontrado")
+    conn.execute("DELETE FROM planos WHERE id = ?", (plano_id,))
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "deletar_plano", f"Plano {row['codigo']} removido")
+    return {"ok": True}
 
 
 # ── Static (deve ficar DEPOIS de todas as rotas /api) ─────────────────────────

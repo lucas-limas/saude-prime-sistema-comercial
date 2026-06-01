@@ -126,6 +126,36 @@ def init_db():
                 criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS operadoras (
+                id SERIAL PRIMARY KEY,
+                chave TEXT UNIQUE NOT NULL,
+                nome TEXT NOT NULL,
+                cor TEXT,
+                cls TEXT,
+                info TEXT,
+                ativo INTEGER DEFAULT 1,
+                ordem INTEGER DEFAULT 0,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS planos (
+                id SERIAL PRIMARY KEY,
+                codigo TEXT UNIQUE NOT NULL,
+                operadora_id INTEGER REFERENCES operadoras(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL,
+                aco TEXT NOT NULL,
+                tipo TEXT,
+                fvidas INTEGER,
+                mod TEXT,
+                vig INTEGER,
+                precos TEXT NOT NULL,
+                ativo INTEGER DEFAULT 1,
+                ordem INTEGER DEFAULT 0,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
         conn.commit()
         _migrations_pg(conn)
     else:
@@ -172,6 +202,36 @@ def init_db():
                 acao TEXT NOT NULL,
                 detalhes TEXT,
                 ip TEXT,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS operadoras (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                chave TEXT UNIQUE NOT NULL,
+                nome TEXT NOT NULL,
+                cor TEXT,
+                cls TEXT,
+                info TEXT,
+                ativo INTEGER DEFAULT 1,
+                ordem INTEGER DEFAULT 0,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS planos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                codigo TEXT UNIQUE NOT NULL,
+                operadora_id INTEGER REFERENCES operadoras(id) ON DELETE CASCADE,
+                nome TEXT NOT NULL,
+                aco TEXT NOT NULL,
+                tipo TEXT,
+                fvidas INTEGER,
+                mod TEXT,
+                vig INTEGER,
+                precos TEXT NOT NULL,
+                ativo INTEGER DEFAULT 1,
+                ordem INTEGER DEFAULT 0,
                 criado_em TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)

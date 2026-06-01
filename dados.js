@@ -535,3 +535,25 @@ window.PLANOS_DB = Object.fromEntries(
     }))
   ])
 );
+
+// ── Sincronização com banco de dados ────────────────────────────────────────
+// Atualiza preços e operadoras em segundo plano. Planos no banco sobrescrevem
+// o hardcoded; planos apenas no hardcoded permanecem visíveis até serem
+// adicionados ao banco. Migração gradual sem quebrar o cotador.
+(async function sincronizarCatalogo() {
+  try {
+    const r = await fetch('/api/catalogo');
+    if (!r.ok) return;
+    const { planos, operadoras } = await r.json();
+    // Atualiza/adiciona planos do banco (merge — não remove hardcoded)
+    planos.forEach(dbP => {
+      const idx = window.PLANOS.findIndex(p => p.id === dbP.id);
+      if (idx >= 0) Object.assign(window.PLANOS[idx], dbP);
+      else window.PLANOS.push(dbP);
+    });
+    // Atualiza metadados de operadoras
+    Object.assign(window.OP_META, operadoras);
+    // Re-renderiza o cotador se já estiver pronto
+    if (typeof render === 'function') render();
+  } catch(e) {}
+})();

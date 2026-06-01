@@ -157,6 +157,12 @@ iframe.visible{display:block}
   color:rgba(255,255,255,.45);cursor:pointer;transition:all .15s;
 }
 .painel-tab.active{background:rgba(255,255,255,.1);color:#fff}
+.cat-tab{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  padding:5px 14px;border-radius:6px;font-family:"Outfit",sans-serif;
+  font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;
+}
+.cat-tab.active{background:rgba(125,211,252,.15);border-color:rgba(125,211,252,.3);color:#7dd3fc}
 .painel-content{flex:1;overflow-y:auto;padding:24px}
 .painel-logout{
   background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);
@@ -277,6 +283,7 @@ iframe.visible{display:block}
         <button class="painel-tab active" onclick="saTab('corretoras',this)">Corretoras</button>
         <button class="painel-tab" onclick="saTab('usuarios',this)">Usuários</button>
         <button class="painel-tab" onclick="saTab('audit',this)">Auditoria</button>
+        <button class="painel-tab" onclick="saTab('catalogo',this)">Catálogo</button>
       </div>
     </div>
     <button class="painel-logout" onclick="doLogout()">Sair</button>
@@ -320,6 +327,87 @@ iframe.visible{display:block}
     </div>
     <div id="sa-tab-audit" style="display:none">
       <div id="sa-audit-body"><div class="admin-loading">Carregando...</div></div>
+    </div>
+
+    <div id="sa-tab-catalogo" style="display:none">
+      <!-- Sub-navegação -->
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="cat-tab active" onclick="catTab('operadoras',this)">Operadoras</button>
+        <button class="cat-tab" onclick="catTab('planos',this)">Planos</button>
+      </div>
+
+      <!-- OPERADORAS -->
+      <div id="cat-sub-ops">
+        <div class="form-card">
+          <h3 id="cat-op-form-title">Nova Operadora</h3>
+          <input type="hidden" id="cat-op-id">
+          <div class="form-grid">
+            <div class="form-field"><label>Chave (ex: amil)</label><input type="text" id="cat-op-chave" placeholder="sem espaços, minúsculo"></div>
+            <div class="form-field"><label>Nome</label><input type="text" id="cat-op-nome" placeholder="Ex: Amil Saúde"></div>
+            <div class="form-field"><label>Variável CSS de cor</label><input type="text" id="cat-op-cor" placeholder="var(--amil) ou #3b82f6"></div>
+            <div class="form-field"><label>Classe CSS</label><input type="text" id="cat-op-cls" placeholder="on-a"></div>
+            <div class="form-field" style="grid-column:1/-1"><label>Info (aparece no cotador)</label><input type="text" id="cat-op-info" placeholder="Vigência · Rede · Diferenciais"></div>
+            <div class="form-field"><label>Ordem de exibição</label><input type="number" id="cat-op-ordem" value="0" min="0"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-novo" id="cat-op-btn" onclick="salvarOperadora()">Criar Operadora</button>
+            <button class="btn-toggle" id="cat-op-cancel" style="display:none" onclick="cancelarOpEdit()">Cancelar</button>
+            <span class="form-msg" id="cat-op-msg"></span>
+          </div>
+        </div>
+        <div class="section-bar"><h3>Operadoras cadastradas</h3></div>
+        <div id="sa-ops-body"><div class="admin-loading">Carregando...</div></div>
+      </div>
+
+      <!-- PLANOS -->
+      <div id="cat-sub-planos" style="display:none">
+        <div class="form-card">
+          <h3 id="cat-pl-form-title">Novo Plano</h3>
+          <input type="hidden" id="cat-pl-id">
+          <div class="form-grid">
+            <div class="form-field"><label>Operadora</label>
+              <select id="cat-pl-op"><option value="">Selecione</option></select>
+            </div>
+            <div class="form-field"><label>Código (ex: a21)</label><input type="text" id="cat-pl-codigo" placeholder="único, sem espaços"></div>
+            <div class="form-field" style="grid-column:span 2"><label>Nome do plano</label><input type="text" id="cat-pl-nome" placeholder="Ex: Ouro QP (Apt) — Copart Total"></div>
+            <div class="form-field"><label>Acomodação</label>
+              <select id="cat-pl-aco">
+                <option value="amb">Ambulatorial</option>
+                <option value="enf">Enfermaria</option>
+                <option value="apt">Apartamento</option>
+              </select>
+            </div>
+            <div class="form-field"><label>Tipo (opcional)</label>
+              <select id="cat-pl-tipo">
+                <option value="">Todos</option>
+                <option value="adesao">Adesão</option>
+                <option value="pme">PME</option>
+                <option value="pf">Pessoa Física</option>
+              </select>
+            </div>
+          </div>
+          <div class="section-bar" style="margin:12px 0 8px"><h3>Preços por faixa etária (R$)</h3></div>
+          <div class="form-grid" id="cat-pl-precos-grid">
+            <div class="form-field"><label>0 a 18</label><input type="number" step="0.01" class="preco-input" data-idx="0" placeholder="0.00"></div>
+            <div class="form-field"><label>19 a 23</label><input type="number" step="0.01" class="preco-input" data-idx="1" placeholder="0.00"></div>
+            <div class="form-field"><label>24 a 28</label><input type="number" step="0.01" class="preco-input" data-idx="2" placeholder="0.00"></div>
+            <div class="form-field"><label>29 a 33</label><input type="number" step="0.01" class="preco-input" data-idx="3" placeholder="0.00"></div>
+            <div class="form-field"><label>34 a 38</label><input type="number" step="0.01" class="preco-input" data-idx="4" placeholder="0.00"></div>
+            <div class="form-field"><label>39 a 43</label><input type="number" step="0.01" class="preco-input" data-idx="5" placeholder="0.00"></div>
+            <div class="form-field"><label>44 a 48</label><input type="number" step="0.01" class="preco-input" data-idx="6" placeholder="0.00"></div>
+            <div class="form-field"><label>49 a 53</label><input type="number" step="0.01" class="preco-input" data-idx="7" placeholder="0.00"></div>
+            <div class="form-field"><label>54 a 58</label><input type="number" step="0.01" class="preco-input" data-idx="8" placeholder="0.00"></div>
+            <div class="form-field"><label>59 ou mais</label><input type="number" step="0.01" class="preco-input" data-idx="9" placeholder="0.00"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-novo" id="cat-pl-btn" onclick="salvarPlano()">Criar Plano</button>
+            <button class="btn-toggle" id="cat-pl-cancel" style="display:none" onclick="cancelarPlanoEdit()">Cancelar</button>
+            <span class="form-msg" id="cat-pl-msg"></span>
+          </div>
+        </div>
+        <div class="section-bar"><h3>Planos cadastrados</h3></div>
+        <div id="sa-planos-body"><div class="admin-loading">Carregando...</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -464,14 +552,15 @@ function doLogout() {
 let _corretoras = [];
 
 function saTab(tab, btn) {
-  ['corretoras','usuarios','audit'].forEach(t => {
+  ['corretoras','usuarios','audit','catalogo'].forEach(t => {
     document.getElementById(`sa-tab-${t}`).style.display = t === tab ? '' : 'none';
   });
   document.querySelectorAll('.painel-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (tab === 'corretoras') loadCorretoras();
   else if (tab === 'usuarios') loadUsuariosSA();
-  else loadAudit();
+  else if (tab === 'audit') loadAudit();
+  else loadCatalogo();
 }
 
 async function loadCorretoras() {
@@ -675,6 +764,203 @@ async function deletarColaborador(id, btn) {
   btn.disabled = true;
   const res = await fetch(`${API}/api/admin/users/${id}`, {method:'DELETE', headers: authH()});
   if (res.ok) await loadColaboradores(); else btn.disabled = false;
+}
+
+/* ════════════════════════════════════════
+   CATÁLOGO
+════════════════════════════════════════ */
+let _cat_ops = [], _cat_planos = [];
+
+function catTab(tab, btn) {
+  document.getElementById('cat-sub-ops').style.display    = tab === 'operadoras' ? '' : 'none';
+  document.getElementById('cat-sub-planos').style.display = tab === 'planos'     ? '' : 'none';
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'operadoras') loadOpsCat();
+  else loadPlanosCat();
+}
+
+async function loadCatalogo() {
+  await loadOpsCat();
+}
+
+/* ── Operadoras ── */
+async function loadOpsCat() {
+  const el = document.getElementById('sa-ops-body');
+  el.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const res = await fetch(`${API}/api/superadmin/catalogo/operadoras`, {headers: authH()});
+  _cat_ops = await res.json();
+  // Atualiza select de operadoras no form de plano
+  const sel = document.getElementById('cat-pl-op');
+  sel.innerHTML = '<option value="">Selecione</option>' +
+    _cat_ops.map(o => `<option value="${o.id}">${o.nome}</option>`).join('');
+  if (!_cat_ops.length) { el.innerHTML = '<div class="admin-loading">Nenhuma operadora cadastrada.</div>'; return; }
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr><th>Chave</th><th>Nome</th><th>Cor</th><th>Planos</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>${_cat_ops.map(o => `<tr>
+      <td><code style="color:rgba(255,255,255,.6);font-size:11px">${o.chave}</code></td>
+      <td><strong style="color:#fff">${o.nome}</strong></td>
+      <td><span style="font-size:11px;color:rgba(255,255,255,.45)">${o.cor||'—'}</span></td>
+      <td>${o.total_planos}</td>
+      <td><span class="badge-status ${o.ativo?'ativo':'inativo'}">${o.ativo?'Ativa':'Inativa'}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn-toggle" onclick="editOp(${o.id})">Editar</button>
+        <button class="btn-del" onclick="deletarOp(${o.id},this)">Excluir</button>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+async function salvarOperadora() {
+  const id = document.getElementById('cat-op-id').value;
+  const chave = document.getElementById('cat-op-chave').value.trim();
+  const nome  = document.getElementById('cat-op-nome').value.trim();
+  const cor   = document.getElementById('cat-op-cor').value.trim();
+  const cls   = document.getElementById('cat-op-cls').value.trim();
+  const info  = document.getElementById('cat-op-info').value.trim();
+  const ordem = parseInt(document.getElementById('cat-op-ordem').value) || 0;
+  const msg   = document.getElementById('cat-op-msg');
+  if (!nome) { msg.className='form-msg error'; msg.textContent='Nome obrigatório.'; return; }
+  msg.textContent = ''; msg.className = 'form-msg';
+  const isEdit = !!id;
+  const url  = isEdit ? `${API}/api/superadmin/catalogo/operadoras/${id}` : `${API}/api/superadmin/catalogo/operadoras`;
+  const method = isEdit ? 'PATCH' : 'POST';
+  const body = isEdit ? {nome, cor, cls, info, ordem} : {chave, nome, cor, cls, info, ordem};
+  if (!isEdit && !chave) { msg.className='form-msg error'; msg.textContent='Chave obrigatória.'; return; }
+  const res = await fetch(url, {method, headers: authH(), body: JSON.stringify(body)});
+  const data = await res.json();
+  if (!res.ok) { msg.className='form-msg error'; msg.textContent = data.detail||'Erro.'; return; }
+  msg.className='form-msg success'; msg.textContent = isEdit ? 'Operadora atualizada!' : 'Operadora criada!';
+  cancelarOpEdit();
+  await loadOpsCat();
+}
+
+function editOp(id) {
+  const o = _cat_ops.find(x => x.id === id);
+  if (!o) return;
+  document.getElementById('cat-op-id').value    = o.id;
+  document.getElementById('cat-op-chave').value = o.chave;
+  document.getElementById('cat-op-chave').disabled = true;
+  document.getElementById('cat-op-nome').value  = o.nome;
+  document.getElementById('cat-op-cor').value   = o.cor  || '';
+  document.getElementById('cat-op-cls').value   = o.cls  || '';
+  document.getElementById('cat-op-info').value  = o.info || '';
+  document.getElementById('cat-op-ordem').value = o.ordem || 0;
+  document.getElementById('cat-op-form-title').textContent = 'Editar Operadora';
+  document.getElementById('cat-op-btn').textContent = 'Salvar Alterações';
+  document.getElementById('cat-op-cancel').style.display = '';
+  document.getElementById('cat-sub-ops').scrollIntoView({behavior:'smooth'});
+}
+
+function cancelarOpEdit() {
+  ['cat-op-id','cat-op-chave','cat-op-nome','cat-op-cor','cat-op-cls','cat-op-info'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cat-op-chave').disabled = false;
+  document.getElementById('cat-op-ordem').value = 0;
+  document.getElementById('cat-op-form-title').textContent = 'Nova Operadora';
+  document.getElementById('cat-op-btn').textContent = 'Criar Operadora';
+  document.getElementById('cat-op-cancel').style.display = 'none';
+  document.getElementById('cat-op-msg').textContent = '';
+}
+
+async function deletarOp(id, btn) {
+  const o = _cat_ops.find(x => x.id === id);
+  if (!confirm(`Excluir a operadora "${o.nome}" e todos os seus planos? Esta ação não pode ser desfeita.`)) return;
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/superadmin/catalogo/operadoras/${id}`, {method:'DELETE', headers: authH()});
+  if (res.ok) await loadOpsCat(); else btn.disabled = false;
+}
+
+/* ── Planos ── */
+async function loadPlanosCat() {
+  const el = document.getElementById('sa-planos-body');
+  el.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const res = await fetch(`${API}/api/superadmin/catalogo/planos`, {headers: authH()});
+  _cat_planos = await res.json();
+  if (!_cat_planos.length) { el.innerHTML = '<div class="admin-loading">Nenhum plano cadastrado.</div>'; return; }
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr><th>Código</th><th>Operadora</th><th>Nome</th><th>Aco.</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>${_cat_planos.map(p => `<tr>
+      <td><code style="font-size:11px;color:rgba(255,255,255,.5)">${p.codigo}</code></td>
+      <td style="color:rgba(255,255,255,.65)">${p.op_nome}</td>
+      <td>${p.nome}</td>
+      <td><span class="badge-role">${p.aco}</span></td>
+      <td><span class="badge-status ${p.ativo?'ativo':'inativo'}">${p.ativo?'Ativo':'Inativo'}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn-toggle" onclick="editPlano(${p.id})">Editar</button>
+        <button class="btn-del" onclick="deletarPlano(${p.id},this)">Excluir</button>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+async function salvarPlano() {
+  const id     = document.getElementById('cat-pl-id').value;
+  const op_id  = document.getElementById('cat-pl-op').value;
+  const codigo = document.getElementById('cat-pl-codigo').value.trim();
+  const nome   = document.getElementById('cat-pl-nome').value.trim();
+  const aco    = document.getElementById('cat-pl-aco').value;
+  const tipo   = document.getElementById('cat-pl-tipo').value || null;
+  const msg    = document.getElementById('cat-pl-msg');
+  const precos = Array.from(document.querySelectorAll('.preco-input')).map(i => parseFloat(i.value) || 0);
+  if (!nome || (!id && (!op_id || !codigo))) {
+    msg.className='form-msg error'; msg.textContent='Preencha operadora, código e nome.'; return;
+  }
+  msg.textContent = ''; msg.className = 'form-msg';
+  const isEdit = !!id;
+  const url    = isEdit ? `${API}/api/superadmin/catalogo/planos/${id}` : `${API}/api/superadmin/catalogo/planos`;
+  const method = isEdit ? 'PATCH' : 'POST';
+  const body   = isEdit
+    ? {nome, aco, tipo, precos}
+    : {codigo, operadora_id: parseInt(op_id), nome, aco, tipo, precos};
+  const res = await fetch(url, {method, headers: authH(), body: JSON.stringify(body)});
+  const data = await res.json();
+  if (!res.ok) { msg.className='form-msg error'; msg.textContent = data.detail||'Erro.'; return; }
+  msg.className='form-msg success'; msg.textContent = isEdit ? 'Plano atualizado!' : 'Plano criado!';
+  cancelarPlanoEdit();
+  await loadPlanosCat();
+}
+
+function editPlano(id) {
+  const p = _cat_planos.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('cat-pl-id').value     = p.id;
+  document.getElementById('cat-pl-op').value     = p.operadora_id;
+  document.getElementById('cat-pl-op').disabled  = true;
+  document.getElementById('cat-pl-codigo').value = p.codigo;
+  document.getElementById('cat-pl-codigo').disabled = true;
+  document.getElementById('cat-pl-nome').value   = p.nome;
+  document.getElementById('cat-pl-aco').value    = p.aco;
+  document.getElementById('cat-pl-tipo').value   = p.tipo || '';
+  p.precos.forEach((v, i) => {
+    const inp = document.querySelector(`.preco-input[data-idx="${i}"]`);
+    if (inp) inp.value = v;
+  });
+  document.getElementById('cat-pl-form-title').textContent = 'Editar Plano';
+  document.getElementById('cat-pl-btn').textContent = 'Salvar Alterações';
+  document.getElementById('cat-pl-cancel').style.display = '';
+  document.getElementById('cat-sub-planos').scrollIntoView({behavior:'smooth'});
+}
+
+function cancelarPlanoEdit() {
+  ['cat-pl-id','cat-pl-codigo','cat-pl-nome'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cat-pl-op').value     = '';
+  document.getElementById('cat-pl-op').disabled  = false;
+  document.getElementById('cat-pl-codigo').disabled = false;
+  document.getElementById('cat-pl-aco').value    = 'amb';
+  document.getElementById('cat-pl-tipo').value   = '';
+  document.querySelectorAll('.preco-input').forEach(i => i.value = '');
+  document.getElementById('cat-pl-form-title').textContent = 'Novo Plano';
+  document.getElementById('cat-pl-btn').textContent = 'Criar Plano';
+  document.getElementById('cat-pl-cancel').style.display = 'none';
+  document.getElementById('cat-pl-msg').textContent = '';
+}
+
+async function deletarPlano(id, btn) {
+  const p = _cat_planos.find(x => x.id === id);
+  if (!confirm(`Excluir o plano "${p.nome}"? Esta ação não pode ser desfeita.`)) return;
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/superadmin/catalogo/planos/${id}`, {method:'DELETE', headers: authH()});
+  if (res.ok) await loadPlanosCat(); else btn.disabled = false;
 }
 
 /* ── Navegação cotador ── */
