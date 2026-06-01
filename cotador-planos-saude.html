@@ -154,6 +154,10 @@ body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);fo
 }
 .op-config-sel:focus{border-color:var(--navy)}
 .op-config-sel:disabled{opacity:.4;cursor:not-allowed}
+.op-check-list{display:flex;flex-direction:column;gap:2px;max-height:150px;overflow-y:auto;margin-top:1px}
+.op-check-item{display:flex;align-items:flex-start;gap:6px;cursor:pointer;padding:3px 0}
+.op-check-item input[type=checkbox]{margin-top:2px;accent-color:var(--navy);cursor:pointer;flex-shrink:0}
+.op-check-label{font-size:11px;color:var(--ink);line-height:1.3}
 .op-na{font-size:11px;color:var(--ink3);font-style:italic;padding:4px 0}
 .op-toggle{position:relative;display:inline-block;width:28px;height:16px;margin-left:auto;flex-shrink:0}
 .op-toggle input{opacity:0;width:0;height:0;position:absolute}
@@ -1280,7 +1284,7 @@ const OP_META = window.OP_META || {
 
 // Estado
 let qtds = Array(10).fill(0);
-let selPlanos = {unity:'u3', evo:'e1', plenum:'p1', amil:'am_04_cc_1', medsenior:'ms1', segurosunimed:'su_c29_1', portosaude:'ps_1', bradesco:'bd_4', bestsenior:'bse_pf1', sulamerica:'sa_29_12_sc_1'};
+let selPlanos = {unity:['u3'], evo:['e1'], plenum:['p1'], amil:['am_04_cc_1'], medsenior:['ms1'], segurosunimed:['su_c29_1'], portosaude:['ps_1'], bradesco:['bd_4'], bestsenior:['bse_pf1'], sulamerica:['sa_29_12_sc_1']};
 let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true, sulamerica:true};
 // tipo por operadora — permite cotação mista entre modalidades
 let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'pme', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf', sulamerica:'pme'};
@@ -1382,7 +1386,7 @@ function setOpTipo(op, val) {
   tipoOp[op] = val;
   // Auto-seleciona o primeiro plano disponível no novo tipo
   const planos = planosFiltered(op);
-  if (planos.length > 0) selPlanos[op] = planos[0].id;
+  if (planos.length > 0) selPlanos[op] = [planos[0].id];
   const fmodRow = document.getElementById('fmod-row');
   if (fmodRow) fmodRow.style.display = tipoOp.segurosunimed === 'pme' ? 'block' : 'none';
   _syncFiltroSubtitle();
@@ -1502,9 +1506,10 @@ function buildOpConfig() {
 
     const planos = planosFiltered(op);
 
-    // Se plano atual não está na lista filtrada, seleciona o primeiro disponível
-    if (planos.length > 0 && !planos.find(p => p.id === selPlanos[op])) {
-      selPlanos[op] = planos[0].id;
+    // Remove seleções que saíram da lista filtrada; garante ao menos 1
+    if (planos.length > 0) {
+      selPlanos[op] = (selPlanos[op] || []).filter(id => planos.find(p => p.id === id));
+      if (selPlanos[op].length === 0) selPlanos[op] = [planos[0].id];
     }
 
     const div = document.createElement('div');
@@ -1530,17 +1535,28 @@ function buildOpConfig() {
     } else if (!isActive) {
       div.innerHTML = head + tipoRow;
     } else {
-      const opts = planos.map(p =>
-        `<option value="${p.id}" ${selPlanos[op]===p.id?'selected':''}>${p.nome}</option>`
-      ).join('');
-      div.innerHTML = head + tipoRow + `<select class="op-config-sel" onchange="selPlan('${op}',this.value)">${opts}</select>`;
+      const opts = planos.map(p => {
+        const checked = (selPlanos[op] || []).includes(p.id);
+        return `<label class="op-check-item"><input type="checkbox" ${checked?'checked':''} onclick="selPlan('${op}','${p.id}',this)"><span class="op-check-label">${p.nome}</span></label>`;
+      }).join('');
+      div.innerHTML = head + tipoRow + `<div class="op-check-list">${opts}</div>`;
     }
     body.appendChild(div);
   });
 }
 
-function selPlan(op, id) {
-  selPlanos[op] = id;
+function selPlan(op, id, el) {
+  const checked = el ? el.checked : true;
+  if (checked) {
+    if (!(selPlanos[op] || []).includes(id)) selPlanos[op] = [...(selPlanos[op] || []), id];
+  } else {
+    if ((selPlanos[op] || []).length > 1) {
+      selPlanos[op] = selPlanos[op].filter(x => x !== id);
+    } else {
+      el.checked = true;
+      return;
+    }
+  }
   render();
 }
 
@@ -1561,46 +1577,42 @@ function planAvailable(p) {
 // ── RENDER ───────────────────────────────────────────────────────────
 function render() {
   const tv = qtds.reduce((a,b)=>a+b,0);
-  const uP  = activeOps.unity         && planosFiltered('unity').length         > 0 ? PLANOS.find(p=>p.id===selPlanos.unity)         : null;
-  const eP  = activeOps.evo           && planosFiltered('evo').length           > 0 ? PLANOS.find(p=>p.id===selPlanos.evo)           : null;
-  const pP  = activeOps.plenum        && planosFiltered('plenum').length        > 0 ? PLANOS.find(p=>p.id===selPlanos.plenum)        : null;
-  const aP  = activeOps.amil          && planosFiltered('amil').length          > 0 ? PLANOS.find(p=>p.id===selPlanos.amil)          : null;
-  const mPraw = activeOps.medsenior   && planosFiltered('medsenior').length     > 0 ? PLANOS.find(p=>p.id===selPlanos.medsenior)     : null;
-  const mP  = planAvailable(mPraw) ? mPraw : null;
-  const suP = activeOps.segurosunimed && planosFiltered('segurosunimed').length > 0 ? PLANOS.find(p=>p.id===selPlanos.segurosunimed) : null;
-  const psP = activeOps.portosaude   && planosFiltered('portosaude').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.portosaude)   : null;
-  const bdP = activeOps.bradesco     && planosFiltered('bradesco').length     > 0 ? PLANOS.find(p=>p.id===selPlanos.bradesco)     : null;
-  const bsPraw = activeOps.bestsenior && planosFiltered('bestsenior').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.bestsenior)   : null;
-  const bsP = planAvailable(bsPraw) ? bsPraw : null;
-  const saP = activeOps.sulamerica   && planosFiltered('sulamerica').length   > 0 ? PLANOS.find(p=>p.id===selPlanos.sulamerica)   : null;
+  const OPS_ORDER = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
+
+  // Colunas: uma por plano selecionado por operadora ativa
+  const cols = [];
+  OPS_ORDER.forEach(op => {
+    if (!activeOps[op] || planosFiltered(op).length === 0) return;
+    (selPlanos[op] || []).forEach(pid => {
+      const p = PLANOS.find(x => x.id === pid);
+      if (!p || !planAvailable(p)) return;
+      cols.push({op, plan: p});
+    });
+  });
 
   document.getElementById('placeholder').style.display = tv===0 ? 'block' : 'none';
   document.getElementById('result-wrap').style.display = tv>0 ? 'block' : 'none';
   document.getElementById('totais-section').style.display = tv>0 ? 'block' : 'none';
 
-  if (tv === 0) { renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP,saP); return; }
+  if (tv === 0) { renderNotes(cols); return; }
 
-  // Cabeçalho tabela
-  const usedTipos = [...new Set(
-    [uP&&'unity',eP&&'evo',pP&&'plenum',aP&&'amil',mP&&'medsenior',suP&&'segurosunimed',psP&&'portosaude',bdP&&'bradesco',bsP&&'bestsenior',saP&&'sulamerica']
-      .filter(Boolean).map(op => tipoOp[op])
-  )];
+  const opColor = op => `var(--${op==='segurosunimed'?'seguros-unimed':op})`;
+  const subCls  = op => ({unity:'sub-u',evo:'sub-e',plenum:'sub-p',amil:'sub-a',medsenior:'sub-ms',segurosunimed:'sub-su',portosaude:'sub-ps',bradesco:'sub-bd',bestsenior:'sub-bs',sulamerica:'sub-sa'}[op]);
+  const tbCls   = op => ({unity:'tb-u',evo:'tb-e',plenum:'tb-p',amil:'tb-a',medsenior:'tb-ms',segurosunimed:'tb-su',portosaude:'tb-ps',bradesco:'tb-bd',bestsenior:'tb-bs',sulamerica:'tb-sa'}[op]);
+
+  const usedTipos = [...new Set(cols.map(c => tipoOp[c.op]))];
   const mixedTipos = usedTipos.length > 1;
   const tipoShort = {adesao:'Adesão', pme:'PME', pf:'PF'};
-  const tipoTag = op => mixedTipos ? ` <small style="font-size:8px;font-weight:600;opacity:.65;letter-spacing:.04em">${tipoShort[tipoOp[op]]}</small>` : '';
 
+  // Cabeçalho
   const rh = document.getElementById('rt-head');
   let th = '<tr><th>Faixa / Vidas</th>';
-  if(uP)  th += `<th style="color:var(--unity)">${uP.nome.split('—')[0].trim()}${tipoTag('unity')}</th><th style="color:var(--unity)">Unity subtotal</th>`;
-  if(eP)  th += `<th style="color:var(--evo)">${eP.nome.split('—')[0].trim()}${tipoTag('evo')}</th><th style="color:var(--evo)">Evo subtotal</th>`;
-  if(pP)  th += `<th style="color:var(--plenum)">${pP.nome.split('—')[0].trim()}${tipoTag('plenum')}</th><th style="color:var(--plenum)">Plenum subtotal</th>`;
-  if(aP)  th += `<th style="color:var(--amil)">${aP.nome.split('—')[0].trim()}${tipoTag('amil')}</th><th style="color:var(--amil)">Amil subtotal</th>`;
-  if(mP)  th += `<th style="color:var(--medsenior)">${mP.nome.split('—')[0].trim()}${tipoTag('medsenior')}</th><th style="color:var(--medsenior)">MedSênior subtotal</th>`;
-  if(suP) th += `<th style="color:var(--seguros-unimed)">${suP.nome.split('—')[0].trim()}${tipoTag('segurosunimed')}</th><th style="color:var(--seguros-unimed)">Seguros Unimed subtotal</th>`;
-  if(psP) th += `<th style="color:var(--portosaude)">${psP.nome.split('—')[0].trim()}${tipoTag('portosaude')}</th><th style="color:var(--portosaude)">Porto Saúde subtotal</th>`;
-  if(bdP) th += `<th style="color:var(--bradesco)">${bdP.nome.split('—')[0].trim()}${tipoTag('bradesco')}</th><th style="color:var(--bradesco)">Bradesco subtotal</th>`;
-  if(bsP) th += `<th style="color:var(--bestsenior)">${bsP.nome.split('—')[0].trim()}${tipoTag('bestsenior')}</th><th style="color:var(--bestsenior)">Best Sênior subtotal</th>`;
-  if(saP) th += `<th style="color:var(--sulamerica)">${saP.nome.split('—')[0].trim()}${tipoTag('sulamerica')}</th><th style="color:var(--sulamerica)">SulAmérica subtotal</th>`;
+  cols.forEach(({op, plan}) => {
+    const color = opColor(op);
+    const tag = mixedTipos ? ` <small style="font-size:8px;font-weight:600;opacity:.65;letter-spacing:.04em">${tipoShort[tipoOp[op]]}</small>` : '';
+    const label = plan.nome.includes('—') ? plan.nome.split('—').slice(1).join('—').trim() : plan.nome;
+    th += `<th style="color:${color}">${label}${tag}</th><th style="color:${color}">${OP_META[op].nome}</th>`;
+  });
   rh.innerHTML = th + '</tr>';
 
   // Linhas — só faixas com qtd > 0
@@ -1609,104 +1621,62 @@ function render() {
   FAIXAS.forEach((faixa, i) => {
     const q = qtds[i]||0;
     if (q === 0) return;
-    const uS  = uP  ? uP.precos[i]*q  : null;
-    const eS  = eP  ? eP.precos[i]*q  : null;
-    const pS  = pP  ? pP.precos[i]*q  : null;
-    const aS  = aP  ? aP.precos[i]*q  : null;
-    const mS  = mP  ? mP.precos[i]*q  : null;
-    const suS = suP ? suP.precos[i]*q : null;
-    const psS = psP ? psP.precos[i]*q : null;
-    const bdS = bdP ? bdP.precos[i]*q : null;
-    const bsS = bsP ? bsP.precos[i]*q : null;
-    const saS = saP ? saP.precos[i]*q : null;
-    const vs = [uS,eS,pS,aS,mS,suS,psS,bdS,bsS,saS].filter(v=>v!=null);
-    const mn = vs.length ? Math.min(...vs) : null;
-    const mk = v => v!=null ? f(v)+(v===mn&&vs.length>1?'<span class="best">✓</span>':'') : '—';
+    const subs = cols.map(({plan}) => plan.precos[i] * q);
+    const mn = Math.min(...subs);
     const tr = document.createElement('tr');
     let h = `<td><div class="faixa-cell">${faixa} anos</div><div class="qty-cell">${q} vida(s)</div></td>`;
-    if(uP)  h += `<td class="price-cell">${f(uP.precos[i])}</td><td class="sub-u">${mk(uS)}</td>`;
-    if(eP)  h += `<td class="price-cell">${f(eP.precos[i])}</td><td class="sub-e">${mk(eS)}</td>`;
-    if(pP)  h += `<td class="price-cell">${f(pP.precos[i])}</td><td class="sub-p">${mk(pS)}</td>`;
-    if(aP)  h += `<td class="price-cell">${f(aP.precos[i])}</td><td class="sub-a">${mk(aS)}</td>`;
-    if(mP)  h += `<td class="price-cell">${f(mP.precos[i])}</td><td class="sub-ms">${mk(mS)}</td>`;
-    if(suP) h += `<td class="price-cell">${f(suP.precos[i])}</td><td class="sub-su">${mk(suS)}</td>`;
-    if(psP) h += `<td class="price-cell">${f(psP.precos[i])}</td><td class="sub-ps">${mk(psS)}</td>`;
-    if(bdP) h += `<td class="price-cell">${f(bdP.precos[i])}</td><td class="sub-bd">${mk(bdS)}</td>`;
-    if(bsP) h += `<td class="price-cell">${f(bsP.precos[i])}</td><td class="sub-bs">${mk(bsS)}</td>`;
-    if(saP) h += `<td class="price-cell">${f(saP.precos[i])}</td><td class="sub-sa">${mk(saS)}</td>`;
+    cols.forEach(({op, plan}, ci) => {
+      const s = subs[ci];
+      const mk = f(s) + (s===mn && subs.length>1 ? '<span class="best">✓</span>' : '');
+      h += `<td class="price-cell">${f(plan.precos[i])}</td><td class="${subCls(op)}">${mk}</td>`;
+    });
     tr.innerHTML = h;
     rb.appendChild(tr);
   });
 
-  // Linha total na tabela
-  const uT  = uP  ? qtds.reduce((a,q,i)=>a+q*uP.precos[i],0)  : null;
-  const eT  = eP  ? qtds.reduce((a,q,i)=>a+q*eP.precos[i],0)  : null;
-  const pT  = pP  ? qtds.reduce((a,q,i)=>a+q*pP.precos[i],0)  : null;
-  const aT  = aP  ? qtds.reduce((a,q,i)=>a+q*aP.precos[i],0)  : null;
-  const mT  = mP  ? qtds.reduce((a,q,i)=>a+q*mP.precos[i],0)  : null;
-  const suT = suP ? qtds.reduce((a,q,i)=>a+q*suP.precos[i],0) : null;
-  const psT = psP ? qtds.reduce((a,q,i)=>a+q*psP.precos[i],0) : null;
-  const bdT = bdP ? qtds.reduce((a,q,i)=>a+q*bdP.precos[i],0) : null;
-  const bsT = bsP ? qtds.reduce((a,q,i)=>a+q*bsP.precos[i],0) : null;
-  const saT = saP ? qtds.reduce((a,q,i)=>a+q*saP.precos[i],0) : null;
+  // Linha total
+  const totals = cols.map(({plan}) => qtds.reduce((a,q,i) => a + q * plan.precos[i], 0));
   const trTot = document.createElement('tr');
   trTot.className = 'row-total';
   let ht = `<td style="font-size:11px;font-weight:600;color:var(--ink2)">Total · ${tv} vida(s)</td>`;
-  if(uP)  ht += `<td></td><td class="sub-u"  style="font-size:13px">${f(uT)}</td>`;
-  if(eP)  ht += `<td></td><td class="sub-e"  style="font-size:13px">${f(eT)}</td>`;
-  if(pP)  ht += `<td></td><td class="sub-p"  style="font-size:13px">${f(pT)}</td>`;
-  if(aP)  ht += `<td></td><td class="sub-a"  style="font-size:13px">${f(aT)}</td>`;
-  if(mP)  ht += `<td></td><td class="sub-ms" style="font-size:13px">${f(mT)}</td>`;
-  if(suP) ht += `<td></td><td class="sub-su" style="font-size:13px">${f(suT)}</td>`;
-  if(psP) ht += `<td></td><td class="sub-ps" style="font-size:13px">${f(psT)}</td>`;
-  if(bdP) ht += `<td></td><td class="sub-bd" style="font-size:13px">${f(bdT)}</td>`;
-  if(bsP) ht += `<td></td><td class="sub-bs" style="font-size:13px">${f(bsT)}</td>`;
-  if(saP) ht += `<td></td><td class="sub-sa" style="font-size:13px">${f(saT)}</td>`;
+  cols.forEach(({op}, ci) => {
+    ht += `<td></td><td class="${subCls(op)}" style="font-size:13px">${f(totals[ci])}</td>`;
+  });
   trTot.innerHTML = ht;
   rb.appendChild(trTot);
 
   // Blocos totais
   const tg = document.getElementById('total-grid');
-  const cnt = [uT,eT,pT,aT,mT,suT,psT,bdT,bsT,saT].filter(v=>v!==null).length || 1;
-  tg.style.gridTemplateColumns = `repeat(${cnt},1fr)`;
+  tg.style.gridTemplateColumns = `repeat(${cols.length||1},1fr)`;
   tg.innerHTML = '';
-  const addT = (t, cls, lbl, sub) => {
-    if (t === null) return;
+  cols.forEach(({op, plan}, ci) => {
     const d = document.createElement('div');
-    d.className = 'total-blk ' + cls;
-    d.innerHTML = `<div><div class="tb-op">${lbl}</div><div class="tb-val">${f(t)}</div><div class="tb-sub">${tv} vida(s) · ${sub}</div></div>`;
+    d.className = 'total-blk ' + tbCls(op);
+    d.innerHTML = `<div><div class="tb-op">${OP_META[op].nome}</div><div class="tb-val">${f(totals[ci])}</div><div class="tb-sub">${tv} vida(s) · ${plan.nome}</div></div>`;
     tg.appendChild(d);
-  };
-  addT(uT,'tb-u', 'Unity Saúde',      uP?uP.nome:'');
-  addT(eT,'tb-e', 'Evo Saúde',        eP?eP.nome:'');
-  addT(pT,'tb-p', 'Plenum Saúde',     pP?pP.nome:'');
-  addT(aT,'tb-a', 'Amil',             aP?aP.nome:'');
-  addT(mT,'tb-ms','MedSênior',        mP?mP.nome:'');
-  addT(suT,'tb-su','Seguros Unimed',  suP?suP.nome:'');
-  addT(psT,'tb-ps','Porto Saúde',     psP?psP.nome:'');
-  addT(bdT,'tb-bd','Bradesco Saúde',  bdP?bdP.nome:'');
-  addT(bsT,'tb-bs','Best Sênior',     bsP?bsP.nome:'');
-  addT(saT,'tb-sa','SulAmérica Saúde',saP?saP.nome:'');
+  });
 
   // Vencedora
   const w = document.getElementById('winner');
-  const arr = [{n:'Unity Saúde',v:uT},{n:'Evo Saúde',v:eT},{n:'Plenum Saúde',v:pT},{n:'Amil',v:aT},{n:'MedSênior',v:mT},{n:'Seguros Unimed',v:suT},{n:'Porto Saúde',v:psT},{n:'Bradesco Saúde',v:bdT},{n:'Best Sênior',v:bsT},{n:'SulAmérica Saúde',v:saT}].filter(x=>x.v!==null);
-  if (arr.length > 1) {
-    arr.sort((a,b)=>a.v-b.v);
-    const diff = arr[arr.length-1].v - arr[0].v;
+  if (cols.length > 1) {
+    const sorted = cols.map((c, i) => ({op:c.op, nome:c.plan.nome, total:totals[i]})).sort((a,b)=>a.total-b.total);
+    const diff = sorted[sorted.length-1].total - sorted[0].total;
     w.classList.add('on');
+    const winLabel = sorted[0].nome.includes('—') ? `${OP_META[sorted[0].op].nome} · ${sorted[0].nome.split('—').pop().trim()}` : `${OP_META[sorted[0].op].nome} · ${sorted[0].nome}`;
     document.getElementById('winner-txt').innerHTML =
-      `<strong>${arr[0].n}</strong> é a opção mais econômica — <strong>${f(diff)}</strong> de diferença no total mensal.`;
+      `<strong>${winLabel}</strong> é a opção mais econômica — <strong>${f(diff)}</strong> de diferença no total mensal.`;
   } else w.classList.remove('on');
 
-  renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP,saP);
+  renderNotes(cols);
 }
 
-function renderNotes(uP,eP,pP,aP,mP,suP,psP,bdP,bsP,saP) {
+function renderNotes(cols) {
   const oc = document.getElementById('op-notes');
   oc.innerHTML = '';
-  [['unity',uP],['evo',eP],['plenum',pP],['amil',aP],['medsenior',mP],['segurosunimed',suP],['portosaude',psP],['bradesco',bdP],['bestsenior',bsP],['sulamerica',saP]].forEach(([op,p]) => {
-    if (!p) return;
+  const seen = new Set();
+  cols.forEach(({op}) => {
+    if (seen.has(op)) return;
+    seen.add(op);
     const m = OP_META[op];
     const d = document.createElement('div');
     d.className = 'op-note ' + m.cls;
@@ -1720,13 +1690,12 @@ function criarApresentacao() {
   const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
   const opsInfo = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
-    .filter(op => planAvailable(PLANOS.find(x => x.id === selPlanos[op])))
-    .map(op => {
-      const pid = selPlanos[op];
+    .flatMap(op => (selPlanos[op] || []).map(pid => {
       const p = PLANOS.find(x => x.id === pid);
-      const total = p ? qtds.reduce((a,q,i) => a + q * p.precos[i], 0) : 0;
-      return {op, pid, total, precos: p ? [...p.precos] : null};
-    });
+      if (!p || !planAvailable(p)) return null;
+      const total = qtds.reduce((a,q,i) => a + q * p.precos[i], 0);
+      return {op, pid, total, precos: [...p.precos]};
+    }).filter(Boolean));
   const withTotal = opsInfo.filter(x => x.total > 0);
   const winner = withTotal.length
     ? withTotal.slice().sort((a,b) => a.total - b.total)[0].op
@@ -1735,7 +1704,7 @@ function criarApresentacao() {
     nome:        document.getElementById('nome').value,
     obs:         document.getElementById('obs').value,
     qtds:        [...qtds],
-    selPlanos:   {...selPlanos},
+    selPlanos:   Object.fromEntries(Object.entries(selPlanos).map(([k,v])=>[k,(v||[])[0]||null])),
     activeOps:   {...activeOps},
     winner,
     opsInfo:     withTotal,
