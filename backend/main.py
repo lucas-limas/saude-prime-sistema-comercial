@@ -870,5 +870,96 @@ def deletar_plano(plano_id: int, admin=Depends(require_superadmin)):
     return {"ok": True}
 
 
+@app.patch("/api/superadmin/catalogo/operadoras/{op_id}/toggle")
+def toggle_operadora(op_id: int, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    row = conn.execute("SELECT ativo FROM operadoras WHERE id = ?", (op_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Operadora não encontrada")
+    new_status = 0 if row["ativo"] else 1
+    conn.execute("UPDATE operadoras SET ativo = ? WHERE id = ?", (new_status, op_id))
+    conn.commit()
+    conn.close()
+    return {"ativo": new_status}
+
+
+@app.patch("/api/superadmin/catalogo/planos/{plano_id}/toggle")
+def toggle_plano(plano_id: int, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    row = conn.execute("SELECT ativo FROM planos WHERE id = ?", (plano_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Plano não encontrado")
+    new_status = 0 if row["ativo"] else 1
+    conn.execute("UPDATE planos SET ativo = ? WHERE id = ?", (new_status, plano_id))
+    conn.commit()
+    conn.close()
+    return {"ativo": new_status}
+
+
+# ── Superadmin: Importar catálogo em lote (dados.js → DB) ─────────────────────
+
+class ImportarOpItem(BaseModel):
+    chave: str
+    nome: str
+    cor: Optional[str] = None
+    cls: Optional[str] = None
+    info: Optional[str] = None
+    ordem: Optional[int] = 0
+
+class ImportarPlanoItem(BaseModel):
+    codigo: str
+    op_chave: str
+    nome: str
+    aco: str
+    tipo: Optional[str] = None
+    fvidas: Optional[str] = None
+    mod: Optional[str] = None
+    vig: Optional[int] = None
+    precos: list
+    ordem: Optional[int] = 0
+
+class ImportarCatalogoRequest(BaseModel):
+    operadoras: list
+    planos: list
+
+@app.post("/api/superadmin/catalogo/importar")
+def importar_catalogo(body: ImportarCatalogoRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    ops_novas = 0
+    planos_novos = 0
+    for i, op in enumerate(body.operadoras):
+        chave = (op.get("chave") or "").strip()
+        if not chave:
+            continue
+        if not conn.execute("SELECT id FROM operadoras WHERE chave = ?", (chave,)).fetchone():
+            conn.execute(
+                "INSERT INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES (?, ?, ?, ?, ?, ?)",
+                (chave, op.get("nome",""), op.get("cor",""), op.get("cls",""), op.get("info",""), op.get("ordem", i+1)),
+            )
+            ops_novas += 1
+    conn.commit()
+    ops_map = {r["chave"]: r["id"] for r in conn.execute("SELECT id, chave FROM operadoras").fetchall()}
+    for i, pl in enumerate(body.planos):
+        codigo = (pl.get("codigo") or "").strip()
+        op_chave = (pl.get("op_chave") or "").strip()
+        if not codigo or not op_chave:
+            continue
+        op_id = ops_map.get(op_chave)
+        if not op_id:
+            continue
+        if not conn.execute("SELECT id FROM planos WHERE codigo = ?", (codigo,)).fetchone():
+            conn.execute(
+                "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (codigo, op_id, pl.get("nome",""), pl.get("aco","enf"), pl.get("tipo") or None, pl.get("fvidas") or None, pl.get("mod") or None, pl.get("vig") or None, json.dumps(pl.get("precos",[])), pl.get("ordem", i+1)),
+            )
+            planos_novos += 1
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "importar_catalogo", f"{ops_novas} operadoras e {planos_novos} planos importados")
+    return {"ok": True, "ops_novas": ops_novas, "planos_novos": planos_novos}
+
+
 # ── Static (deve ficar DEPOIS de todas as rotas /api) ─────────────────────────
 app.mount("/", StaticFiles(directory=PROJECT_DIR, html=True), name="static")

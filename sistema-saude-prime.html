@@ -334,6 +334,24 @@ iframe.visible{display:block}
       <div style="display:flex;gap:8px;margin-bottom:16px">
         <button class="cat-tab active" onclick="catTab('operadoras',this)">Operadoras</button>
         <button class="cat-tab" onclick="catTab('planos',this)">Planos</button>
+        <button class="cat-tab" onclick="catTab('importar',this)" style="margin-left:auto;background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:#fbbf24">⬆ Importar dados.js</button>
+      </div>
+
+      <!-- IMPORTAÇÃO -->
+      <div id="cat-sub-importar" style="display:none">
+        <div class="form-card" style="border-color:rgba(251,191,36,.25)">
+          <h3 style="color:#fbbf24">Importar catálogo do dados.js</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:13px;margin:8px 0 16px">
+            Esta operação lê o arquivo <code>dados.js</code> do servidor e importa todas as operadoras e planos que ainda não existem no banco. Registros já existentes <strong>não serão alterados</strong>.
+          </p>
+          <div class="form-actions">
+            <button class="btn-novo" onclick="importarDadosJS()" id="btn-importar-dados">Iniciar importação</button>
+            <span class="form-msg" id="import-msg"></span>
+          </div>
+          <div id="import-result" style="display:none;margin-top:16px;background:rgba(0,0,0,.25);border-radius:8px;padding:14px">
+            <div id="import-result-body" style="font-size:13px;color:rgba(255,255,255,.75)"></div>
+          </div>
+        </div>
       </div>
 
       <!-- OPERADORAS -->
@@ -772,12 +790,75 @@ async function deletarColaborador(id, btn) {
 let _cat_ops = [], _cat_planos = [];
 
 function catTab(tab, btn) {
-  document.getElementById('cat-sub-ops').style.display    = tab === 'operadoras' ? '' : 'none';
-  document.getElementById('cat-sub-planos').style.display = tab === 'planos'     ? '' : 'none';
+  document.getElementById('cat-sub-ops').style.display      = tab === 'operadoras' ? '' : 'none';
+  document.getElementById('cat-sub-planos').style.display   = tab === 'planos'     ? '' : 'none';
+  document.getElementById('cat-sub-importar').style.display = tab === 'importar'   ? '' : 'none';
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (tab === 'operadoras') loadOpsCat();
-  else loadPlanosCat();
+  else if (tab === 'planos') loadPlanosCat();
+}
+
+async function importarDadosJS() {
+  const msg   = document.getElementById('import-msg');
+  const res   = document.getElementById('import-result');
+  const body  = document.getElementById('import-result-body');
+  const btn   = document.getElementById('btn-importar-dados');
+  msg.textContent = ''; res.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Carregando dados.js…';
+
+  try {
+    // Carrega dados.js dinamicamente para obter window.SP_DATA
+    await new Promise((ok, err) => {
+      if (window.SP_DATA) { ok(); return; }
+      const s = document.createElement('script');
+      s.src = '/dados.js?' + Date.now();
+      s.onload = ok; s.onerror = err;
+      document.head.appendChild(s);
+    });
+
+    const spData = window.SP_DATA;
+    if (!spData || !Array.isArray(spData)) throw new Error('SP_DATA não encontrado no dados.js');
+
+    // Converte formato dados.js → formato da API
+    const operadoras = spData.map((op, i) => ({
+      chave: op.key, nome: op.nome, cor: op.cor || '', cls: op.cls || '',
+      info: op.info || '', ordem: i + 1
+    }));
+    const planos = [];
+    spData.forEach((op, oi) => {
+      (op.produtos || []).forEach((pl, pi) => {
+        planos.push({
+          codigo: pl.id, op_chave: op.key, nome: pl.nome, aco: pl.aco,
+          tipo: pl.tipo || null, fvidas: pl.fvidas || null,
+          mod: pl.mod || null, vig: pl.vig || null,
+          precos: pl.valores || [], ordem: pi + 1
+        });
+      });
+    });
+
+    btn.textContent = `Importando ${planos.length} planos…`;
+    const r = await fetch(`${API}/api/superadmin/catalogo/importar`, {
+      method: 'POST', headers: authH(),
+      body: JSON.stringify({operadoras, planos})
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || 'Erro na importação');
+
+    res.style.display = '';
+    body.innerHTML = `
+      <div style="color:#4ade80;font-weight:600;margin-bottom:8px">✓ Importação concluída!</div>
+      <div>Operadoras novas: <strong>${data.ops_novas}</strong></div>
+      <div>Planos novos: <strong>${data.planos_novos}</strong></div>
+      <div style="margin-top:8px;color:rgba(255,255,255,.45);font-size:12px">Registros já existentes não foram alterados. Recarregue o cotador para ver os novos dados.</div>
+    `;
+    msg.className = 'form-msg success'; msg.textContent = 'Importação concluída!';
+    await loadOpsCat();
+  } catch(e) {
+    msg.className = 'form-msg error'; msg.textContent = e.message || 'Erro inesperado.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Iniciar importação';
+  }
 }
 
 async function loadCatalogo() {
@@ -805,6 +886,7 @@ async function loadOpsCat() {
       <td><span class="badge-status ${o.ativo?'ativo':'inativo'}">${o.ativo?'Ativa':'Inativa'}</span></td>
       <td style="white-space:nowrap">
         <button class="btn-toggle" onclick="editOp(${o.id})">Editar</button>
+        <button class="btn-toggle" onclick="toggleOp(${o.id},this)">${o.ativo?'Desativar':'Ativar'}</button>
         <button class="btn-del" onclick="deletarOp(${o.id},this)">Excluir</button>
       </td>
     </tr>`).join('')}</tbody>
@@ -862,6 +944,12 @@ function cancelarOpEdit() {
   document.getElementById('cat-op-msg').textContent = '';
 }
 
+async function toggleOp(id, btn) {
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/superadmin/catalogo/operadoras/${id}/toggle`, {method:'PATCH', headers: authH()});
+  if (res.ok) await loadOpsCat(); else btn.disabled = false;
+}
+
 async function deletarOp(id, btn) {
   const o = _cat_ops.find(x => x.id === id);
   if (!confirm(`Excluir a operadora "${o.nome}" e todos os seus planos? Esta ação não pode ser desfeita.`)) return;
@@ -887,6 +975,7 @@ async function loadPlanosCat() {
       <td><span class="badge-status ${p.ativo?'ativo':'inativo'}">${p.ativo?'Ativo':'Inativo'}</span></td>
       <td style="white-space:nowrap">
         <button class="btn-toggle" onclick="editPlano(${p.id})">Editar</button>
+        <button class="btn-toggle" onclick="togglePlano(${p.id},this)">${p.ativo?'Desativar':'Ativar'}</button>
         <button class="btn-del" onclick="deletarPlano(${p.id},this)">Excluir</button>
       </td>
     </tr>`).join('')}</tbody>
@@ -953,6 +1042,12 @@ function cancelarPlanoEdit() {
   document.getElementById('cat-pl-btn').textContent = 'Criar Plano';
   document.getElementById('cat-pl-cancel').style.display = 'none';
   document.getElementById('cat-pl-msg').textContent = '';
+}
+
+async function togglePlano(id, btn) {
+  btn.disabled = true;
+  const res = await fetch(`${API}/api/superadmin/catalogo/planos/${id}/toggle`, {method:'PATCH', headers: authH()});
+  if (res.ok) await loadPlanosCat(); else btn.disabled = false;
 }
 
 async function deletarPlano(id, btn) {

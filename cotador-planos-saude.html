@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -437,7 +437,6 @@ body{-webkit-overflow-scrolling:touch}
 .op-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:.875rem}
 .op-cards-grid .op-config-item{background:var(--white);border:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important;border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px}
 </style>
-<script src="dados.js"></script>
 </head>
 <body>
 
@@ -1214,83 +1213,19 @@ body{-webkit-overflow-scrolling:touch}
 </footer>
 
 <script>
-// ── DADOS ─────────────────────────────────────────────────────────────
+// ── DADOS (carregados da API) ────────────────────────────────────────
 const FAIXAS = ['0 a 18','19 a 23','24 a 28','29 a 33','34 a 38','39 a 43','44 a 48','49 a 53','54 a 58','59 ou mais'];
-
-// Cada operadora tem seus próprios planos com acomodação já definida
-// Estrutura: {id, nome, operadora, acomodação, copart, precos}
-const PLANOS = window.PLANOS || [
-  // UNITY
-  {id:'u1',op:'unity',nome:'Sem copart — Life Vital',aco:'amb',precos:[189.94,201.35,231.55,259.32,311.19,357.87,450.91,554.62,721.01,1045.46]},
-  {id:'u2',op:'unity',nome:'Com copart — Life Vital',aco:'amb',precos:[138.34,146.64,168.64,188.87,226.65,260.65,328.41,403.95,525.13,761.45]},
-  {id:'u3',op:'unity',nome:'Sem copart — Unity Vida',aco:'enf',precos:[348.34,369.25,424.63,475.59,570.69,656.31,826.94,1017.15,1322.28,1917.30]},
-  {id:'u4',op:'unity',nome:'Com copart — Unity Vida',aco:'enf',precos:[248.94,263.88,303.46,339.87,407.85,469.02,590.97,726.90,944.97,1370.20]},
-  {id:'u5',op:'unity',nome:'Sem copart — Unity Star',aco:'apt',precos:[433.42,459.42,528.34,591.74,710.08,816.60,1028.91,1265.56,1645.23,2385.58]},
-  {id:'u6',op:'unity',nome:'Com copart — Unity Star',aco:'apt',precos:[371.26,393.54,452.57,506.88,608.25,699.46,881.36,1084.07,1409.30,2043.48]},
-  // EVO
-  {id:'e1',op:'evo',nome:'Sem copart — NOW Enfermaria',aco:'enf',precos:[329.69,352.17,383.37,450.31,541.95,612.67,747.64,917.58,1233.41,1637.60]},
-  {id:'e2',op:'evo',nome:'Com copart — ONE Enfermaria',aco:'enf',precos:[249.30,266.30,289.90,340.52,409.81,463.29,565.35,693.86,932.68,1238.32]},
-  {id:'e3',op:'evo',nome:'Com copart — NOW Enfermaria',aco:'enf',precos:[286.68,306.24,333.37,391.58,471.26,532.76,650.13,797.90,1072.54,1424.01]},
-  {id:'e4',op:'evo',nome:'Sem copart — NOW Apartamento',aco:'apt',precos:[394.15,421.03,458.33,538.36,647.91,732.47,893.83,1097.00,1474.58,1957.80]},
-  {id:'e5',op:'evo',nome:'Com copart — ONE Apartamento',aco:'apt',precos:[292.74,312.71,340.41,399.85,481.22,544.02,663.86,814.76,1095.20,1454.10]},
-  {id:'e6',op:'evo',nome:'Com copart — NOW Apartamento',aco:'apt',precos:[348.80,372.59,405.60,476.42,573.37,648.20,790.99,970.79,1304.93,1732.56]},
-  // PLENUM
-  {id:'p1',op:'plenum',nome:'Copart parcial — Delta (Enf)',aco:'enf',precos:[349.90,437.38,507.36,577.34,629.82,664.81,804.77,874.75,1084.69,1679.52]},
-  {id:'p2',op:'plenum',nome:'Copart parcial — Ômega (Enf)',aco:'enf',precos:[389.90,487.38,565.36,643.34,701.82,740.81,896.77,974.75,1208.69,1871.52]},
-  {id:'p3',op:'plenum',nome:'Copart total — Delta (Enf)',aco:'enf',precos:[269.90,337.38,391.36,445.34,485.82,512.81,620.77,674.75,836.69,1295.52]},
-  {id:'p4',op:'plenum',nome:'Copart total — Ômega (Enf)',aco:'enf',precos:[299.90,374.88,434.86,494.84,539.82,569.81,689.77,749.75,929.69,1439.52]},
-  {id:'p5',op:'plenum',nome:'Copart parcial — Beta (Apt)',aco:'apt',precos:[399.90,499.88,579.86,659.84,719.82,759.81,919.77,999.75,1239.69,1919.52]},
-  {id:'p6',op:'plenum',nome:'Copart parcial — Sigma (Apt)',aco:'apt',precos:[499.90,624.88,724.86,824.84,899.82,949.81,1149.77,1249.75,1549.69,2399.52]},
-  {id:'p7',op:'plenum',nome:'Copart total — Beta (Apt)',aco:'apt',precos:[309.90,387.38,449.36,511.34,557.82,588.81,712.77,774.75,960.69,1487.52]},
-  {id:'p8',op:'plenum',nome:'Copart total — Sigma (Apt)',aco:'apt',precos:[389.90,487.38,565.36,643.34,701.82,740.81,896.77,974.75,1208.69,1871.52]},
-
-  // AMIL — Adesão DF · Vigência mai/2026
-  // Coparticipação TOTAL
-  {id:'a1',op:'amil',nome:'Bronze DF QC (Enf) — Copart Total',aco:'enf',precos:[320.90,435.79,511.57,511.57,511.57,571.43,789.14,942.24,1354.94,1921.31]},
-  {id:'a2',op:'amil',nome:'Bronze DF QP (Apt) — Copart Total',aco:'apt',precos:[356.22,483.74,567.86,567.86,567.86,634.31,875.98,1045.92,1504.03,2132.71]},
-  {id:'a3',op:'amil',nome:'Prata DF QC (Enf) — Copart Total',aco:'enf',precos:[448.22,524.41,639.79,767.74,806.12,886.74,1108.44,1219.28,1524.11,2667.19]},
-  {id:'a4',op:'amil',nome:'Prata DF QP (Apt) — Copart Total',aco:'apt',precos:[497.52,582.10,710.15,852.18,894.80,984.28,1230.36,1353.40,1691.75,2960.58]},
-  {id:'a5',op:'amil',nome:'Ouro QC (Enf) — Copart Total',aco:'enf',precos:[500.09,585.11,713.83,856.60,899.42,989.38,1236.72,1360.39,1700.48,2975.86]},
-  {id:'a6',op:'amil',nome:'Ouro QP (Apt) — Copart Total',aco:'apt',precos:[555.10,649.48,792.35,950.82,998.36,1098.19,1372.74,1510.02,1887.53,3303.18]},
-  {id:'a7',op:'amil',nome:'Platinum R1 QP (Apt) — Copart Total',aco:'apt',precos:[589.22,689.38,841.04,1009.26,1059.73,1165.70,1457.12,1602.84,2003.56,3506.22]},
-  {id:'a8',op:'amil',nome:'Platinum R2 QP (Apt) — Copart Total',aco:'apt',precos:[595.08,696.24,849.42,1019.30,1070.26,1177.28,1471.61,1618.78,2023.46,3541.07]},
-  {id:'a9',op:'amil',nome:'Platinum Mais R1 QP (Apt) — Copart Total',aco:'apt',precos:[732.24,856.72,1045.19,1254.24,1316.95,1448.65,1810.81,1991.90,2489.88,4357.28]},
-  {id:'a10',op:'amil',nome:'Platinum Mais R2 QP (Apt) — Copart Total',aco:'apt',precos:[739.48,865.19,1055.54,1266.65,1330.00,1462.99,1828.75,2011.62,2514.52,4400.42]},
-  // Coparticipação PARCIAL
-  {id:'a11',op:'amil',nome:'Bronze DF QC (Enf) — Copart Parcial',aco:'enf',precos:[427.87,581.05,682.09,682.09,682.09,761.89,1052.17,1256.29,1806.55,2561.69]},
-  {id:'a12',op:'amil',nome:'Bronze DF QP (Apt) — Copart Parcial',aco:'apt',precos:[474.95,644.98,757.14,757.14,757.14,845.72,1167.95,1394.53,2005.33,2843.56]},
-  {id:'a13',op:'amil',nome:'Prata DF QC (Enf) — Copart Parcial',aco:'enf',precos:[597.62,699.22,853.04,1023.65,1074.84,1182.31,1477.91,1625.71,2032.14,3556.26]},
-  {id:'a14',op:'amil',nome:'Prata DF QP (Apt) — Copart Parcial',aco:'apt',precos:[663.36,776.14,946.87,1136.26,1193.06,1312.38,1640.48,1804.54,2255.68,3947.45]},
-  {id:'a15',op:'amil',nome:'Ouro QC (Enf) — Copart Parcial',aco:'enf',precos:[666.78,780.12,951.76,1142.10,1199.21,1319.12,1648.91,1813.80,2267.26,3967.69]},
-  {id:'a16',op:'amil',nome:'Ouro QP (Apt) — Copart Parcial',aco:'apt',precos:[740.11,865.93,1056.43,1267.72,1331.10,1464.20,1830.26,2013.29,2516.62,4404.08]},
-  {id:'a17',op:'amil',nome:'Platinum R1 QP (Apt) — Copart Parcial',aco:'apt',precos:[785.62,919.16,1121.39,1345.67,1412.94,1554.24,1942.81,2137.09,2671.37,4674.90]},
-  {id:'a18',op:'amil',nome:'Platinum R2 QP (Apt) — Copart Parcial',aco:'apt',precos:[793.43,928.31,1132.54,1359.04,1426.99,1569.70,1962.12,2158.33,2697.91,4721.35]},
-  {id:'a19',op:'amil',nome:'Platinum Mais R1 QP (Apt) — Copart Parcial',aco:'apt',precos:[976.32,1142.28,1393.60,1672.32,1755.95,1931.53,2414.44,2655.86,3319.84,5809.72]},
-  {id:'a20',op:'amil',nome:'Platinum Mais R2 QP (Apt) — Copart Parcial',aco:'apt',precos:[985.99,1153.60,1407.40,1688.87,1773.34,1950.66,2438.34,2682.17,3352.69,5867.23]},
-];
-
-const OP_META = window.OP_META || {
-  unity:     {nome:'Unity Saúde', cor:'var(--unity)',    cls:'on-u',  info:'Adm. Esplendor · Mai/2026 · Taxa assoc. R$ 5,00 · Assoc: UEB, UVA, UNIPRO, ANC, UNSP · Telemedicina gratuita'},
-  evo:       {nome:'Evo Saúde',   cor:'var(--evo)',      cls:'on-e',  info:'Adm. Easyplan · Reajuste set/2026 · Odonto ODONTOGROUP incluso · Telemedicina 24h · Taxa assoc. R$ 5,00'},
-  plenum:    {nome:'Plenum Saúde',cor:'var(--plenum)',   cls:'on-p',  info:'Adm. Easyplan · Reajuste mar/2027 · Seguro Viagem AIG + UTI Móvel 24h · Sírio-Libanês (Sigma) · Taxa assoc. R$ 5,00'},
-  amil:      {nome:'Amil',        cor:'var(--amil)',     cls:'on-a',  info:'Vigência mai/2026 · Amil Dental incluso 12 meses grátis (R$ 14,99/mês após) · Rede nacional · Reembolso disponível nos planos Platinum'},
-  medsenior:   {nome:'MedSênior',   cor:'var(--medsenior)',  cls:'on-ms', info:'Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas'},
-  segurosunimed:{nome:'Seguros Unimed',cor:'var(--seguros-unimed)',cls:'on-su',info:'PME · Compulsório e Facultativo · 2–99 vidas · Rede DF + UE nacional · Essencial I/II/III/IV disponíveis'},
-  portosaude:  {nome:'Porto Saúde',  cor:'var(--portosaude)',  cls:'on-ps', info:'PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde'},
-  bradesco:    {nome:'Bradesco Saúde',cor:'var(--bradesco)',   cls:'on-b',  info:'PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros'},
-  bestsenior:  {nome:'Best Sênior',  cor:'var(--bestsenior)', cls:'on-bs', info:'PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde'},
-  sulamerica:  {nome:'SulAmérica Saúde', cor:'var(--sulamerica)', cls:'on-sa', info:'PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde'},
-};
+let PLANOS = [];
+let OP_META = {};
 
 // Estado
 let qtds = Array(10).fill(0);
-let selPlanos = {unity:['u3'], evo:['e1'], plenum:['p1'], amil:['am_04_cc_1'], medsenior:['ms1'], segurosunimed:['su_c29_1'], portosaude:['ps_1'], bradesco:['bd_4'], bestsenior:['bse_pf1'], sulamerica:['sa_29_12_sc_1']};
-let activeOps  = {unity:true, evo:true, plenum:true, amil:true, medsenior:true, segurosunimed:true, portosaude:true, bradesco:true, bestsenior:true, sulamerica:true};
-// tipo por operadora — permite cotação mista entre modalidades
-let tipoOp = {unity:'adesao', evo:'adesao', plenum:'adesao', amil:'pme', medsenior:'pf', segurosunimed:'pme', portosaude:'pme', bradesco:'pme', bestsenior:'pf', sulamerica:'pme'};
-let filtroCopart = 'todos';  // 'todos' | 'sem' | 'parcial' | 'total'
-let filtroMod    = 'comp';   // 'comp' | 'fac' — só relevante para PME (Seguros Unimed)
-let filtroVig    = '12';     // '12' | '24'   — vigência SulAmérica
+let selPlanos = {};
+let activeOps = {};
+let tipoOp = {};
+let filtroCopart = 'todos';
+let filtroMod    = 'comp';
+let filtroVig    = '12';
 
 const f = v => v != null ? 'R$ ' + v.toFixed(2).replace('.',',') : '—';
 
@@ -1495,10 +1430,11 @@ function buildOpConfig() {
   const tipoLabel = {adesao:'Adesão', pme:'PME', pf:'PF'};
   const tipoOrder = ['adesao','pme','pf'];
 
-  ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'].forEach(op => {
+  Object.keys(OP_META).forEach(op => {
     const meta = OP_META[op];
-    const isActive = activeOps[op];
-    const sfx = sfxMap[op] || op[0];
+    if (!meta) return;
+    const isActive = activeOps[op] !== false;
+    const sfx = sfxMap[op] || op.slice(0,2);
     const availTipos = tiposDisponiveis(op);
 
     // Garante que tipoOp[op] seja válido para esta operadora
@@ -1577,7 +1513,7 @@ function planAvailable(p) {
 // ── RENDER ───────────────────────────────────────────────────────────
 function render() {
   const tv = qtds.reduce((a,b)=>a+b,0);
-  const OPS_ORDER = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
+  const OPS_ORDER = Object.keys(OP_META);
 
   // Colunas: uma por plano selecionado por operadora ativa
   const cols = [];
@@ -1611,7 +1547,7 @@ function render() {
     const color = opColor(op);
     const tag = mixedTipos ? ` <small style="font-size:8px;font-weight:600;opacity:.65;letter-spacing:.04em">${tipoShort[tipoOp[op]]}</small>` : '';
     const label = plan.nome.includes('—') ? plan.nome.split('—').slice(1).join('—').trim() : plan.nome;
-    th += `<th style="color:${color}">${label}${tag}</th><th style="color:${color}">${OP_META[op].nome}</th>`;
+    th += `<th style="color:${color}">${label}${tag}</th><th style="color:${color}">${(OP_META[op]||{}).nome||op}</th>`;
   });
   rh.innerHTML = th + '</tr>';
 
@@ -1652,7 +1588,7 @@ function render() {
   cols.forEach(({op, plan}, ci) => {
     const d = document.createElement('div');
     d.className = 'total-blk ' + tbCls(op);
-    d.innerHTML = `<div><div class="tb-op">${OP_META[op].nome}</div><div class="tb-val">${f(totals[ci])}</div><div class="tb-sub">${tv} vida(s) · ${plan.nome}</div></div>`;
+    d.innerHTML = `<div><div class="tb-op">${(OP_META[op]||{}).nome||op}</div><div class="tb-val">${f(totals[ci])}</div><div class="tb-sub">${tv} vida(s) · ${plan.nome}</div></div>`;
     tg.appendChild(d);
   });
 
@@ -1662,7 +1598,8 @@ function render() {
     const sorted = cols.map((c, i) => ({op:c.op, nome:c.plan.nome, total:totals[i]})).sort((a,b)=>a.total-b.total);
     const diff = sorted[sorted.length-1].total - sorted[0].total;
     w.classList.add('on');
-    const winLabel = sorted[0].nome.includes('—') ? `${OP_META[sorted[0].op].nome} · ${sorted[0].nome.split('—').pop().trim()}` : `${OP_META[sorted[0].op].nome} · ${sorted[0].nome}`;
+    const _wop = (OP_META[sorted[0].op]||{}).nome||sorted[0].op;
+    const winLabel = sorted[0].nome.includes('—') ? `${_wop} · ${sorted[0].nome.split('—').pop().trim()}` : `${_wop} · ${sorted[0].nome}`;
     document.getElementById('winner-txt').innerHTML =
       `<strong>${winLabel}</strong> é a opção mais econômica — <strong>${f(diff)}</strong> de diferença no total mensal.`;
   } else w.classList.remove('on');
@@ -1678,16 +1615,17 @@ function renderNotes(cols) {
     if (seen.has(op)) return;
     seen.add(op);
     const m = OP_META[op];
+    if (!m) return;
     const d = document.createElement('div');
-    d.className = 'op-note ' + m.cls;
-    d.innerHTML = `<span class="on-name">${m.nome}</span><span>${m.info}</span>`;
+    d.className = 'op-note ' + (m.cls || '');
+    d.innerHTML = `<span class="on-name">${m.nome||op}</span><span>${m.info||''}</span>`;
     oc.appendChild(d);
   });
 }
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
 function criarApresentacao() {
-  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
+  const opsOrder = Object.keys(OP_META);
   const opsInfo = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
     .flatMap(op => (selPlanos[op] || []).map(pid => {
@@ -1784,15 +1722,45 @@ function limpar() {
 }
 
 
-// ── INIT ─────────────────────────────────────────────────────────────
-buildFaixas();
-buildOpConfig();
-render();
-_checkFVigRow();
-['ph-data','ph-data2','ph-data3'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.textContent = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
-});
+// ── INIT (async: carrega catálogo da API antes de montar a UI) ────────
+const _loadingDiv = document.createElement('div');
+_loadingDiv.id = 'cotador-loading';
+_loadingDiv.style.cssText = 'position:fixed;inset:0;background:#0b1220;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:12px';
+_loadingDiv.innerHTML = '<div style="width:36px;height:36px;border:3px solid rgba(255,255,255,.15);border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite"></div><span style="color:rgba(255,255,255,.55);font-size:14px">Carregando planos...</span>';
+const _spinStyle = document.createElement('style');
+_spinStyle.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(_spinStyle);
+document.body.appendChild(_loadingDiv);
+
+async function _initCotador() {
+  try {
+    const res = await fetch('/api/catalogo');
+    if (res.ok) {
+      const data = await res.json();
+      PLANOS  = data.planos   || [];
+      OP_META = data.operadoras || {};
+      Object.keys(OP_META).forEach(op => {
+        if (activeOps[op] === undefined) activeOps[op] = true;
+        if (tipoOp[op]   === undefined) {
+          const ts = tiposDisponiveis(op);
+          tipoOp[op] = ts[0] || 'adesao';
+        }
+      });
+    }
+  } catch(e) {
+    console.warn('Falha ao carregar catálogo da API:', e);
+  }
+  _loadingDiv.remove();
+  buildFaixas();
+  buildOpConfig();
+  render();
+  _checkFVigRow();
+  ['ph-data','ph-data2','ph-data3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  });
+}
+_initCotador();
 
 // ── HISTÓRICO DE COTAÇÕES ────────────────────────────────────────────
 const HIST_KEY = 'sp_historico_cotacoes';
@@ -1802,7 +1770,7 @@ function saveToHistory() {
   const nome = document.getElementById('nome')?.value?.trim() || 'Sem nome';
   const tv = qtds.reduce((a,b)=>a+b,0);
   if (tv === 0) return;
-  const opsOrder = ['unity','evo','plenum','amil','medsenior','segurosunimed','portosaude','bradesco','bestsenior','sulamerica'];
+  const opsOrder = Object.keys(OP_META);
   const withTotal = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
     .filter(op => (selPlanos[op]||[]).some(pid => planAvailable(PLANOS.find(x=>x.id===pid))))
