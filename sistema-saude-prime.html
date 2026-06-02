@@ -237,6 +237,9 @@ iframe.visible{display:block}
 .form-msg.error{color:#ff6b6b}
 .form-msg.success{color:#86efac}
 .admin-loading{color:rgba(255,255,255,.35);text-align:center;padding:40px;font-family:"Outfit",sans-serif;font-size:14px}
+.pf-ctrl{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:12px;font-family:"Outfit",sans-serif;padding:6px 10px;min-width:130px}
+.pf-ctrl:focus{outline:none;border-color:rgba(59,130,246,.5)}
+.pf-ctrl option{background:#1a2540;color:#fff}
 /* seção título com botão */
 .section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .section-bar h3{font-size:13px;font-weight:600;color:#fff;font-family:"Outfit",sans-serif}
@@ -423,7 +426,42 @@ iframe.visible{display:block}
             <span class="form-msg" id="cat-pl-msg"></span>
           </div>
         </div>
-        <div class="section-bar"><h3>Planos cadastrados</h3></div>
+        <div class="section-bar" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <h3>Planos cadastrados</h3>
+          <span id="planos-count" style="color:rgba(255,255,255,.4);font-size:12px;font-weight:400"></span>
+        </div>
+
+        <!-- FILTROS -->
+        <div id="planos-filtros" style="display:none;flex-wrap:wrap;gap:8px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:12px">
+          <input  type="text" id="pf-busca"   placeholder="Buscar por código ou nome…" class="pf-ctrl" style="flex:2;min-width:220px">
+          <select id="pf-op"    class="pf-ctrl"><option value="">Todas as operadoras</option></select>
+          <select id="pf-tipo"  class="pf-ctrl">
+            <option value="">Todos os tipos</option>
+            <option value="adesao">Adesão (Coletivo)</option>
+            <option value="pme">PME</option>
+            <option value="pf">Pessoa Física</option>
+          </select>
+          <select id="pf-copart" class="pf-ctrl">
+            <option value="">Todas as coparticipações</option>
+            <option value="sem">Sem copart.</option>
+            <option value="parcial">Copart. parcial</option>
+            <option value="total">Copart. total / completa</option>
+          </select>
+          <select id="pf-aco" class="pf-ctrl">
+            <option value="">Todas as acomodações</option>
+            <option value="amb">Ambulatorial</option>
+            <option value="enf">Enfermaria</option>
+            <option value="apt">Apartamento</option>
+          </select>
+          <select id="pf-fvidas" class="pf-ctrl"><option value="">Todas as faixas de vidas</option></select>
+          <select id="pf-status" class="pf-ctrl">
+            <option value="">Qualquer status</option>
+            <option value="1">Ativos</option>
+            <option value="0">Inativos</option>
+          </select>
+          <button class="btn-toggle" onclick="limparFiltrosPlanos()" style="align-self:flex-end">✕ Limpar filtros</button>
+        </div>
+
         <div id="sa-planos-body"><div class="admin-loading">Carregando...</div></div>
       </div>
     </div>
@@ -787,7 +825,7 @@ async function deletarColaborador(id, btn) {
 /* ════════════════════════════════════════
    CATÁLOGO
 ════════════════════════════════════════ */
-let _cat_ops = [], _cat_planos = [];
+let _cat_ops = [], _cat_planos = [], _catPlanosListeners = false;
 
 function catTab(tab, btn) {
   document.getElementById('cat-sub-ops').style.display      = tab === 'operadoras' ? '' : 'none';
@@ -966,14 +1004,87 @@ async function loadPlanosCat() {
   el.innerHTML = '<div class="admin-loading">Carregando...</div>';
   const res = await fetch(`${API}/api/superadmin/catalogo/planos`, {headers: authH()});
   _cat_planos = await res.json();
-  if (!_cat_planos.length) { el.innerHTML = '<div class="admin-loading">Nenhum plano cadastrado.</div>'; return; }
+
+  /* Popula dropdown de operadoras */
+  const opSel   = document.getElementById('pf-op');
+  const savedOp = opSel.value;
+  const opMap   = {};
+  _cat_planos.forEach(p => { opMap[p.op_chave] = p.op_nome; });
+  opSel.innerHTML = '<option value="">Todas as operadoras</option>' +
+    Object.entries(opMap).map(([k,v]) => `<option value="${k}"${savedOp===k?' selected':''}>${v}</option>`).join('');
+
+  /* Popula dropdown de faixas de vidas */
+  const fvSel   = document.getElementById('pf-fvidas');
+  const savedFv = fvSel.value;
+  const fvidas  = [...new Set(_cat_planos.map(p => p.fvidas).filter(Boolean))].sort();
+  fvSel.innerHTML = '<option value="">Todas as faixas de vidas</option>' +
+    fvidas.map(f => `<option value="${f}"${savedFv===f?' selected':''}>${f}</option>`).join('');
+
+  /* Exibe a barra de filtros */
+  document.getElementById('planos-filtros').style.display = 'flex';
+
+  /* Registra listeners apenas uma vez */
+  if (!_catPlanosListeners) {
+    _catPlanosListeners = true;
+    document.getElementById('pf-busca').addEventListener('input', _renderPlanosFiltrados);
+    ['pf-op','pf-tipo','pf-copart','pf-aco','pf-fvidas','pf-status'].forEach(id =>
+      document.getElementById(id).addEventListener('change', _renderPlanosFiltrados));
+  }
+
+  _renderPlanosFiltrados();
+}
+
+function _getCopart(nome) {
+  const n = (nome || '').toLowerCase();
+  if (n.includes('sem copart')) return 'sem';
+  if (n.includes('copart') || n.includes('coparticip')) {
+    if (n.includes('parcial')) return 'parcial';
+    return 'total';
+  }
+  return 'sem';
+}
+
+function _renderPlanosFiltrados() {
+  const busca  = (document.getElementById('pf-busca').value || '').toLowerCase().trim();
+  const opChave = document.getElementById('pf-op').value;
+  const tipo   = document.getElementById('pf-tipo').value;
+  const copart = document.getElementById('pf-copart').value;
+  const aco    = document.getElementById('pf-aco').value;
+  const fvidas = document.getElementById('pf-fvidas').value;
+  const status = document.getElementById('pf-status').value;
+
+  let lista = _cat_planos;
+  if (busca)   lista = lista.filter(p => p.codigo.toLowerCase().includes(busca) || p.nome.toLowerCase().includes(busca));
+  if (opChave) lista = lista.filter(p => p.op_chave === opChave);
+  if (tipo)    lista = lista.filter(p => (p.tipo || '').toLowerCase() === tipo);
+  if (copart)  lista = lista.filter(p => _getCopart(p.nome) === copart);
+  if (aco)     lista = lista.filter(p => (p.aco || '').toLowerCase() === aco);
+  if (fvidas)  lista = lista.filter(p => (p.fvidas || '') === fvidas);
+  if (status !== '') lista = lista.filter(p => String(p.ativo) === status);
+
+  const countEl = document.getElementById('planos-count');
+  countEl.textContent = lista.length === _cat_planos.length
+    ? `${_cat_planos.length} planos`
+    : `${lista.length} de ${_cat_planos.length} planos`;
+
+  const el = document.getElementById('sa-planos-body');
+  if (!lista.length) {
+    el.innerHTML = '<div class="admin-loading">Nenhum plano encontrado com esses filtros.</div>';
+    return;
+  }
   el.innerHTML = `<table class="admin-table">
-    <thead><tr><th>Código</th><th>Operadora</th><th>Nome</th><th>Aco.</th><th>Status</th><th>Ações</th></tr></thead>
-    <tbody>${_cat_planos.map(p => `<tr>
+    <thead><tr>
+      <th>Código</th><th>Operadora</th><th>Nome</th>
+      <th>Tipo</th><th>Aco.</th><th>Faixa vidas</th>
+      <th>Status</th><th>Ações</th>
+    </tr></thead>
+    <tbody>${lista.map(p => `<tr>
       <td><code style="font-size:11px;color:rgba(255,255,255,.5)">${p.codigo}</code></td>
       <td style="color:rgba(255,255,255,.65)">${p.op_nome}</td>
       <td>${p.nome}</td>
+      <td>${p.tipo ? `<span class="badge-role">${p.tipo}</span>` : '<span style="color:rgba(255,255,255,.25)">—</span>'}</td>
       <td><span class="badge-role">${p.aco}</span></td>
+      <td style="color:rgba(255,255,255,.45);font-size:11px">${p.fvidas || '—'}</td>
       <td><span class="badge-status ${p.ativo?'ativo':'inativo'}">${p.ativo?'Ativo':'Inativo'}</span></td>
       <td style="white-space:nowrap">
         <button class="btn-toggle" onclick="editPlano(${p.id})">Editar</button>
@@ -982,6 +1093,12 @@ async function loadPlanosCat() {
       </td>
     </tr>`).join('')}</tbody>
   </table>`;
+}
+
+function limparFiltrosPlanos() {
+  ['pf-busca','pf-op','pf-tipo','pf-copart','pf-aco','pf-fvidas','pf-status']
+    .forEach(id => document.getElementById(id).value = '');
+  _renderPlanosFiltrados();
 }
 
 async function salvarPlano() {
