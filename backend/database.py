@@ -46,6 +46,8 @@ def _migrations_pg(conn):
         "ALTER TABLE users ADD COLUMN bloqueado_ate TEXT",
         "ALTER TABLE users ADD COLUMN session_token TEXT",
         "ALTER TABLE cotacoes ADD COLUMN corretora_id INTEGER",
+        # fvidas deve ser TEXT (ex: '02-29', '05-29', '30-99'), não INTEGER
+        "ALTER TABLE planos ALTER COLUMN fvidas TYPE TEXT USING fvidas::TEXT",
         # Renomeia códigos Amil para bater com IDs de dados.js (mapeamento por preço)
         "UPDATE planos SET codigo = 'am_ad_ct_1'  WHERE codigo = 'a1'",
         "UPDATE planos SET codigo = 'am_ad_ct_2'  WHERE codigo = 'a2'",
@@ -193,7 +195,7 @@ def init_db():
                 nome TEXT NOT NULL,
                 aco TEXT NOT NULL,
                 tipo TEXT,
-                fvidas INTEGER,
+                fvidas TEXT,
                 mod TEXT,
                 vig INTEGER,
                 precos TEXT NOT NULL,
@@ -272,7 +274,7 @@ def init_db():
                 nome TEXT NOT NULL,
                 aco TEXT NOT NULL,
                 tipo TEXT,
-                fvidas INTEGER,
+                fvidas TEXT,
                 mod TEXT,
                 vig INTEGER,
                 precos TEXT NOT NULL,
