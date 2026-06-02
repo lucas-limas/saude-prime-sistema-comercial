@@ -121,7 +121,7 @@ export default function Hero() {
               style={{ color: "rgba(255,255,255,0.38)" }}
             >
               {[
-                "4+ operadoras",
+                "10+ operadoras",
                 "100+ planos",
                 "Funciona offline",
                 "Brasília · DF",

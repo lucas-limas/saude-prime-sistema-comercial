@@ -5,22 +5,22 @@ import { motion, useInView } from "framer-motion";
 
 const stats = [
   {
-    value: 4,
+    value: 10,
     suffix: "+",
-    label: "Operadoras parceiras",
-    sub: "Unity, Evo, Plenum, Amil",
+    label: "Operadoras no catálogo",
+    sub: "Amil, Porto, Bradesco, SulAmérica…",
   },
   {
     value: 100,
     suffix: "+",
     label: "Planos disponíveis",
-    sub: "Em todas as categorias",
+    sub: "PME, Adesão, PF e Sênior",
   },
   {
     value: 3,
     suffix: "×",
     label: "Mais rápido",
-    sub: "Vs. cotação manual",
+    sub: "Vs. cotação manual em planilha",
   },
   {
     value: 100,
