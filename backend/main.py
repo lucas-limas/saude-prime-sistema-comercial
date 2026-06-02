@@ -900,59 +900,58 @@ def toggle_plano(plano_id: int, admin=Depends(require_superadmin)):
 
 # ── Superadmin: Importar catálogo em lote (dados.js → DB) ─────────────────────
 
-class ImportarOpItem(BaseModel):
-    chave: str
-    nome: str
-    cor: Optional[str] = None
-    cls: Optional[str] = None
-    info: Optional[str] = None
-    ordem: Optional[int] = 0
-
-class ImportarPlanoItem(BaseModel):
-    codigo: str
-    op_chave: str
-    nome: str
-    aco: str
-    tipo: Optional[str] = None
-    fvidas: Optional[str] = None
-    mod: Optional[str] = None
-    vig: Optional[int] = None
-    precos: list
-    ordem: Optional[int] = 0
-
-class ImportarCatalogoRequest(BaseModel):
-    operadoras: list
-    planos: list
-
 @app.post("/api/superadmin/catalogo/importar")
-def importar_catalogo(body: ImportarCatalogoRequest, admin=Depends(require_superadmin)):
+async def importar_catalogo(request: Request, admin=Depends(require_superadmin)):
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(400, "JSON inválido no corpo da requisição")
+    operadoras = body.get("operadoras") or []
+    planos     = body.get("planos")     or []
+    if not isinstance(operadoras, list) or not isinstance(planos, list):
+        raise HTTPException(400, "Campos 'operadoras' e 'planos' devem ser listas")
     conn = get_connection()
     ops_novas = 0
     planos_novos = 0
-    for i, op in enumerate(body.operadoras):
-        chave = (op.get("chave") or "").strip()
+    for i, op in enumerate(operadoras):
+        if not isinstance(op, dict):
+            continue
+        chave = str(op.get("chave") or "").strip()
         if not chave:
             continue
         if not conn.execute("SELECT id FROM operadoras WHERE chave = ?", (chave,)).fetchone():
             conn.execute(
                 "INSERT INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES (?, ?, ?, ?, ?, ?)",
-                (chave, op.get("nome",""), op.get("cor",""), op.get("cls",""), op.get("info",""), op.get("ordem", i+1)),
+                (chave, str(op.get("nome","") or ""), str(op.get("cor","") or ""),
+                 str(op.get("cls","") or ""), str(op.get("info","") or ""), int(op.get("ordem", i+1) or 0)),
             )
             ops_novas += 1
     conn.commit()
     ops_map = {r["chave"]: r["id"] for r in conn.execute("SELECT id, chave FROM operadoras").fetchall()}
-    for i, pl in enumerate(body.planos):
-        codigo = (pl.get("codigo") or "").strip()
-        op_chave = (pl.get("op_chave") or "").strip()
+    for i, pl in enumerate(planos):
+        if not isinstance(pl, dict):
+            continue
+        codigo   = str(pl.get("codigo")   or "").strip()
+        op_chave = str(pl.get("op_chave") or "").strip()
         if not codigo or not op_chave:
             continue
         op_id = ops_map.get(op_chave)
         if not op_id:
             continue
         if not conn.execute("SELECT id FROM planos WHERE codigo = ?", (codigo,)).fetchone():
+            precos = pl.get("precos") or []
+            vig_val = pl.get("vig")
+            try:
+                vig_int = int(vig_val) if vig_val is not None else None
+            except (ValueError, TypeError):
+                vig_int = None
             conn.execute(
-                "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (codigo, op_id, pl.get("nome",""), pl.get("aco","enf"), pl.get("tipo") or None, pl.get("fvidas") or None, pl.get("mod") or None, pl.get("vig") or None, json.dumps(pl.get("precos",[])), pl.get("ordem", i+1)),
+                "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ordem) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (codigo, op_id, str(pl.get("nome","") or ""), str(pl.get("aco","enf") or "enf"),
+                 pl.get("tipo") or None, pl.get("fvidas") or None,
+                 pl.get("mod") or None, vig_int,
+                 json.dumps(precos), int(pl.get("ordem", i+1) or 0)),
             )
             planos_novos += 1
     conn.commit()

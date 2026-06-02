@@ -842,8 +842,10 @@ async function importarDadosJS() {
       method: 'POST', headers: authH(),
       body: JSON.stringify({operadoras, planos})
     });
-    const data = await r.json();
-    if (!r.ok) throw new Error(data.detail || 'Erro na importação');
+    const rawText = await r.text();
+    let data;
+    try { data = JSON.parse(rawText); } catch { throw new Error(`Servidor retornou: ${rawText.slice(0,120)}`); }
+    if (!r.ok) throw new Error(data.detail || `Erro ${r.status}`);
 
     res.style.display = '';
     body.innerHTML = `
