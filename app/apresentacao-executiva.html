@@ -542,6 +542,20 @@ body{-webkit-overflow-scrolling:touch}
     <div class="vant-grid" id="vant-checks"></div>
   </div>
 
+  <!-- OPÇÕES DE EXIBIÇÃO -->
+  <div class="card">
+    <div class="card-head">⚙️ Opções de exibição na apresentação</div>
+    <div class="card-body" style="padding:.875rem 1.5rem">
+      <label class="vant-item checked" style="max-width:480px" onclick="this.classList.toggle('checked')">
+        <input type="checkbox" id="g-mostrar-impacto" checked style="accent-color:var(--navy)">
+        <span>
+          <span class="vant-nome">💰 Exibir impacto anual</span>
+          <span class="vant-desc">Mostra o card com o valor total em 12 meses. Oculte quando o valor puder gerar resistência no cliente.</span>
+        </span>
+      </label>
+    </div>
+  </div>
+
   <!-- PRÓXIMOS PASSOS -->
   <div class="card">
     <div class="card-head">✅ Próximos passos personalizados</div>
@@ -720,6 +734,7 @@ const VANTAGENS_DB = [
 // ─── ESTADO ────────────────────────────────────────────────────────────
 let vidaCount = 0;
 let _opsData = null;
+let _recomendado = null;
 
 // ─── UTILITÁRIOS ───────────────────────────────────────────────────────
 const fm = v => v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -756,19 +771,40 @@ function buildPlanosSel() {
 function buildOpsCards(opsInfo, winner) {
   const c = document.getElementById('ops-cards');
   if (!opsInfo || !opsInfo.length) { c.innerHTML = ''; return; }
+  _recomendado = winner;
   c.innerHTML = opsInfo.map(({op, pid, total}) => {
     const meta = OP_META[op] || {nome: op, cor: '#555555'};
     const pi = (PLANOS_DB[op] || []).find(p => p.id === pid) || {};
     const isW = op === winner;
     const tot = total > 0 ? 'R$ ' + total.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-    return `<div class="op-comp-card${isW?' is-winner':''}" style="border-top:3px solid ${meta.cor}">
+    return `<div class="op-comp-card${isW?' is-winner':''}" data-op="${op}" style="border-top:3px solid ${meta.cor};cursor:pointer" onclick="setRecomendado('${op}')" title="Clique para definir como recomendado">
       ${isW ? '<div class="occ-badge">★ RECOMENDADO</div>' : ''}
       <div class="occ-op" style="color:${meta.cor}">${meta.nome}</div>
       <div class="occ-plan">${pi.nome || pid}</div>
       <div class="occ-total">${tot}<span style="font-size:11px;font-weight:400;color:var(--ink3)">/mês</span></div>
       <div class="occ-meta">${pi.aco||''} · Reajuste ${pi.reajuste||'—'}</div>
+      <div style="margin-top:.5rem;font-size:10px;color:var(--ink3);text-align:center;border-top:1px solid var(--line);padding-top:.4rem">${isW ? '✔ Selecionado' : 'Clique para recomendar'}</div>
     </div>`;
   }).join('');
+}
+
+function setRecomendado(op) {
+  _recomendado = op;
+  document.querySelectorAll('#ops-cards .op-comp-card').forEach(card => {
+    const isW = card.dataset.op === op;
+    card.classList.toggle('is-winner', isW);
+    let badge = card.querySelector('.occ-badge');
+    if (isW && !badge) {
+      badge = document.createElement('div');
+      badge.className = 'occ-badge';
+      badge.textContent = '★ RECOMENDADO';
+      card.insertBefore(badge, card.firstChild);
+    } else if (!isW && badge) {
+      badge.remove();
+    }
+    const hint = card.querySelector('[data-hint]') || card.lastElementChild;
+    if (hint) hint.textContent = isW ? '✔ Selecionado' : 'Clique para recomendar';
+  });
 }
 
 // ─── VIDAS ─────────────────────────────────────────────────────────────
@@ -1047,8 +1083,10 @@ async function gerar() {
   const p1 = sanitize(document.getElementById('g-p1').value);
   const p2 = sanitize(document.getElementById('g-p2').value);
   const p3 = sanitize(document.getElementById('g-p3').value);
+  const mostrarImpacto = document.getElementById('g-mostrar-impacto').checked;
   const planoInfo = (PLANOS_DB[opKey]||[]).find(p=>p.id===planoId) || (PLANOS_DB[opKey]||[])[0] || {};
   const opMeta = OP_META[opKey] || {nome: opKey, cor: '#555555'};
+  const effectiveWinner = isMulti ? (_recomendado || _opsData.winner) : opKey;
 
   // Coletar vidas
   const vidas = [];
@@ -1115,7 +1153,7 @@ async function gerar() {
     compOpsHTML = _opsData.opsInfo.map(({op, pid, total, precos}) => {
       const meta = OP_META[op] || {nome: op, cor: '#555555'};
       const pi = (PLANOS_DB[op] || []).find(p => p.id === pid) || {};
-      const isW = op === _opsData.winner;
+      const isW = op === effectiveWinner;
       const opTotal = total > 0 ? total : (precos ? qtdsArr.reduce((a,q,i) => a + q*(precos[i]||0), 0) : 0);
       if (isW) { winnerTotalMulti = opTotal; winnerReajuste = pi.reajuste || reajuste; }
       const vidasRows = (precos && qtdsArr.some(q=>q>0)) ? qtdsArr.map((q,i) => {
@@ -1230,12 +1268,12 @@ async function gerar() {
     <div class="sec-eyebrow">01 — Comparativo de Planos</div>
     <h2 class="sec-title">Análise lado a lado das suas opções</h2>
     <div class="comp-ops-grid">${compOpsHTML}</div>
-    ${winnerTotalMulti > 0 ? `
+    ${winnerTotalMulti > 0 && mostrarImpacto ? `
     <div class="impacto-grid" style="margin-top:1.25rem">
       <div class="imp-card imp-rec">
         <span class="imp-tag it-gold">⭐ Melhor opção</span>
         <div class="imp-val iv-gold">R$ ${fm(winnerTotalMulti)}</div>
-        <div class="imp-desc"><strong>por mês</strong> — ${abrang} · ${aco} · ${(OP_META[_opsData.winner]||{nome:_opsData.winner}).nome}</div>
+        <div class="imp-desc"><strong>por mês</strong> — ${abrang} · ${aco} · ${(OP_META[effectiveWinner]||{nome:effectiveWinner}).nome}</div>
         ${mesesAteReajuste(winnerReajuste) > 0 ? `<div style="margin-top:.75rem;font-size:12px;color:var(--amber);background:#fffbeb;border-radius:var(--r-sm);padding:8px 10px">🔒 Valor <strong>congelado</strong> por aprox. <strong>${mesesAteReajuste(winnerReajuste)} ${mesesAteReajuste(winnerReajuste)===1?'mês':'meses'}</strong> — reajuste em ${winnerReajuste}.</div>` : ''}
       </div>
       <div class="imp-card imp-econ">
@@ -1254,7 +1292,7 @@ async function gerar() {
       ${rxRows}
     </div>
     ${totalMensal > 0 ? `
-    <div class="impacto-grid">
+    ${mostrarImpacto ? `<div class="impacto-grid">
       <div class="imp-card imp-rec">
         <span class="imp-tag it-gold">⭐ Plano recomendado</span>
         <div class="imp-val iv-gold">R$ ${fm(totalMensal)}</div>
@@ -1266,7 +1304,7 @@ async function gerar() {
         <div class="imp-val iv-green">R$ ${fm(econAnual)}</div>
         <div class="imp-desc"><span class="imp-acento">Este é o valor total do seu investimento em 12 meses.</span> Um planejamento inteligente que protege a saúde sem comprometer o orçamento.</div>
       </div>
-    </div>
+    </div>` : ''}
     ${meses > 0 ? `
     <div class="oport-strip">
       <div class="os-icon">⏳</div>
