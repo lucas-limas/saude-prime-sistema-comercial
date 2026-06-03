@@ -1517,26 +1517,35 @@ async function exportarPDF(btn) {
     alert('Biblioteca PDF ainda carregando. Tente novamente em instantes.');
     return;
   }
+  const el = document.querySelector('#apres-content .apres-wrap');
+  if (!el) {
+    alert('Gere a apresentação primeiro antes de exportar.');
+    return;
+  }
   const orig = btn.innerHTML;
   btn.innerHTML = '⏳ Gerando PDF...';
   btn.disabled = true;
   try {
-    const el = document.querySelector('#apres-content .apres-wrap') || document.getElementById('apres-content');
     const canvas = await html2canvas(el, {
       scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
-      windowWidth: el.scrollWidth, windowHeight: el.scrollHeight,
       onclone: (doc) => {
+        // Garante que o painel da apresentação esteja visível no clone,
+        // independente de qual aba está ativa na tela
+        const tabApres = doc.getElementById('tab-apres');
+        if (tabApres) { tabApres.classList.add('on'); tabApres.style.display = 'block'; }
         const wrap = doc.querySelector('.apres-wrap');
         if (wrap) {
           wrap.style.boxShadow = 'none';
           wrap.style.borderRadius = '0';
           wrap.style.margin = '0';
+          wrap.style.maxWidth = 'none';
+          wrap.style.width = '820px';
         }
       }
     });
+    if (!canvas.width || !canvas.height) throw new Error('Apresentação sem conteúdo renderizável.');
     const { jsPDF } = window.jspdf;
-    // Página única com altura proporcional ao conteúdo — sem cortes
-    const pW = 210; // largura A4 em mm
+    const pW = 210;
     const pH = Math.ceil(canvas.height * pW / canvas.width);
     const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [pW, pH] });
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
