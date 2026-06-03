@@ -636,6 +636,13 @@ const OP_META = window.OP_META || {
   bradesco:{nome:'Bradesco Saúde',cor:'#CC0000'},
   bestsenior:{nome:'Best Sênior',cor:'#1B3A8A'},
 };
+// Carrega operadoras do catálogo para suporte automático a novas operadoras
+fetch('/api/catalogo').then(r=>r.ok?r.json():null).then(data=>{
+  if(!data) return;
+  Object.entries(data.operadoras||{}).forEach(([k,v])=>{
+    if(!OP_META[k]) OP_META[k]={nome:v.nome, cor:(v.cor||'').trim()||'#555555'};
+  });
+}).catch(()=>{});
 
 const HOSPITAIS_DB = [
   // ── Unity ──────────────────────────────────────────────────────────────
@@ -738,8 +745,11 @@ function buildPlanosSel() {
   const op  = document.getElementById(multi ? 'g-op'       : 'g-op-s').value;
   const sel = document.getElementById(multi ? 'g-plano'    : 'g-plano-s');
   const rEl = document.getElementById(multi ? 'g-reajuste' : 'g-reajuste-s');
-  sel.innerHTML = PLANOS_DB[op].map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
-  if (PLANOS_DB[op][0]) rEl.value = PLANOS_DB[op][0].reajuste;
+  const _planos = PLANOS_DB[op] || [];
+  sel.innerHTML = _planos.length
+    ? _planos.map(p=>`<option value="${p.id}">${p.nome}</option>`).join('')
+    : `<option value="${op}-sel">${(OP_META[op]||{}).nome||op} — plano do cotador</option>`;
+  if (_planos[0]) rEl.value = _planos[0].reajuste;
 }
 
 // ─── OPERATOR CARDS (multi mode) ───────────────────────────────────────
@@ -747,7 +757,7 @@ function buildOpsCards(opsInfo, winner) {
   const c = document.getElementById('ops-cards');
   if (!opsInfo || !opsInfo.length) { c.innerHTML = ''; return; }
   c.innerHTML = opsInfo.map(({op, pid, total}) => {
-    const meta = OP_META[op];
+    const meta = OP_META[op] || {nome: op, cor: '#555555'};
     const pi = (PLANOS_DB[op] || []).find(p => p.id === pid) || {};
     const isW = op === winner;
     const tot = total > 0 ? 'R$ ' + total.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
@@ -1029,7 +1039,7 @@ async function gerar() {
   const isMulti = _opsData !== null;
   const opKey   = document.getElementById(isMulti ? 'g-op'       : 'g-op-s').value;
   const planoId = document.getElementById(isMulti ? 'g-plano'    : 'g-plano-s').value;
-  const reajuste = document.getElementById(isMulti ? 'g-reajuste' : 'g-reajuste-s').value || PLANOS_DB[opKey][0]?.reajuste || '';
+  const reajuste = document.getElementById(isMulti ? 'g-reajuste' : 'g-reajuste-s').value || (PLANOS_DB[opKey]||[])[0]?.reajuste || '';
   const abrang  = document.getElementById(isMulti ? 'g-abrang'   : 'g-abrang-s').value;
   const aco     = document.getElementById(isMulti ? 'g-aco'      : 'g-aco-s').value;
   const copTipo = document.getElementById('g-cop-tipo').value;
@@ -1037,8 +1047,8 @@ async function gerar() {
   const p1 = sanitize(document.getElementById('g-p1').value);
   const p2 = sanitize(document.getElementById('g-p2').value);
   const p3 = sanitize(document.getElementById('g-p3').value);
-  const planoInfo = PLANOS_DB[opKey].find(p=>p.id===planoId) || PLANOS_DB[opKey][0];
-  const opMeta = OP_META[opKey];
+  const planoInfo = (PLANOS_DB[opKey]||[]).find(p=>p.id===planoId) || (PLANOS_DB[opKey]||[])[0] || {};
+  const opMeta = OP_META[opKey] || {nome: opKey, cor: '#555555'};
 
   // Coletar vidas
   const vidas = [];
@@ -1103,7 +1113,7 @@ async function gerar() {
   if (isMulti && _opsData.opsInfo && _opsData.opsInfo.length > 0) {
     const qtdsArr = _opsData.qtds;
     compOpsHTML = _opsData.opsInfo.map(({op, pid, total, precos}) => {
-      const meta = OP_META[op];
+      const meta = OP_META[op] || {nome: op, cor: '#555555'};
       const pi = (PLANOS_DB[op] || []).find(p => p.id === pid) || {};
       const isW = op === _opsData.winner;
       const opTotal = total > 0 ? total : (precos ? qtdsArr.reduce((a,q,i) => a + q*(precos[i]||0), 0) : 0);
@@ -1208,8 +1218,8 @@ async function gerar() {
     </div>
     <div class="capa-footer">
       <div class="cf-item"><strong>${nome}</strong><span>Beneficiário</span></div>
-      <div class="cf-item"><strong>${isMulti ? _opsData.opsInfo.map(o=>OP_META[o.op].nome).join(' · ') : opMeta.nome}</strong><span>${isMulti ? 'Operadoras' : 'Operadora'}</span></div>
-      <div class="cf-item"><strong>${isMulti ? 'Comparativo de Planos' : (planoInfo.nome.split('—')[1]?.trim()||planoInfo.nome)}</strong><span>Produto</span></div>
+      <div class="cf-item"><strong>${isMulti ? _opsData.opsInfo.map(o=>(OP_META[o.op]||{nome:o.op}).nome).join(' · ') : opMeta.nome}</strong><span>${isMulti ? 'Operadoras' : 'Operadora'}</span></div>
+      <div class="cf-item"><strong>${isMulti ? 'Comparativo de Planos' : ((planoInfo.nome||opKey).split('—')[1]?.trim()||(planoInfo.nome||opKey))}</strong><span>Produto</span></div>
       <div class="cf-item"><strong>${fmtData(validade)}</strong><span>Válido até</span></div>
     </div>
   </div>
@@ -1225,7 +1235,7 @@ async function gerar() {
       <div class="imp-card imp-rec">
         <span class="imp-tag it-gold">⭐ Melhor opção</span>
         <div class="imp-val iv-gold">R$ ${fm(winnerTotalMulti)}</div>
-        <div class="imp-desc"><strong>por mês</strong> — ${abrang} · ${aco} · ${OP_META[_opsData.winner].nome}</div>
+        <div class="imp-desc"><strong>por mês</strong> — ${abrang} · ${aco} · ${(OP_META[_opsData.winner]||{nome:_opsData.winner}).nome}</div>
         ${mesesAteReajuste(winnerReajuste) > 0 ? `<div style="margin-top:.75rem;font-size:12px;color:var(--amber);background:#fffbeb;border-radius:var(--r-sm);padding:8px 10px">🔒 Valor <strong>congelado</strong> por aprox. <strong>${mesesAteReajuste(winnerReajuste)} ${mesesAteReajuste(winnerReajuste)===1?'mês':'meses'}</strong> — reajuste em ${winnerReajuste}.</div>` : ''}
       </div>
       <div class="imp-card imp-econ">
