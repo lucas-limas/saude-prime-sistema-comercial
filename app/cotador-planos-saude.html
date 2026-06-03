@@ -1644,9 +1644,14 @@ function render() {
   cols.forEach(({op, plan}, ci) => {
     const d = document.createElement('div');
     const _tc = tbCls(op);
-    d.className = 'total-blk' + (_tc ? ' ' + _tc : '');
-    if (!_tc) { const bg = (OP_META[op]||{}).cor; if (bg) d.style.background = bg; }
-    d.innerHTML = `<div><div class="tb-op">${(OP_META[op]||{}).nome||op}</div><div class="tb-val">${f(totals[ci])}</div><div class="tb-sub">${tv} vida(s) · ${plan.nome}</div></div>`;
+    const _cor = ((OP_META[op]||{}).cor || '').trim();
+    const hasColor = !!_tc || !!_cor;
+    d.className = 'total-blk' + (_tc ? ' ' + _tc : (hasColor ? '' : ' tb-off'));
+    if (!_tc && _cor) d.style.background = _cor;
+    const opCls  = hasColor ? 'tb-op'  : 'tb-op-off';
+    const valCls = hasColor ? 'tb-val' : 'tb-val-off';
+    const subStyle = hasColor ? '' : ' style="color:var(--ink3)"';
+    d.innerHTML = `<div><div class="${opCls}">${(OP_META[op]||{}).nome||op}</div><div class="${valCls}">${f(totals[ci])}</div><div class="tb-sub"${subStyle}>${tv} vida(s) · ${plan.nome}</div></div>`;
     tg.appendChild(d);
   });
 
