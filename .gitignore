@@ -1,2 +1,5 @@
 landing/.next/
 landing/node_modules/
+backend/__pycache__/
+backend/saude_prime.db
+*.lnk

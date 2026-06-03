@@ -850,7 +850,7 @@ async function importarDadosJS() {
     await new Promise((ok, err) => {
       if (window.SP_DATA) { ok(); return; }
       const s = document.createElement('script');
-      s.src = '/dados.js?' + Date.now();
+      s.src = 'dados.js?' + Date.now();
       s.onload = ok; s.onerror = err;
       document.head.appendChild(s);
     });
