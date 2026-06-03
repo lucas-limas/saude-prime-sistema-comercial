@@ -1505,9 +1505,10 @@ function buildOpConfig() {
     const div = document.createElement('div');
     div.className = 'op-config-item' + (isActive ? '' : ' op-inactive');
 
+    const _cor = meta.cor || '';
     const head = `<div class="op-config-head">
-      <span class="op-dot dot-${sfx}"></span>
-      <span class="op-config-name cn-${sfx}">${meta.nome}</span>
+      <span class="op-dot dot-${sfx}"${_cor?` style="background:${_cor}"`:''}></span>
+      <span class="op-config-name cn-${sfx}"${_cor?` style="color:${_cor}"`:''}>${meta.nome}</span>
       <label class="op-toggle" title="${isActive?'Remover da cotação':'Adicionar à cotação'}">
         <input type="checkbox" ${isActive?'checked':''} onchange="toggleOp('${op}')">
         <span class="op-toggle-slider"></span>
@@ -1586,8 +1587,9 @@ function render() {
 
   if (tv === 0) { renderNotes(cols); return; }
 
-  const opColor = op => `var(--${op==='segurosunimed'?'seguros-unimed':op})`;
+  const opColor = op => (OP_META[op]||{}).cor || `var(--${op==='segurosunimed'?'seguros-unimed':op})`;
   const subCls  = op => ({unity:'sub-u',evo:'sub-e',plenum:'sub-p',amil:'sub-a',medsenior:'sub-ms',segurosunimed:'sub-su',portosaude:'sub-ps',bradesco:'sub-bd',bestsenior:'sub-bs',sulamerica:'sub-sa'}[op]);
+  const subAttr = op => { const c=subCls(op); if(c) return `class="${c}"`; const col=(OP_META[op]||{}).cor||'var(--ink2)'; return `style="font-size:13px;font-weight:600;color:${col}"`; };
   const tbCls   = op => ({unity:'tb-u',evo:'tb-e',plenum:'tb-p',amil:'tb-a',medsenior:'tb-ms',segurosunimed:'tb-su',portosaude:'tb-ps',bradesco:'tb-bd',bestsenior:'tb-bs',sulamerica:'tb-sa'}[op]);
 
   const usedTipos = [...new Set(cols.map(c => tipoOp[c.op]))];
@@ -1618,7 +1620,7 @@ function render() {
     cols.forEach(({op, plan}, ci) => {
       const s = subs[ci];
       const mk = f(s) + (s===mn && subs.length>1 ? '<span class="best">✓</span>' : '');
-      h += `<td class="price-cell">${f(plan.precos[i])}</td><td class="${subCls(op)}">${mk}</td>`;
+      h += `<td class="price-cell">${f(plan.precos[i])}</td><td ${subAttr(op)}>${mk}</td>`;
     });
     tr.innerHTML = h;
     rb.appendChild(tr);
@@ -1630,7 +1632,7 @@ function render() {
   trTot.className = 'row-total';
   let ht = `<td style="font-size:11px;font-weight:600;color:var(--ink2)">Total · ${tv} vida(s)</td>`;
   cols.forEach(({op}, ci) => {
-    ht += `<td></td><td class="${subCls(op)}" style="font-size:13px">${f(totals[ci])}</td>`;
+    ht += `<td></td><td ${subAttr(op)}>${f(totals[ci])}</td>`;
   });
   trTot.innerHTML = ht;
   rb.appendChild(trTot);
@@ -1641,7 +1643,9 @@ function render() {
   tg.innerHTML = '';
   cols.forEach(({op, plan}, ci) => {
     const d = document.createElement('div');
-    d.className = 'total-blk ' + tbCls(op);
+    const _tc = tbCls(op);
+    d.className = 'total-blk' + (_tc ? ' ' + _tc : '');
+    if (!_tc) { const bg = (OP_META[op]||{}).cor; if (bg) d.style.background = bg; }
     d.innerHTML = `<div><div class="tb-op">${(OP_META[op]||{}).nome||op}</div><div class="tb-val">${f(totals[ci])}</div><div class="tb-sub">${tv} vida(s) · ${plan.nome}</div></div>`;
     tg.appendChild(d);
   });
@@ -1793,6 +1797,15 @@ async function _initCotador() {
       const data = await res.json();
       PLANOS  = data.planos   || [];
       OP_META = data.operadoras || {};
+      // Injeta variáveis CSS para operadoras novas (cor hex → var(--chave))
+      const _dynStyle = document.createElement('style');
+      Object.entries(OP_META).forEach(([op, meta]) => {
+        if (meta.cor && !meta.cor.startsWith('var(')) {
+          _dynStyle.textContent += `:root{--${op}:${meta.cor}}`;
+        }
+      });
+      if (_dynStyle.textContent) document.head.appendChild(_dynStyle);
+
       Object.keys(OP_META).forEach(op => {
         if (activeOps[op] === undefined) activeOps[op] = true;
         if (tipoOp[op]   === undefined) {
