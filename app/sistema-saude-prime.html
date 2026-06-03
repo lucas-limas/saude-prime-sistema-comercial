@@ -1220,6 +1220,11 @@ function show(id, btn) {
   document.getElementById(id).classList.add('visible');
 }
 
+function showCotador() {
+  document.querySelectorAll('iframe').forEach(f => f.classList.remove('visible'));
+  document.getElementById('cotador').classList.add('visible');
+}
+
 function syncApres(data) {
   document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('iframe').forEach(f => f.classList.remove('visible'));
