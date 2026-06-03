@@ -26,6 +26,34 @@
   --r:8px;--r-sm:5px;--r-lg:14px;
   --sh:0 1px 4px rgba(13,27,42,.08);--sh-md:0 4px 16px rgba(13,27,42,.1);
 }
+html[data-theme="dark"]{
+  --ink:#dde6f0;--ink2:#8ba4bc;--ink3:#5d7a96;
+  --cream:#0d1b2e;--white:#142033;--line:#1e3045;--line2:#2a4060;
+  --unity-bg:rgba(15,35,64,.5);--evo-bg:rgba(92,26,64,.3);
+  --plenum-bg:rgba(10,64,40,.3);--amil-bg:rgba(70,27,255,.15);
+  --medsenior-bg:rgba(149,193,61,.1);--seguros-unimed-bg:rgba(0,116,190,.15);
+  --portosaude-bg:rgba(0,92,185,.15);--bradesco-bg:rgba(204,0,0,.12);
+  --bestsenior-bg:rgba(27,58,138,.2);--sulamerica-bg:rgba(213,83,28,.12);
+  --green:#22c55e;--green-bg:rgba(34,197,94,.1);
+  --sh:0 1px 4px rgba(0,0,0,.35);--sh-md:0 4px 16px rgba(0,0,0,.45);
+}
+/* Hard-coded color overrides for dark mode */
+html[data-theme="dark"] .rt tbody tr:hover{background:rgba(255,255,255,.04)!important}
+html[data-theme="dark"] .hist-modal{background:var(--white)!important}
+html[data-theme="dark"] .hist-item:hover{background:var(--line)!important}
+html[data-theme="dark"] .hist-del:hover{background:rgba(255,107,107,.15)!important;color:#ff6b6b!important}
+html[data-theme="dark"] .car-tbl td{border-bottom:1px solid var(--line)!important}
+html[data-theme="dark"] .car-tbl{background:var(--white)!important}
+/* theme toggle button */
+.btn-theme-cot{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.8);border-radius:var(--r-sm);
+  width:32px;height:32px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+html[data-theme="dark"] .btn-theme-cot{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.btn-theme-cot:hover{background:rgba(255,255,255,.2)}
+.btn-theme-cot svg{width:15px;height:15px;flex-shrink:0}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Outfit",sans-serif;background:var(--cream);color:var(--ink);font-size:13px;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
@@ -453,6 +481,9 @@ body{-webkit-overflow-scrolling:touch}
     <span class="pill">Mai / 2026</span>
     <button class="btn btn-ghost" onclick="openHistorico()" title="Ver cotações salvas">📋 Histórico</button>
     <button class="btn btn-ghost" onclick="limpar()">Limpar</button>
+    <button class="btn-theme-cot" id="cot-theme-btn" onclick="toggleCotTheme()" title="Alternar tema claro/escuro">
+      <svg id="cot-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
     <button class="btn btn-navy" onclick="criarApresentacao()">✨ Apresentação</button>
   </div>
 </header>
@@ -1213,6 +1244,35 @@ body{-webkit-overflow-scrolling:touch}
 </footer>
 
 <script>
+/* ── TEMA ── */
+(function(){
+  const t = localStorage.getItem('sp_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+window.addEventListener('message', function(e){
+  if (e.data && e.data.sp_theme) {
+    const t = e.data.sp_theme;
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('sp_theme', t);
+    _setCotIcon(t);
+  }
+});
+function _setCotIcon(t){
+  const svg = document.getElementById('cot-theme-icon');
+  if (!svg) return;
+  svg.innerHTML = t === 'dark'
+    ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+    : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+function toggleCotTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sp_theme', next);
+  _setCotIcon(next);
+  try { window.parent.postMessage({sp_theme: next}, '*'); } catch(e){}
+}
+
 // ── DADOS (carregados da API) ────────────────────────────────────────
 const FAIXAS = ['0 a 18','19 a 23','24 a 28','29 a 33','34 a 38','39 a 43','44 a 48','49 a 53','54 a 58','59 ou mais'];
 let PLANOS = [];
@@ -1760,7 +1820,7 @@ async function _initCotador() {
     if (el) el.textContent = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
   });
 }
-_initCotador();
+_initCotador().then(() => _setCotIcon(localStorage.getItem('sp_theme') || 'light'));
 
 // ── HISTÓRICO DE COTAÇÕES ────────────────────────────────────────────
 const HIST_KEY = 'sp_historico_cotacoes';
