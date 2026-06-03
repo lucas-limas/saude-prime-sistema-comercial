@@ -2,33 +2,105 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/[0.06] py-8 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
-            <span className="text-[10px] font-bold text-white">SP</span>
+    <footer className="border-t border-white/[0.06] py-14 px-6">
+      <div className="container-lg">
+        <div className="grid md:grid-cols-[1fr_auto_auto_auto] gap-10 mb-12">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
+                <span className="text-[10px] font-bold text-white">SP</span>
+              </div>
+              <span className="text-sm font-semibold text-white">
+                Saúde <span className="text-gold">Prime</span>
+              </span>
+            </div>
+            <p className="text-xs text-muted leading-relaxed max-w-[200px]">
+              Sistema comercial para corretoras de planos de saúde corporativos.
+            </p>
+            <p className="text-xs text-muted mt-3">Brasília / DF · Brasil</p>
           </div>
-          <span className="text-sm font-medium text-white/50">
-            Saúde Prime Seguros e Saúde
-          </span>
+
+          {/* Sistema */}
+          <div>
+            <p className="text-xs font-semibold text-white/50 uppercase tracking-[0.16em] mb-4">
+              Sistema
+            </p>
+            <ul className="space-y-2.5">
+              {[
+                { label: "O produto", href: "#produto" },
+                { label: "Recursos", href: "#recursos" },
+                { label: "Como funciona", href: "#como-funciona" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    className="text-xs text-muted hover:text-white/70 transition-colors duration-200"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Empresa */}
+          <div>
+            <p className="text-xs font-semibold text-white/50 uppercase tracking-[0.16em] mb-4">
+              Empresa
+            </p>
+            <ul className="space-y-2.5">
+              {[
+                { label: "Depoimentos", href: "#depoimentos" },
+                { label: "FAQ", href: "#faq" },
+                { label: "Contato", href: "#contato" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    className="text-xs text-muted hover:text-white/70 transition-colors duration-200"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contato */}
+          <div>
+            <p className="text-xs font-semibold text-white/50 uppercase tracking-[0.16em] mb-4">
+              Contato
+            </p>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="mailto:contato@saudeprimeseguros.com"
+                  className="text-xs text-muted hover:text-white/70 transition-colors duration-200"
+                >
+                  contato@saudeprimeseguros.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://saudeprimeseguros.com"
+                  className="text-xs text-muted hover:text-white/70 transition-colors duration-200"
+                >
+                  saudeprimeseguros.com
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Links */}
-        <nav className="flex items-center gap-6 text-xs text-white/30">
-          <a href="#recursos" className="hover:text-white/60 transition-colors">
-            Recursos
-          </a>
-          <a href="#como-funciona" className="hover:text-white/60 transition-colors">
-            Como funciona
-          </a>
-          <a href="#contato" className="hover:text-white/60 transition-colors">
-            Contato
-          </a>
-        </nav>
+        {/* Divider */}
+        <div className="divider mb-6" />
 
-        {/* Copyright */}
-        <p className="text-xs text-white/25">© {year} Saúde Prime · Brasília / DF</p>
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
+          <p>© {year} Saúde Prime Seguros e Saúde. Todos os direitos reservados.</p>
+          <p>Desenvolvido em Brasília / DF</p>
+        </div>
       </div>
     </footer>
   );

@@ -2,32 +2,28 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Calculator, BookOpen, FileBarChart } from "lucide-react";
 
 const features = [
   {
-    icon: Calculator,
+    num: "01",
     title: "Cotador Comparativo",
     description:
-      "Compare planos de múltiplas operadoras lado a lado em tempo real. Filtre por faixa etária, cobertura e valor para encontrar a melhor proposta.",
-    tags: ["Unity Saúde", "Evo Saúde", "Plenum", "Amil"],
-    accent: "rgba(255,255,255,0.08)",
+      "Compare planos de múltiplas operadoras lado a lado em tempo real. Filtre por faixa etária, cobertura e valor. O sistema calcula automaticamente o custo por vida e destaca a melhor proposta para cada perfil de empresa.",
+    tags: ["Unity Saúde", "Evo Saúde", "Plenum", "Amil", "Porto Saúde"],
   },
   {
-    icon: BookOpen,
+    num: "02",
     title: "Catálogo Digital",
     description:
-      "Gestão completa de operadoras, planos, coberturas, tabelas de preços e rede credenciada. Sempre atualizado, sempre acessível — mesmo offline.",
-    tags: ["Tabela de preços", "Rede credenciada", "Carências", "ARC"],
-    accent: "rgba(201,162,39,0.07)",
+      "Gestão completa de operadoras, planos, coberturas, tabelas de preços e rede credenciada. Sempre atualizado, sempre acessível — mesmo sem internet. Nunca mais perca uma venda por informação desatualizada.",
+    tags: ["Tabela de preços", "Rede credenciada", "Carências", "ARC", "Offline"],
   },
   {
-    icon: FileBarChart,
+    num: "03",
     title: "Apresentação Executiva",
     description:
-      "Gere apresentações profissionais personalizadas com metodologia GPCT e técnicas de SPIN Selling para impactar seus clientes empresariais.",
-    tags: ["GPCT + SPIN", "Comparativo visual", "12 slides", "Personalizado"],
-    accent: "rgba(255,255,255,0.04)",
+      "Gere apresentações profissionais personalizadas em um clique. Metodologia GPCT e SPIN Selling embutidas nos slides — impressione decisores corporativos e aumente sua taxa de fechamento.",
+    tags: ["GPCT + SPIN", "Comparativo visual", "12 slides", "Personalizado", "PDF"],
   },
 ];
 
@@ -36,63 +32,59 @@ export default function Features() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="recursos" className="py-28 px-6" ref={ref}>
-      <div className="max-w-6xl mx-auto">
-        {/* Section header */}
+    <section id="recursos" className="section px-6" ref={ref}>
+      <div className="container-lg">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.55 }}
+          className="mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.2em] text-white/35 font-medium mb-4">
+          <p className="text-xs uppercase tracking-[0.22em] text-muted font-medium mb-4">
             Recursos
           </p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
-            Tudo que uma corretora precisa
+          <h2 className="text-section text-white">
+            Tudo que sua<br />corretora precisa
           </h2>
-          <p className="text-white/45 text-lg max-w-lg mx-auto leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.45)" }}>
-            Ferramentas pensadas para o cotidiano de quem vende planos de saúde corporativos.
-          </p>
         </motion.div>
 
-        {/* Cards grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Feature list */}
+        <div className="divide-y divide-white/[0.06]">
           {features.map((feature, i) => (
             <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 32 }}
+              key={feature.num}
+              initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.13 }}
-              whileHover={{ y: -5, transition: { duration: 0.22, ease: "easeOut" } }}
-              className="glass-card rounded-2xl p-7 flex flex-col cursor-default"
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="group grid md:grid-cols-[80px_1fr_1fr] gap-6 py-10 hover:bg-white/[0.015] transition-colors duration-300 px-4 -mx-4 rounded-xl cursor-default"
             >
-              {/* Icon */}
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 border border-white/[0.1]"
-                style={{ background: feature.accent }}
-              >
-                <feature.icon size={22} className="text-white/75" strokeWidth={1.75} />
+              {/* Number */}
+              <div className="text-xs font-mono text-muted group-hover:text-white/50 transition-colors pt-1">
+                {feature.num}
               </div>
 
-              <h3 className="text-lg font-semibold text-white mb-3">{feature.title}</h3>
-              <p className="text-sm text-white/45 leading-relaxed mb-6 flex-1"
-                style={{ color: "rgba(255,255,255,0.45)" }}>
+              {/* Title */}
+              <div>
+                <h3 className="text-xl font-semibold text-white leading-tight mb-3">
+                  {feature.title}
+                </h3>
+                <div className="flex flex-wrap gap-1.5 mt-4">
+                  {feature.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.05] text-muted border border-white/[0.07]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Description */}
+              <p className="text-secondary-ui text-sm leading-relaxed md:pt-1">
                 {feature.description}
               </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {feature.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-white/[0.05] text-white/50 border border-white/[0.07]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
             </motion.div>
           ))}
         </div>
