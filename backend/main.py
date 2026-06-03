@@ -7,6 +7,7 @@ from typing import Optional
 
 from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -958,6 +959,25 @@ async def importar_catalogo(request: Request, admin=Depends(require_superadmin))
     conn.close()
     log_action(admin["sub"], "importar_catalogo", f"{ops_novas} operadoras e {planos_novos} planos importados")
     return {"ok": True, "ops_novas": ops_novas, "planos_novos": planos_novos}
+
+
+# ── Redirects para caminhos antigos (raiz → app/) ─────────────────────────────
+
+@app.get("/cotador-planos-saude.html")
+async def _r_cotador():
+    return RedirectResponse("/app/cotador-planos-saude.html", status_code=301)
+
+@app.get("/sistema-saude-prime.html")
+async def _r_sistema():
+    return RedirectResponse("/app/sistema-saude-prime.html", status_code=301)
+
+@app.get("/apresentacao-executiva.html")
+async def _r_apresentacao():
+    return RedirectResponse("/app/apresentacao-executiva.html", status_code=301)
+
+@app.get("/dados.js")
+async def _r_dados():
+    return RedirectResponse("/app/dados.js", status_code=301)
 
 
 # ── Static (deve ficar DEPOIS de todas as rotas /api) ─────────────────────────
