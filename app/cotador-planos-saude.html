@@ -1348,6 +1348,7 @@ function getFVidasForOp(op) {
   if (op === 'plenum') return tv <= 29 ? '02-29' : '30-99';
   if (op === 'amil') return tv <= 4 ? '02-04' : tv <= 29 ? '05-29' : '30-99';
   if (op === 'sulamerica') return tv <= 4 ? '03-04' : tv <= 29 ? '05-29' : '30-99';
+  if (op === 'hapvida') return '02-29';
   return getFVidas();
 }
 
