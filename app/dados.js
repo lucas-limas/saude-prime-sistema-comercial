@@ -774,6 +774,38 @@ window.REDE_DATA = {
     ],
     rodape: 'Rede nacional Bradesco. Confirme rede atualizada em bradescosaude.com.br ou com o corretor.',
   },
+
+  sulamerica: {
+    adm: 'Lâmina Centro-Oeste · Março/2025',
+    grupos: [
+      { titulo: 'Hospitais', itens: [
+        { nome: 'DF Star', local: 'Brasília', tags: ['PS','INT'], tagExtra: { label: '★ Luxo', cor: '#fef9c3', texto: '#78350f' } },
+        { nome: 'Hospital Alvorada de Brasília', local: 'Brasília', tags: ['PS','INT'] },
+        { nome: 'Hospital Anchieta', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hospital Brasília', local: 'Brasília', tags: ['PS','INT'] },
+        { nome: 'Hospital do Coração do Brasil', local: 'Brasília', tags: ['INT'] },
+        { nome: 'Hospital Daher Lago Sul', local: 'Lago Sul', tags: ['PS','INT'] },
+        { nome: 'Hospital Maria Auxiliadora', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hospital Santa Helena', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hospital Santa Luzia', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hospital São Francisco', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hospital Santa Marta', local: 'Taguatinga', tags: ['PS','INT','MAT'] },
+        { nome: 'Maternidade Brasília', local: 'Brasília', tags: ['MAT'] },
+        { nome: 'ProUnidade', local: 'Brasília', tags: ['PS','INT'] },
+        { nome: 'Hospital Águas Claras', local: 'Águas Claras', tags: ['PS','INT'] },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'Laboratório Sabin', local: 'Brasília', tags: ['AMB'] },
+        { nome: 'HSL Unidade Brasília III', local: 'Brasília', tags: ['INT','AMB'] },
+        { nome: 'Lab Flanalto', local: 'Brasília', tags: ['AMB'] },
+      ]},
+      { titulo: 'Oftalmologia', itens: [
+        { nome: 'Visão Institutos Oftalmológicos', local: 'Brasília', tags: ['AMB'] },
+        { nome: 'Hospital de Olhos do Gama', local: 'Gama', tags: ['INT'] },
+      ]},
+    ],
+    rodape: 'Rede válida para Brasília/DF · Planos PME · Confirme cobertura por produto em sulamerica.com.br',
+  },
 };
 
 // ── Sincronização com banco de dados ────────────────────────────────────────
