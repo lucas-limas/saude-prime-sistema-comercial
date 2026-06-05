@@ -319,7 +319,12 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
         <button class="painel-tab" onclick="saTab('catalogo',this)">Catálogo</button>
       </div>
     </div>
-    <button class="painel-logout" onclick="doLogout()">Sair</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn-theme" onclick="toggleTheme()" title="Alternar tema claro/escuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+      <button class="painel-logout" onclick="doLogout()">Sair</button>
+    </div>
   </div>
   <div class="painel-content">
     <div id="sa-tab-corretoras">
@@ -507,7 +512,12 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
         <div class="painel-subtitle" id="adm-nome-bar"></div>
       </div>
     </div>
-    <button class="painel-logout" onclick="doLogout()">Sair</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn-theme" onclick="toggleTheme()" title="Alternar tema claro/escuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+      <button class="painel-logout" onclick="doLogout()">Sair</button>
+    </div>
   </div>
   <div class="painel-content">
     <div id="adm-info-bar" class="info-bar" style="display:none"></div>
@@ -536,33 +546,26 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
 <script>
 const API = window.location.origin;
 
-/* ── TEMA ── */
+/* ── TEMA ADMIN (independente do cotador) ── */
 (function(){
-  const t = localStorage.getItem('sp_theme') || 'dark';
+  const t = localStorage.getItem('adm_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', t);
   _setThemeIcon(t);
 })();
-function _setThemeIcon(t){ /* theme icon handled by cotador iframe */ }
+function _setThemeIcon(t){
+  document.querySelectorAll('.btn-theme svg').forEach(svg => {
+    svg.innerHTML = t === 'dark'
+      ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  });
+}
 function toggleTheme(){
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('sp_theme', next);
+  localStorage.setItem('adm_theme', next);
   _setThemeIcon(next);
-  document.querySelectorAll('iframe').forEach(f => {
-    try { f.contentWindow.postMessage({sp_theme: next}, '*'); } catch(e){}
-  });
 }
-
-/* sync theme if iframe toggles */
-window.addEventListener('message', function(e){
-  if (e.data && e.data.sp_theme) {
-    const t = e.data.sp_theme;
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('sp_theme', t);
-    _setThemeIcon(t);
-  }
-});
 
 function token() { return sessionStorage.getItem('sp_token'); }
 function authH() { return {Authorization:`Bearer ${token()}`, 'Content-Type':'application/json'}; }
@@ -1241,7 +1244,6 @@ function syncApres(data) {
 document.getElementById('lg-pass').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 
 /* ── Esconde cotador até autenticar ── */
-document.querySelector('.switcher').style.display = 'none';
 document.querySelector('.frames').style.display = 'none';
 
 /* ── Verifica sessão ao carregar ── */

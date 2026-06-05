@@ -27,14 +27,15 @@
   --sh:0 1px 4px rgba(13,27,42,.08);--sh-md:0 4px 16px rgba(13,27,42,.1);
 }
 html[data-theme="dark"]{
-  --ink:#dde6f0;--ink2:#8ba4bc;--ink3:#5d7a96;
-  --cream:#0d1b2e;--white:#142033;--line:#1e3045;--line2:#2a4060;
-  --unity-bg:rgba(15,35,64,.5);--evo-bg:rgba(92,26,64,.3);
+  --ink:#e8e8e8;--ink2:#9a9a9a;--ink3:#626262;
+  --cream:#141414;--white:#1f1e1e;--line:#2a2929;--line2:#3a3838;
+  --unity-bg:rgba(15,35,64,.45);--evo-bg:rgba(92,26,64,.3);
   --plenum-bg:rgba(10,64,40,.3);--amil-bg:rgba(70,27,255,.15);
   --medsenior-bg:rgba(149,193,61,.1);--seguros-unimed-bg:rgba(0,116,190,.15);
   --portosaude-bg:rgba(0,92,185,.15);--bradesco-bg:rgba(204,0,0,.12);
   --bestsenior-bg:rgba(27,58,138,.2);--sulamerica-bg:rgba(213,83,28,.12);
   --green:#22c55e;--green-bg:rgba(34,197,94,.1);
+  --red:#f87171;--amber:#fbbf24;
   --sh:0 1px 4px rgba(0,0,0,.35);--sh-md:0 4px 16px rgba(0,0,0,.45);
 }
 /* Hard-coded color overrides for dark mode */
@@ -44,14 +45,31 @@ html[data-theme="dark"] .hist-item:hover{background:var(--line)!important}
 html[data-theme="dark"] .hist-del:hover{background:rgba(255,107,107,.15)!important;color:#ff6b6b!important}
 html[data-theme="dark"] .car-tbl td{border-bottom:1px solid var(--line)!important}
 html[data-theme="dark"] .car-tbl{background:var(--white)!important}
-/* theme toggle button */
+/* Visibilidade — inputs, selects, placeholders */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea{background:var(--white)!important;color:var(--ink)!important;border-color:var(--line2)!important}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{color:var(--ink3)!important}
+html[data-theme="dark"] select option{background:#1f1e1e;color:#e8e8e8}
+/* Tags de operadora e badges sobre fundo escuro */
+html[data-theme="dark"] .op-tag,
+html[data-theme="dark"] .op-badge{color:#fff!important}
+/* Total e valores na tabela de resultados */
+html[data-theme="dark"] .rt-total{color:#e8e8e8!important}
+/* Cards de plano */
+html[data-theme="dark"] .plan-card{background:var(--white)!important;border-color:var(--line)!important}
+/* Faixa etária label */
+html[data-theme="dark"] .faixa-lbl{color:var(--ink)!important}
+/* Topbar mantém navy escuro nos dois modos */
+html[data-theme="dark"] .topbar{background:var(--navy)!important}
+/* theme toggle button — sempre na topbar escura */
 .btn-theme-cot{
   background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
   color:rgba(255,255,255,.8);border-radius:var(--r-sm);
   width:32px;height:32px;cursor:pointer;transition:all .15s;
   display:flex;align-items:center;justify-content:center;
 }
-html[data-theme="dark"] .btn-theme-cot{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
 .btn-theme-cot:hover{background:rgba(255,255,255,.2)}
 .btn-theme-cot svg{width:15px;height:15px;flex-shrink:0}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1238,19 +1256,11 @@ body{-webkit-overflow-scrolling:touch}
 </footer>
 
 <script>
-/* ── TEMA ── */
+/* ── TEMA (independente do painel admin) ── */
 (function(){
-  const t = localStorage.getItem('sp_theme') || 'light';
+  const t = localStorage.getItem('cot_theme') || 'light';
   document.documentElement.setAttribute('data-theme', t);
 })();
-window.addEventListener('message', function(e){
-  if (e.data && e.data.sp_theme) {
-    const t = e.data.sp_theme;
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('sp_theme', t);
-    _setCotIcon(t);
-  }
-});
 function _setCotIcon(t){
   const svg = document.getElementById('cot-theme-icon');
   if (!svg) return;
@@ -1262,9 +1272,8 @@ function toggleCotTheme(){
   const cur = document.documentElement.getAttribute('data-theme') || 'light';
   const next = cur === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('sp_theme', next);
+  localStorage.setItem('cot_theme', next);
   _setCotIcon(next);
-  try { window.parent.postMessage({sp_theme: next}, '*'); } catch(e){}
 }
 
 // ── DADOS (carregados da API) ────────────────────────────────────────
@@ -1833,7 +1842,7 @@ async function _initCotador() {
   });
 }
 _initCotador().then(() => {
-  _setCotIcon(localStorage.getItem('sp_theme') || 'light');
+  _setCotIcon(localStorage.getItem('cot_theme') || 'light');
   if (window !== window.top) {
     const b = document.getElementById('btn-sair-cot');
     if (b) b.style.display = 'inline-flex';
