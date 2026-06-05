@@ -489,6 +489,30 @@ window.SP_DATA = [
       { id:'sa_99_24_cc_7', nome:'Com copart — Executivo R3',    aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1236.90, 1546.13, 1917.20, 2128.09, 2277.06, 2641.39, 3157.52, 3700.62, 4405.57,  7421.19] },
       { id:'sa_99_24_cc_8', nome:'Com copart — Prestige',        aco:'apt', tipo:'pme', fvidas:'30-99', vig:24, valores:[1622.22, 2027.77, 2514.43, 2791.02, 2986.40, 3464.22, 4141.13, 4853.41, 5777.97,  9732.99] },
     ]
+  },
+
+  // ── HAPVIDA ───────────────────────────────────────────────────────────
+  {
+    key: 'hapvida', nome: 'Hapvida',
+    cor: 'var(--hapvida)', cls: 'on-hap',
+    reajuste: 'A definir',
+    info: 'PME 2–29 vidas · Tabela Brasília · Nosso Médico e Nosso Plano · Com coparticipação parcial ou completa · Rede credenciada DF',
+    produtos: [
+      // ── Nosso Médico · Copart Parcial ──────────────────────────────────
+      { id:'hap_nm_cp_enf', nome:'Copart Parcial — Nosso Médico (Enf)', aco:'enf', tipo:'pme', fvidas:'02-29', valores:[ 147.09,  164.74,  184.51,  212.19,  244.02,  290.38,  362.98,  453.73,  771.34,  863.90] },
+      { id:'hap_nm_cp_apt', nome:'Copart Parcial — Nosso Médico (Apt)', aco:'apt', tipo:'pme', fvidas:'02-29', valores:[ 220.58,  247.05,  276.70,  318.21,  365.94,  435.47,  544.34,  680.43, 1156.73, 1295.54] },
+      // ── Nosso Médico · Copart Completa ─────────────────────────────────
+      { id:'hap_nm_cc_enf', nome:'Copart Completa — Nosso Médico (Enf)', aco:'enf', tipo:'pme', fvidas:'02-29', valores:[ 129.46,  145.00,  162.40,  186.76,  214.77,  255.58,  319.48,  399.35,  678.90,  760.37] },
+      { id:'hap_nm_cc_apt', nome:'Copart Completa — Nosso Médico (Apt)', aco:'apt', tipo:'pme', fvidas:'02-29', valores:[ 194.12,  217.41,  243.50,  280.03,  322.03,  383.22,  479.03,  598.79, 1017.94, 1140.09] },
+      // ── Nosso Plano · Copart Parcial ───────────────────────────────────
+      { id:'hap_np_cp_amb', nome:'Copart Parcial — Nosso Plano (Amb)',   aco:'amb', tipo:'pme', fvidas:'02-29', valores:[ 148.42,  166.23,  186.18,  214.11,  246.23,  293.01,  366.26,  457.83,  778.31,  871.71] },
+      { id:'hap_np_cp_enf', nome:'Copart Parcial — Nosso Plano (Enf)',   aco:'enf', tipo:'pme', fvidas:'02-29', valores:[ 163.26,  182.85,  204.79,  235.51,  270.84,  322.30,  402.88,  503.60,  856.12,  958.85] },
+      { id:'hap_np_cp_apt', nome:'Copart Parcial — Nosso Plano (Apt)',   aco:'apt', tipo:'pme', fvidas:'02-29', valores:[ 244.93,  274.32,  307.24,  353.33,  406.33,  483.53,  604.41,  755.51, 1284.37, 1438.40] },
+      // ── Nosso Plano · Copart Completa ──────────────────────────────────
+      { id:'hap_np_cc_amb', nome:'Copart Completa — Nosso Plano (Amb)',  aco:'amb', tipo:'pme', fvidas:'02-29', valores:[ 120.72,  135.21,  151.44,  174.16,  200.28,  238.33,  297.91,  372.39,  633.06,  709.03] },
+      { id:'hap_np_cc_enf', nome:'Copart Completa — Nosso Plano (Enf)',  aco:'enf', tipo:'pme', fvidas:'02-29', valores:[ 143.68,  160.92,  180.23,  207.26,  232.35,  282.64,  354.55,  443.19,  753.48,  843.83] },
+      { id:'hap_np_cc_apt', nome:'Copart Completa — Nosso Plano (Apt)',  aco:'apt', tipo:'pme', fvidas:'02-29', valores:[ 215.54,  241.40,  270.37,  310.93,  357.57,  425.51,  531.89,  664.86, 1130.26, 1265.89] },
+    ]
   }
 
 ];
