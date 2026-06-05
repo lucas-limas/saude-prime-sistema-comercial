@@ -718,24 +718,20 @@ window.REDE_DATA = {
     rodape: 'Rede PME Porto Saúde no DF. Coparticipação parcial nos planos "Com copart". Confirme rede atualizada em portosaude.com.br ou com o corretor.',
   },
   bestsenior: {
-    adm: 'Tabela Mar-Abr/2026 · Exclusivo 44+',
+    adm: 'Tabela Mar–Abr/2026 · Exclusivo 44+ · Best Sênior Saúde',
     grupos: [
-      { titulo: 'Classic — Enf e Apt (todos os planos)', itens: [
-        { nome: 'H. Santa Lúcia Gama', tags: ['PS','INT'] },
-        { nome: 'H. Anchieta Ceilândia', tags: ['PS','INT'] },
-        { nome: 'CBV Hospital de Olhos', tags: ['PS','AMB'] },
-        { nome: 'Lab. Santa Paula', local: 'Todos os planos' },
+      { titulo: 'Classic · Prime · Platinum', itens: [
+        { nome: 'Hospital Santa Lúcia',                                    local: 'Gama',      tags: ['PS','INT','AMB'] },
+        { nome: 'Hospital Anchieta Ceilândia São Francisco (Kora Saúde)',  local: 'Ceilândia', tags: ['PS','INT','AMB'] },
+        { nome: 'CBV Hospital de Olhos',                                                       tags: ['PS','AMB']       },
+        { nome: 'Laboratório Santa Paula',                                                     tags: ['AMB']            },
       ]},
-      { titulo: 'Prime — adiciona à rede Classic', itens: [
-        { nome: 'H. Santa Lúcia Norte', tags: ['PS','INT'] },
-        { nome: 'Un. Avançada Sta Lúcia Taguatinga', tags: ['PS','AMB'] },
-        { nome: 'H. Anchieta Taguatinga', tags: ['AMB','INT'] },
-        { nome: 'Lab. Sabin', local: 'Prime e Platinum' },
-      ]},
-      { titulo: 'Platinum — adiciona à rede Prime', itens: [
-        { nome: 'H. Santa Lúcia Sul', tags: ['INT'] },
-        { nome: 'H. Anchieta Taguatinga 24h', tags: ['PS'] },
-        { nome: 'Núcleos Radiologia', local: 'Diagnóstico por imagem' },
+      { titulo: 'Prime · Platinum (adiciona à rede Classic)', itens: [
+        { nome: 'Hospital Santa Lúcia Norte',                local: 'Asa Norte',  tags: ['PS','INT','AMB'] },
+        { nome: 'Unidade Avançada Santa Lúcia',              local: 'Taguatinga', tags: ['PS','AMB']       },
+        { nome: 'Hospital Anchieta Taguatinga (Kora Saúde)', local: 'Taguatinga', tags: ['INT','AMB'], obs: 'PS 24h incluído no Platinum' },
+        { nome: 'Hospital Santa Lúcia Sul',                  local: 'Asa Sul',    tags: ['INT','AMB'], obs: 'PS 24h incluído no Platinum' },
+        { nome: 'Laboratório Sabin',                                               tags: ['AMB']       },
       ]},
     ],
     rodape: 'Rede DF exclusiva para 44+. Confirme rede atualizada com o corretor ou no site bestsenior.com.br.',
