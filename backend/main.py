@@ -1121,6 +1121,75 @@ async def importar_catalogo(request: Request, admin=Depends(require_superadmin))
     return {"ok": True, "ops_novas": ops_novas, "planos_novos": planos_novos}
 
 
+@app.post("/api/superadmin/catalogo/importar-rede")
+async def importar_rede(request: Request, admin=Depends(require_superadmin)):
+    try:
+        rede_data = await request.json()
+    except Exception:
+        raise HTTPException(400, "JSON inválido no corpo da requisição")
+    if not isinstance(rede_data, dict):
+        raise HTTPException(400, "'rede_data' deve ser um objeto")
+    conn = get_connection()
+    ops_map = {r["chave"]: r["id"] for r in conn.execute("SELECT id, chave FROM operadoras").fetchall()}
+    itens_novos = 0
+    metas_atualizadas = 0
+    for op_chave, rd in rede_data.items():
+        if not isinstance(rd, dict):
+            continue
+        op_id = ops_map.get(op_chave)
+        if not op_id:
+            continue
+        # Atualiza meta (adm / rodape)
+        rede_adm    = rd.get("adm")    or None
+        rede_rodape = rd.get("rodape") or None
+        if rede_adm or rede_rodape:
+            conn.execute(
+                "UPDATE operadoras SET rede_adm = ?, rede_rodape = ? WHERE id = ?",
+                (rede_adm, rede_rodape, op_id)
+            )
+            metas_atualizadas += 1
+        # Insere itens por grupo
+        grupos = rd.get("grupos") or []
+        for g_idx, grupo in enumerate(grupos):
+            if not isinstance(grupo, dict):
+                continue
+            titulo = str(grupo.get("titulo") or "")
+            itens  = grupo.get("itens") or []
+            for i_idx, item in enumerate(itens):
+                if not isinstance(item, dict):
+                    continue
+                nome = str(item.get("nome") or "").strip()
+                if not nome:
+                    continue
+                # Não duplica: mesmo nome + grupo + operadora_id
+                existe = conn.execute(
+                    "SELECT id FROM rede_credenciada WHERE operadora_id = ? AND grupo = ? AND nome = ?",
+                    (op_id, titulo, nome)
+                ).fetchone()
+                if existe:
+                    continue
+                tags     = item.get("tags")     or None
+                tag_extra = item.get("tagExtra") or None
+                conn.execute(
+                    """INSERT INTO rede_credenciada
+                       (operadora_id, grupo, grupo_ordem, nome, local, tags, obs, tag_extra, ordem, ativo)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)""",
+                    (
+                        op_id, titulo, g_idx, nome,
+                        item.get("local") or None,
+                        json.dumps(tags)      if tags      else None,
+                        item.get("obs")  or None,
+                        json.dumps(tag_extra) if tag_extra else None,
+                        i_idx,
+                    )
+                )
+                itens_novos += 1
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "importar_rede", f"{itens_novos} itens e {metas_atualizadas} metas importados")
+    return {"ok": True, "itens_novos": itens_novos, "metas_atualizadas": metas_atualizadas}
+
+
 # ── Redirects para caminhos antigos (raiz → app/) ─────────────────────────────
 
 @app.get("/cotador-planos-saude.html")

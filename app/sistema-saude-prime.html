@@ -506,6 +506,18 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
 
       <!-- REDE CREDENCIADA -->
       <div id="cat-sub-rede" style="display:none">
+        <div class="form-card" style="border-color:rgba(251,191,36,.25)">
+          <h3 style="color:#fbbf24">Importar rede do dados.js</h3>
+          <p style="color:rgba(255,255,255,.55);font-size:13px;margin:8px 0 16px">
+            Lê o <code>REDE_DATA</code> do <code>dados.js</code> e importa todos os estabelecimentos e metas que ainda não existem no banco. Itens já cadastrados <strong>não serão duplicados</strong>.
+          </p>
+          <div class="form-actions">
+            <button class="btn-novo" onclick="importarRedeJS()" id="btn-importar-rede">Importar rede do dados.js</button>
+            <span class="form-msg" id="import-rede-msg"></span>
+          </div>
+          <div id="import-rede-result" style="display:none;margin-top:12px;background:rgba(0,0,0,.25);border-radius:8px;padding:12px;font-size:13px;color:rgba(255,255,255,.75)"></div>
+        </div>
+
         <div class="form-card">
           <h3>Meta da Rede por Operadora</h3>
           <div class="form-grid">
@@ -931,6 +943,40 @@ function catTab(tab, btn) {
 // ── Rede Credenciada ──────────────────────────────────────────────────────────
 
 let _cat_rede = [];
+
+async function importarRedeJS() {
+  const btn = document.getElementById('btn-importar-rede');
+  const msg = document.getElementById('import-rede-msg');
+  const res = document.getElementById('import-rede-result');
+  msg.textContent = ''; res.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Carregando dados.js…';
+  try {
+    await new Promise((ok, err) => {
+      if (window.REDE_DATA) { ok(); return; }
+      const s = document.createElement('script');
+      s.src = 'dados.js?' + Date.now();
+      s.onload = ok; s.onerror = err;
+      document.head.appendChild(s);
+    });
+    if (!window.REDE_DATA || typeof window.REDE_DATA !== 'object') {
+      throw new Error('REDE_DATA não encontrado no dados.js');
+    }
+    btn.textContent = 'Importando…';
+    const r = await fetch(`${API}/api/superadmin/catalogo/importar-rede`, {
+      method: 'POST', headers: authH(), body: JSON.stringify(window.REDE_DATA)
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || 'Erro no servidor');
+    res.textContent = `✅ ${data.itens_novos} itens importados · ${data.metas_atualizadas} metas atualizadas`;
+    res.style.display = '';
+    msg.textContent = 'Concluído!'; msg.style.color = '#4ade80';
+    loadRede();
+  } catch(e) {
+    msg.textContent = e.message || 'Erro.'; msg.style.color = '#f87171';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Importar rede do dados.js';
+  }
+}
 
 function _populateRedeOpSelects() {
   const ops = _cat_ops.filter(o => o.ativo);
