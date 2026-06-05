@@ -9,6 +9,7 @@
 :root{
   --navy:#1f1e1e;--navy2:#2a2929;--navy3:#141414;
   --amil:#461BFF;--amil-bg:#ede8ff;
+  --ap-gold:#d4a843;--ap-gold-dim:rgba(212,168,67,.55);--ap-gold-faint:rgba(212,168,67,.18);
   --gold:#ffffff;--gold2:#e8e8e8;--gold-bg:rgba(255,255,255,.08);
   --cream:#f7f7f7;--white:#fff;
   --line:#e8e8e8;--line2:#d0d0d0;
@@ -89,7 +90,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .op-comp-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.75rem;padding:1.25rem 1.5rem}
 .op-comp-card{border:1.5px solid var(--line);border-radius:var(--r);padding:1rem 1.25rem;transition:box-shadow .15s;position:relative}
 .op-comp-card.is-winner{box-shadow:0 0 0 2px rgba(201,162,39,.55)}
-.occ-badge{font-size:9px;font-weight:700;background:rgba(201,162,39,.15);border:1px solid rgba(201,162,39,.45);color:var(--gold);padding:1px 8px;border-radius:20px;letter-spacing:.08em;display:inline-block;margin-bottom:.4rem}
+.occ-badge{font-size:9px;font-weight:700;background:rgba(201,162,39,.18);border:1px solid rgba(201,162,39,.5);color:#7a4f00;padding:1px 8px;border-radius:20px;letter-spacing:.08em;display:inline-block;margin-bottom:.4rem}
 .occ-op{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.2rem}
 .occ-plan{font-size:11px;color:var(--ink2);line-height:1.35;margin-bottom:.5rem}
 .occ-total{font-size:17px;font-weight:700;color:var(--navy)}
@@ -98,9 +99,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 /* ── COMP TABLE (PDF) ── */
 .comp-ops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:1rem;margin-top:1.25rem}
 .comp-op-col{border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--white)}
-.comp-op-col.is-winner{border-color:rgba(201,162,39,.6);box-shadow:0 0 0 2px rgba(201,162,39,.18)}
+.comp-op-col.is-winner{border-color:rgba(212,168,67,.7);box-shadow:0 0 0 3px rgba(212,168,67,.15),0 4px 16px rgba(212,168,67,.12)}
 .coc-head{padding:.875rem 1rem;border-bottom:1px solid var(--line)}
-.coc-badge{font-size:9px;font-weight:700;background:rgba(201,162,39,.15);color:var(--gold);padding:1px 8px;border-radius:20px;letter-spacing:.06em;display:inline-block;margin-bottom:.3rem}
+.coc-badge{font-size:9px;font-weight:700;background:rgba(201,162,39,.18);border:1px solid rgba(201,162,39,.5);color:#7a4f00;padding:1px 8px;border-radius:20px;letter-spacing:.06em;display:inline-block;margin-bottom:.3rem}
 .coc-op{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .coc-plan{font-size:11px;color:var(--ink2);margin-top:.2rem;line-height:1.3}
 .coc-total{font-size:19px;font-weight:700;margin:.5rem 0 .15rem}
@@ -127,7 +128,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 
 /* CAPA */
 .capa{
-  background:linear-gradient(155deg,var(--navy3) 0%,#0d2a4a 40%,#1a3a5c 100%);
+  background:linear-gradient(155deg,#0c0c0c 0%,#181818 48%,#242424 100%);
+  border-top:3px solid var(--ap-gold);
   padding:3rem 3rem 2.5rem;position:relative;overflow:hidden;
 }
 .capa::before{content:'';position:absolute;top:-80px;right:-60px;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.05)}
@@ -140,15 +142,15 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .capa-brand-sub{font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;margin-top:2px}
 .capa-divider{height:1px;background:rgba(255,255,255,.15);margin:1.25rem 0;position:relative;z-index:1}
 .capa-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:.9rem;position:relative;z-index:1}
-.capa-title{font-family:"Cormorant Garamond",serif;font-size:40px;font-weight:400;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:.9rem;position:relative;z-index:1}
+.capa-title{font-family:"Cormorant Garamond",serif;font-size:44px;font-weight:400;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:.9rem;position:relative;z-index:1}
 .capa-title em{color:rgba(255,255,255,.78);font-style:italic}
-.capa-diagnostico{font-size:13px;color:rgba(255,255,255,.7);max-width:560px;line-height:1.6;position:relative;z-index:1;border-left:2px solid rgba(255,255,255,.35);padding-left:.9rem;margin-bottom:1.25rem}
+.capa-diagnostico{font-size:13px;color:rgba(255,255,255,.7);max-width:560px;line-height:1.6;position:relative;z-index:1;border-left:2px solid var(--ap-gold-dim);padding-left:.9rem;margin-bottom:1.25rem}
 /* Índice do que virá nas próximas páginas */
 .capa-agenda{position:relative;z-index:1;margin-top:1rem}
 .capa-agenda-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.5rem}
 .capa-agenda-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem}
 .capa-agenda-list li{font-size:12px;color:rgba(255,255,255,.75);padding-left:1.1rem;position:relative}
-.capa-agenda-list li::before{content:'→';position:absolute;left:0;color:rgba(255,255,255,.4);font-size:10px;top:1px}
+.capa-agenda-list li::before{content:'→';position:absolute;left:0;color:var(--ap-gold-dim);font-size:10px;top:1px}
 .capa-footer{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.12);position:relative;z-index:1}
 .cf-item strong{display:block;font-size:13px;color:rgba(255,255,255,.85);margin-bottom:2px}
 .cf-item span{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.04em;text-transform:uppercase}
@@ -171,7 +173,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .sec{padding:2rem 3rem;border-bottom:1px solid var(--line)}
 .sec:last-of-type{border-bottom:none}
 .sec-eyebrow{display:flex;align-items:center;gap:8px;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin-bottom:.5rem}
-.sec-eyebrow::after{content:'';flex:0 0 24px;height:1.5px;background:var(--line2)}
+.sec-eyebrow::after{content:'';flex:0 0 24px;height:2px;background:var(--ap-gold-dim)}
 .sec-title{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:500;color:var(--navy);letter-spacing:-.3px;line-height:1.2;margin-bottom:.75rem}
 .sec-intro{font-size:14px;color:var(--ink2);line-height:1.7;max-width:700px;margin-bottom:1.5rem}
 
@@ -187,13 +189,13 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .rxf-qtd{font-size:12px;color:var(--ink2);text-align:center}
 .rxf-unit{font-size:12px;color:var(--ink3);text-align:center}
 .rxf-sub{font-size:13px;font-weight:600;color:var(--navy);text-align:center}
-.rxf-sub-total{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600;color:#fff;text-align:center}
+.rxf-sub-total{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;color:rgba(212,168,67,.95);text-align:center}
 .rxf-total-lbl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6)}
 
 /* IMPACTO FINANCEIRO */
 .impacto-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem}
 .imp-card{border-radius:var(--r);padding:1.25rem 1.5rem;border:2px solid}
-.imp-rec{border-color:var(--gold);background:linear-gradient(135deg,#fffbf0,#fef9e7)}
+.imp-rec{border-color:rgba(212,168,67,.45);background:linear-gradient(135deg,#fffbf0,#fef9e7)}
 .imp-econ{border-color:var(--green);background:var(--green-bg)}
 .imp-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:.75rem}
 .it-gold{background:var(--navy);color:#fff}
@@ -234,7 +236,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .rb-titulo{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:.25rem}
 .rb-sub{font-size:11px;color:var(--ink3);margin-bottom:.75rem;font-style:italic}
 .rb-txt{font-size:13px;color:var(--ink2);line-height:1.7}
-.rb-destaque{background:var(--cream);border-left:3px solid var(--gold);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.75rem 1rem;margin-top:.875rem;font-size:13px;color:var(--ink2);line-height:1.6}
+.rb-destaque{background:var(--cream);border-left:3px solid rgba(212,168,67,.55);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.75rem 1rem;margin-top:.875rem;font-size:13px;color:var(--ink2);line-height:1.6}
 .rb-destaque strong{color:var(--navy)}
 .teto-box{display:flex;align-items:center;gap:.875rem;background:#fef9e7;border:1.5px solid #f59e0b;border-radius:var(--r-sm);padding:.875rem 1rem;margin-top:.875rem}
 .tb-val{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;color:var(--amber)}
@@ -250,7 +252,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .step-desc{font-size:12px;color:var(--ink2);line-height:1.6}
 
 /* CTA URGÊNCIA */
-.cta-box{background:linear-gradient(135deg,var(--navy3),#0d2a4a);border-radius:var(--r);padding:2rem;margin-top:1.25rem;display:flex;align-items:center;gap:1.5rem}
+.cta-box{background:linear-gradient(135deg,#0c0c0c,var(--navy2));border-top:2px solid var(--ap-gold);border-radius:var(--r);padding:2rem;margin-top:1.25rem;display:flex;align-items:center;gap:1.5rem}
 .cta-icon{font-size:2.5rem;flex-shrink:0}
 .cta-titulo{font-family:"Cormorant Garamond",serif;font-size:24px;color:#fff;margin-bottom:.375rem;line-height:1.2}
 .cta-data{color:var(--gold2)}
