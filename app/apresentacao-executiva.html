@@ -84,13 +84,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .vant-nome{font-size:12px;font-weight:500;color:var(--navy)}
 .vant-desc{font-size:11px;color:var(--ink3)}
 
-/* ── HOSPITAIS CHECK ── */
-.hosp-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:1rem 1.5rem}
-.hc-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:8px 10px;border-radius:var(--r-sm);border:1.5px solid var(--line);transition:all .15s}
-.hc-item:hover{border-color:var(--line2);background:var(--cream)}
-.hc-item.checked{border-color:var(--navy);background:var(--unity-bg)}
-.hc-nome{font-size:12px;font-weight:500;color:var(--navy)}
-.hc-info{font-size:10px;color:var(--ink3)}
 
 /* ── MULTI-OP CARDS (form) ── */
 .op-comp-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.75rem;padding:1.25rem 1.5rem}
@@ -217,20 +210,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .os-txt{font-size:13px;color:var(--amber);line-height:1.6}
 .os-txt strong{font-size:14px;display:block;margin-bottom:3px;color:#78350f}
 
-/* REDE */
-.rede-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.875rem;margin-top:1rem}
-.hosp-card{border-radius:var(--r);border:1.5px solid var(--line);background:var(--white);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .15s;box-shadow:var(--sh)}
-.hosp-card:hover{border-color:var(--navy)}
-.hosp-icon{font-size:1.75rem}
-.hosp-nome{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3}
-.hosp-local{font-size:11px;color:var(--ink3)}
-.hosp-plano{font-size:10px;font-weight:600;color:var(--ink2);margin-top:2px}
-.hosp-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
-.htag{font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:.04em}
-.ht-ps{background:#fee2e2;color:#991b1b}
-.ht-int{background:#dbeafe;color:#1e40af}
-.ht-amb{background:#d1fae5;color:#065f46}
-.ht-mat{background:#fce7f3;color:#9d174d}
 
 /* REDE TABLE */
 .rede-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:1rem}
@@ -312,7 +291,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
   .sec-eyebrow{margin-bottom:.3rem}
   .sec-intro{font-size:11.5px;line-height:1.5;margin-bottom:.75rem}
   /* Cards — não cortar no meio */
-  .comp-op-col,.imp-card,.hosp-card,.va-card,.car-table,.rede-card,.cta-box{break-inside:avoid;page-break-inside:avoid}
+  .comp-op-col,.imp-card,.va-card,.car-table,.rede-card,.cta-box{break-inside:avoid;page-break-inside:avoid}
   .comp-ops-grid{break-inside:avoid;page-break-inside:avoid}
   .impacto-grid{break-inside:avoid;page-break-inside:avoid}
   .rxf-card{break-inside:avoid;page-break-inside:avoid}
@@ -320,7 +299,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 }
 
 /* Touch e scroll suave */
-.btn,.tab-btn,.hc-item,.vant-item,.op-comp-card{touch-action:manipulation}
+.btn,.tab-btn,.vant-item,.op-comp-card{touch-action:manipulation}
 body{-webkit-overflow-scrolling:touch}
 
 @media(max-width:768px){
@@ -344,7 +323,7 @@ body{-webkit-overflow-scrolling:touch}
   /* Comparativo PDF */
   .comp-ops-grid{grid-template-columns:1fr 1fr}
   /* Grids da apresentação gerada */
-  .impacto-grid,.steps-row,.rede-grid,.vant-apres-grid{grid-template-columns:1fr}
+  .impacto-grid,.steps-row,.vant-apres-grid{grid-template-columns:1fr}
   .rxf-head,.rxf-row{grid-template-columns:1fr 60px 80px 90px}
   .sec{padding:1.5rem 1.25rem}
   .capa{padding:1.75rem 1.25rem}
@@ -537,12 +516,6 @@ body{-webkit-overflow-scrolling:touch}
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- HOSPITAIS -->
-  <div class="card">
-    <div class="card-head">🏥 Hospitais de destaque na apresentação</div>
-    <div class="hosp-check-grid" id="hosp-checks"></div>
   </div>
 
   <!-- VANTAGENS EXTRAS -->
@@ -866,32 +839,6 @@ function calcTotal() {
 
 // ─── COPART ────────────────────────────────────────────────────────────
 function toggleCopOpts() {}
-
-// ─── HOSPITAIS ─────────────────────────────────────────────────────────
-function buildHospitais() {
-  const c = document.getElementById('hosp-checks');
-  // Usa apenas operadoras com planos válidos no comparativo (opsInfo), não todas as ativas
-  const activeKeys = _opsData
-    ? (_opsData.opsInfo && _opsData.opsInfo.length > 0
-        ? _opsData.opsInfo.map(o => o.op)
-        : Object.keys(_opsData.activeOps).filter(k => _opsData.activeOps[k]))
-    : null;
-  const list = activeKeys
-    ? HOSPITAIS_DB.filter(h => h.rede && activeKeys.some(op => h.rede[op] && Object.values(h.rede[op]).some(v => v)))
-    : HOSPITAIS_DB;
-  if (!list.length) {
-    c.innerHTML = '<div style="padding:1rem 1.5rem;font-size:13px;color:var(--ink3);font-style:italic">Nenhum hospital encontrado para as operadoras desta cotação.</div>';
-    return;
-  }
-  c.innerHTML = list.map(h => `
-    <label class="hc-item" onclick="this.classList.toggle('checked')">
-      <input type="checkbox" name="hosp" value="${h.id}" style="accent-color:var(--navy)">
-      <span>
-        <span class="hc-nome">${h.icon} ${h.nome}</span>
-        <span class="hc-info">📍 ${h.local}</span>
-      </span>
-    </label>`).join('');
-}
 
 // ─── VANTAGENS ─────────────────────────────────────────────────────────
 function buildVantagens() {
@@ -1267,9 +1214,28 @@ async function gerar() {
     if (qtd > 0 && unit > 0) { vidas.push({faixa,qtd,unit,sub}); totalMensal += sub; }
   });
 
-  // Hospitais
-  const hospSel = [...document.querySelectorAll('input[name="hosp"]:checked')]
-    .map(cb => HOSPITAIS_DB.find(h=>h.id===cb.value)).filter(Boolean);
+  // Rede credenciada: colunas por produto, depois hospitais com cobertura automática
+  const _redeCols = [];
+  { const _seen = new Set();
+    const _addCol = (opK, prodNome) => {
+      const col = getRedeCol(opK, prodNome);
+      if (!col) return;
+      const key = `${opK}|${col}`;
+      if (!_seen.has(key)) { _seen.add(key); _redeCols.push({op:opK, col}); }
+    };
+    if (isMulti) {
+      for (const oi of (_opsData.opsInfo||[])) {
+        const sp = (PLANOS_DB[oi.op]||[]).find(p=>p.id===oi.pid);
+        _addCol(oi.op, sp?.nome||oi.pid||'');
+      }
+    } else {
+      const sp = (PLANOS_DB[opKey]||[]).find(p=>p.id===planoId);
+      _addCol(opKey, sp?.nome||planoId||'');
+    }
+  }
+  const hospSel = _redeCols.length > 0
+    ? HOSPITAIS_DB.filter(h => _redeCols.some(c => h.rede?.[c.op]?.[c.col]))
+    : [];
 
   // Vantagens
   const vantSel = [...document.querySelectorAll('input[name="vant"]:checked')]
@@ -1348,25 +1314,6 @@ async function gerar() {
     }).join('');
   }
 
-  // Montar colunas da tabela de rede: pares únicos (op, redeCol)
-  const _redeCols = [];
-  { const _seen = new Set();
-    const _addCol = (opK, prodNome) => {
-      const col = getRedeCol(opK, prodNome);
-      if (!col) return;
-      const key = `${opK}|${col}`;
-      if (!_seen.has(key)) { _seen.add(key); _redeCols.push({op:opK, col}); }
-    };
-    if (isMulti) {
-      for (const oi of (_opsData.opsInfo||[])) {
-        const sp = (PLANOS_DB[oi.op]||[]).find(p=>p.id===oi.pid);
-        _addCol(oi.op, sp?.nome||oi.pid||'');
-      }
-    } else {
-      const sp = (PLANOS_DB[opKey]||[]).find(p=>p.id===planoId);
-      _addCol(opKey, sp?.nome||planoId||'');
-    }
-  }
   const hospHTML = buildRedeTable(hospSel, _redeCols);
 
   const vantHTML = vantSel.length > 0 ? vantSel.map(v=>`
@@ -1700,8 +1647,6 @@ function receiveFromCotador(data) {
   });
   if (!qtds.some(q => q > 0)) addVida();
 
-  buildHospitais();
-  preSelectHospitais();
   buildVantagens();
 
   // Pré-seleciona vantagens de TODAS as operadoras ativas
@@ -1718,18 +1663,8 @@ function receiveFromCotador(data) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ─── PRÉ-SELEÇÃO DE HOSPITAIS ─────────────────────────────────────────
-function preSelectHospitais() {
-  ['hhome','hmb','hbras','hsm','hamma'].forEach(id => {
-    const cb = document.querySelector(`input[name="hosp"][value="${id}"]`);
-    if(cb){cb.checked=true;cb.closest('.hc-item')?.classList.add('checked');}
-  });
-}
-
 // ─── INIT ─────────────────────────────────────────────────────────────
 buildPlanosSel();
-buildHospitais();
-preSelectHospitais();
 buildVantagens();
 addVida(); // linha inicial
 // Default validade = 30 dias
