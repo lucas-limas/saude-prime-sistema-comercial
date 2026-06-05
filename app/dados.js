@@ -536,6 +536,246 @@ window.PLANOS_DB = Object.fromEntries(
   ])
 );
 
+// REDE_DATA — rede credenciada por operadora (fonte hardcoded; sobrescrita pelo banco quando disponível)
+window.REDE_DATA = {
+  unity: {
+    adm: 'Adm. Esplendor · Atualizada 04/2026',
+    grupos: [
+      { titulo: 'Hospitais — Life Vital & Unity Vida', itens: [
+        { nome: 'Hosp. Santa Lúcia Norte', local: 'Asa Norte', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Lúcia Taguatinga', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Lúcia Gama', tags: ['PS','INT'] },
+        { nome: 'Hosp. São Mateus', local: 'Cruzeiro', tags: ['PS','INT','AMB'] },
+        { nome: 'Hosp. PAI', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. AMMA', local: 'Águas Claras', tags: ['INT','AMB'] },
+        { nome: 'P.S. Fraturas', local: 'Ceilândia', tags: ['PS','INT'] },
+        { nome: 'Hosp. Jardim Botânico', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Luzia', local: 'Luziânia/GO', tags: ['PS','INT'] },
+        { nome: 'Hosp. Luciano Chaves', local: 'Formosa/GO', tags: ['INT'] },
+      ]},
+      { titulo: 'Exclusivos Unity Star', itens: [
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['INT','MAT'] },
+        { nome: 'Hospital Home', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hospital Pacini', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'CBV Hosp. de Olhos', tags: ['PS'] },
+        { nome: 'Hospital Cerrado', local: 'Valparaíso/GO', tags: ['INT'] },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'Bom Exame · LAC · Citoprev · Aliança · Sabin (Unity Vida/Star)' },
+      ]},
+    ],
+    rodape: 'Telemedicina isenta. HOB, Inst. Panamericano, Oftalmed Visão, CEME Luziânia e Santa Mônica também credenciados.',
+  },
+  evo: {
+    adm: 'Adm. Easyplan · +166 parceiros no DF',
+    grupos: [
+      { titulo: 'Hospitais — ONE e NOW', itens: [
+        { nome: 'Hospital Brasília', local: 'Lago Sul / Águas Claras', tags: ['PS','INT'] },
+        { nome: 'Hospital Home', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['MAT'] },
+        { nome: 'Hospital Cerrado', local: 'Valparaíso/GO', tags: ['INT'] },
+        { nome: 'Clínicas de Ceilândia', tags: ['PS','INT'] },
+        { nome: 'Centro Clínico AMMA', local: 'Águas Claras', tags: ['PS'] },
+        { nome: 'HPAES', local: 'São Sebastião', tags: ['INT','AMB'] },
+      ]},
+      { titulo: 'Plano ONE — Atenção Primária (exclusivo)', itens: [
+        { nome: 'Clínica Amparo / Grupo Sabin', local: 'Asa Norte · Lago Norte · Sudoeste · Taguatinga', obs: 'Atendimento primário obrigatório antes do especialista — exceto Oftalmologia' },
+      ]},
+      { titulo: 'Oftalmologia · Laboratórios', itens: [
+        { nome: 'Oftalmed', local: 'Asa Sul · Águas Claras · Taguatinga · Ceilândia' },
+        { nome: 'Sabin (ONE e NOW) · Laboratório Exame (NOW)' },
+      ]},
+    ],
+    rodape: 'Urgência nacional via ABRAMGE (+170 prestadores). Odontológico ODONTOGROUP incluso sem custo.',
+  },
+  plenum: {
+    adm: 'Adm. Easyplan · +120 clínicas / 140+ endereços',
+    grupos: [
+      { titulo: 'Hospitais — Delta, Ômega, Beta, Sigma', itens: [
+        { nome: 'Hosp. Sírio-Libanês', local: 'Asa Sul', tags: ['PS','INT'], tagExtra: { label: 'Sigma', cor: '#fef3c7', texto: '#92400e' } },
+        { nome: 'Hosp. Brasília', local: 'Lago Sul / Águas Claras', tags: ['PS','INT'] },
+        { nome: 'Hosp. Alvorada', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Home', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Daher', local: 'Lago Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. São Mateus', local: 'Cruzeiro', tags: ['INT','AMB'] },
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['INT','MAT'] },
+        { nome: 'Hosp. Anchieta', local: 'Taguatinga / Ceilândia', tags: ['PS','INT','MAT'] },
+        { nome: 'HPAES', local: 'São Sebastião', tags: ['INT','AMB'] },
+        { nome: 'Hosp. Santa Luzia', local: 'Luziânia/GO', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. Cerrado', local: 'Valparaíso/GO', tags: ['INT'] },
+        { nome: 'P.S. Fraturas', local: 'Ceilândia', tags: ['PS','INT'] },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'Exame · Aliança · Dom Bosco · Vitrium · Citoprev · Sabin · Sírio-Libanês Diag. (Sigma)' },
+      ]},
+    ],
+    rodape: 'Seguro Viagem Nacional AIG incluso. UTI Móvel 24h (3 bases).',
+  },
+  amil: {
+    adm: 'Adm. própria · Vigência Mai/2026',
+    grupos: [
+      { titulo: 'Hospitais — Todos os planos DF', itens: [
+        { nome: 'Hosp. Santa Lúcia', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Brasília', local: 'Lago Sul / Águas Claras', tags: ['PS','INT'] },
+        { nome: 'Hosp. Home', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Alvorada', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Daher', local: 'Lago Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Anchieta', local: 'Taguatinga / Ceilândia', tags: ['PS','INT','MAT'] },
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['INT','MAT'] },
+        { nome: 'Hosp. Santa Luzia', local: 'Luziânia/GO', tags: ['PS','INT'] },
+      ]},
+      { titulo: 'Exclusivo Platinum — Rede Nacional', itens: [
+        { nome: '+600 hospitais credenciados em todo o Brasil' },
+        { nome: 'Reembolso por livre escolha (fora da rede credenciada)' },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'Sabin · DASA (Álvaro) · rede própria Amil' },
+      ]},
+    ],
+    rodape: 'Amil Dental incluso 12 meses grátis (R$ 14,99/mês após). Confirme rede no app Amil ou em amil.com.br/guia-medico.',
+  },
+  segurosunimed: {
+    adm: 'Adm. própria · Abrangência DF + Regiões Administrativas',
+    grupos: [
+      { titulo: 'Todos os planos — incl. Essencial I / II / III / IV', itens: [
+        { nome: 'Hosp. Santa Lúcia', local: 'Asa Norte / Gama / Taguatinga', tags: ['PS','INT'] },
+        { nome: 'Hosp. São Mateus', local: 'Cruzeiro', tags: ['PS','INT'] },
+        { nome: 'Hosp. Home · Hosp. Alvorada · Hosp. Daher', tags: ['PS','INT'] },
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['INT','MAT'] },
+        { nome: 'P.S. das Fraturas', local: 'Ceilândia', tags: ['PS','INT'] },
+        { nome: 'Hosp. Anchieta', local: 'Taguatinga / Ceilândia', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Marta · Anna Nery · Maria Auxiliadora · Prontonorte', tags: ['PS','INT'] },
+        { nome: 'Hosp. São Francisco', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. Urológico · Oftalmed / Hosp. da Visão', tags: ['INT'] },
+        { nome: 'Unimed Espaço Saúde Cuidar Mais · Hosp. Dr Albert Sabin', tags: ['INT','AMB'] },
+      ]},
+      { titulo: 'A partir do Completo', itens: [
+        { nome: 'HOB — Brasília e Taguatinga Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Águas Claras · Hosp. Pacini', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Helena', local: 'Brasília', tags: ['PS','INT','MAT'] },
+      ]},
+      { titulo: 'A partir do Superior', itens: [
+        { nome: 'Hosp. do Coração do Brasil · Hosp. Santa Luzia', tags: ['PS','INT'] },
+        { nome: 'Hosp. Sírio-Libanês', local: 'Asa Sul', tags: ['INT'] },
+        { nome: 'RM Clínica de Reabilitação · CBV — Centro Brasileiro da Visão', tags: ['INT'] },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'Sabin / DASA Diagnóstica', local: 'Múltiplas unidades', tags: ['AMB'] },
+        { nome: 'Fleury / Exame Diagnóstica', local: 'Brasília', tags: ['AMB'] },
+      ]},
+    ],
+    rodape: 'Urgência/Emergência nacional via UE Seguros Unimed (+1.000 prestadores). Planos Essencial: abrangência grupo de municípios (DF + RAs). Confirme rede em segurosunimed.com.br/guia-medico.',
+  },
+  medsenior: {
+    adm: 'Pessoa Física · Vigência Mai/2026',
+    grupos: [
+      { titulo: 'Unidades MedSênior — DF3 e DF4', itens: [
+        { nome: 'P.A. 24h SIG', local: 'SIG', tags: ['PS'] },
+        { nome: 'P.A. 24h Taguatinga', tags: ['PS'] },
+        { nome: 'Unidade Asa Sul', local: 'Asa Sul', tags: ['AMB'] },
+        { nome: 'Unidade Taguatinga', tags: ['AMB'] },
+        { nome: 'Unidade Águas Claras', tags: ['AMB'] },
+        { nome: 'C. Oftalmológico Asa Sul', tags: ['AMB'] },
+        { nome: 'C. Oftalmológico Águas Claras', tags: ['AMB'] },
+        { nome: 'Centro de Diagnóstico SIG', tags: ['INT'] },
+      ]},
+      { titulo: 'Hospitais — DF3 e DF4', itens: [
+        { nome: 'Hospital Alvorada Brasília', tags: ['INT'] },
+        { nome: 'Hospital Daher', local: 'Lago Sul', tags: ['PS','INT'] },
+        { nome: 'Hospital Home', local: 'Asa Sul', tags: ['INT'] },
+        { nome: 'Hospital Santa Marta', tags: ['INT'] },
+      ]},
+      { titulo: 'Exclusivo Black e Infinite', itens: [
+        { nome: 'Hospital Brasília', local: 'Lago Sul / Águas Claras', tags: ['PS','INT'] },
+        { nome: 'Hospital Sírio Libanês', local: 'Asa Sul', tags: ['INT'] },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'LAPAC · Sabin · Exame · Coleta domiciliar Lab. MedSênior' },
+      ]},
+    ],
+    rodape: 'Planos Pessoa Física — faixas etárias a partir de 49 anos. Sem coparticipação. Oficinas do Bem inclusas.',
+  },
+  portosaude: {
+    adm: 'Porto Seguro Saúde · PME · Rede credenciada DF',
+    grupos: [
+      { titulo: 'Todos os planos (Bronze / Prata / Ouro)', itens: [
+        { nome: 'Hosp. Santa Lúcia', local: 'Asa Norte / Gama / Taguatinga', tags: ['PS','INT'] },
+        { nome: 'Hosp. Anchieta', local: 'Taguatinga / Ceilândia', tags: ['PS','INT'] },
+        { nome: 'Hosp. Brasília', local: 'Lago Sul / Águas Claras', tags: ['PS','INT'] },
+        { nome: 'Hosp. Home · Hosp. Alvorada', tags: ['PS','INT'] },
+        { nome: 'Hosp. São Mateus', local: 'Cruzeiro', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Marta · Hosp. Daher', tags: ['PS','INT'] },
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['INT','MAT'] },
+        { nome: 'P.S. das Fraturas', local: 'Ceilândia', tags: ['PS','INT'] },
+        { nome: 'Sabin / DASA Diagnóstica', local: 'Múltiplas unidades', tags: ['AMB'] },
+      ]},
+      { titulo: 'Planos com Apartamento (P420 / Ouro)', itens: [
+        { nome: 'Hosp. Santa Helena', local: 'Brasília', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. do Coração do Brasil', tags: ['PS','INT'] },
+        { nome: 'Hosp. DF Star', local: 'Brasília', tags: ['INT'] },
+      ]},
+    ],
+    rodape: 'Rede PME Porto Saúde no DF. Coparticipação parcial nos planos "Com copart". Confirme rede atualizada em portosaude.com.br ou com o corretor.',
+  },
+  bestsenior: {
+    adm: 'Tabela Mar-Abr/2026 · Exclusivo 44+',
+    grupos: [
+      { titulo: 'Classic — Enf e Apt (todos os planos)', itens: [
+        { nome: 'H. Santa Lúcia Gama', tags: ['PS','INT'] },
+        { nome: 'H. Anchieta Ceilândia', tags: ['PS','INT'] },
+        { nome: 'CBV Hospital de Olhos', tags: ['PS','AMB'] },
+        { nome: 'Lab. Santa Paula', local: 'Todos os planos' },
+      ]},
+      { titulo: 'Prime — adiciona à rede Classic', itens: [
+        { nome: 'H. Santa Lúcia Norte', tags: ['PS','INT'] },
+        { nome: 'Un. Avançada Sta Lúcia Taguatinga', tags: ['PS','AMB'] },
+        { nome: 'H. Anchieta Taguatinga', tags: ['AMB','INT'] },
+        { nome: 'Lab. Sabin', local: 'Prime e Platinum' },
+      ]},
+      { titulo: 'Platinum — adiciona à rede Prime', itens: [
+        { nome: 'H. Santa Lúcia Sul', tags: ['INT'] },
+        { nome: 'H. Anchieta Taguatinga 24h', tags: ['PS'] },
+        { nome: 'Núcleos Radiologia', local: 'Diagnóstico por imagem' },
+      ]},
+    ],
+    rodape: 'Rede DF exclusiva para 44+. Confirme rede atualizada com o corretor ou no site bestsenior.com.br.',
+  },
+  bradesco: {
+    adm: 'Bradesco Seguros · PME · Rede Nacional',
+    grupos: [
+      { titulo: 'Nacional Plus 4 e Premium 6 — Todos os planos Apt', itens: [
+        { nome: 'Hosp. Santa Helena', local: 'Asa Norte', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. Santa Lúcia Norte · Santa Lúcia Sul', local: 'Asa Norte / Asa Sul', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. Alvorada · H. Home · H. Daher', tags: ['PS','INT'] },
+        { nome: 'Hosp. DF Star · H. do Coração do Brasil', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. Santa Luzia · Santa Marta', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Sírio-Libanês Brasília IV', local: 'Asa Sul', tags: ['PS','INT'] },
+        { nome: 'Hosp. São Mateus', local: 'Cruzeiro', tags: ['PS','INT'] },
+        { nome: 'Hosp. Anchieta', local: 'Ceilândia / Taguatinga', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. Santa Marta Taguatinga · H. Mantevida', tags: ['PS','INT'] },
+        { nome: 'Hosp. Brasília', local: 'SHIS', tags: ['INT'] },
+        { nome: 'Maternidade Brasília', local: 'Sudoeste', tags: ['INT','MAT'] },
+        { nome: 'Hosp. Águas Claras', local: 'Brasília', tags: ['PS','INT'] },
+        { nome: 'Sta Lúcia Gama', local: 'Gama', tags: ['PS','INT','MAT'] },
+      ]},
+      { titulo: 'Nacional Flex — Enfermaria', itens: [
+        { nome: 'Hosp. Santa Helena · Sta Lúcia Norte/Sul/Gama', tags: ['PS','INT','MAT'] },
+        { nome: 'Hosp. Alvorada · H. Home · H. Daher · Maternidade Brasília', tags: ['PS','INT'] },
+        { nome: 'Hosp. Anchieta Ceilândia · H. Mantevida · Sta Marta Taguatinga', tags: ['PS','INT'] },
+      ]},
+      { titulo: 'Efetivo — Rede reduzida (Enfermaria)', itens: [
+        { nome: 'Sta Lúcia Norte / Sul / Gama', tags: ['INT','MAT'] },
+        { nome: 'Cto. Clínico Recanto', tags: ['INT'] },
+      ]},
+      { titulo: 'Laboratórios', itens: [
+        { nome: 'Exame · Imeb · Sabin · Micra', local: 'Todos os planos' },
+        { nome: 'Brasiliense · Fleury', local: 'Nacional Plus 4 e Premium 6' },
+      ]},
+    ],
+    rodape: 'Rede nacional Bradesco. Confirme rede atualizada em bradescosaude.com.br ou com o corretor.',
+  },
+};
+
 // ── Sincronização com banco de dados ────────────────────────────────────────
 // Para cada operadora que tiver planos no banco, substitui TODOS os planos
 // hardcoded dessa operadora pelos planos do banco (o banco é a fonte de verdade).
@@ -544,7 +784,7 @@ window.PLANOS_DB = Object.fromEntries(
   try {
     const r = await fetch('/api/catalogo');
     if (!r.ok) return;
-    const { planos, operadoras } = await r.json();
+    const { planos, operadoras, rede } = await r.json();
     if (!planos.length && !Object.keys(operadoras).length) return;
     // Agrupa planos do banco por operadora
     const porOp = {};
@@ -556,6 +796,13 @@ window.PLANOS_DB = Object.fromEntries(
     });
     // Atualiza metadados de operadoras
     Object.assign(window.OP_META, operadoras);
+    // Atualiza rede credenciada (banco sobrescreve hardcoded por operadora)
+    if (rede && typeof rede === 'object') {
+      Object.keys(rede).forEach(opKey => {
+        if (rede[opKey]) window.REDE_DATA[opKey] = rede[opKey];
+      });
+    }
     if (typeof render === 'function') render();
+    if (typeof renderRedeTab === 'function') renderRedeTab();
   } catch(e) {}
 })();

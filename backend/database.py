@@ -71,6 +71,9 @@ def _migrations_pg(conn):
         "UPDATE planos SET codigo = 'am_ad_cp_8'  WHERE codigo = 'a20'",
         # Desativa planos Unity Life Vital (u1/u2) removidos do dados.js
         "UPDATE planos SET ativo = 0 WHERE codigo IN ('u1', 'u2')",
+        # Rede credenciada: metadados na tabela operadoras
+        "ALTER TABLE operadoras ADD COLUMN rede_adm TEXT",
+        "ALTER TABLE operadoras ADD COLUMN rede_rodape TEXT",
     ]
     for sql in safe:
         try:
@@ -117,6 +120,9 @@ def _migrations_sqlite(c):
         "UPDATE planos SET codigo = 'am_ad_cp_8'  WHERE codigo = 'a20'",
         # Desativa planos Unity Life Vital (u1/u2) removidos do dados.js
         "UPDATE planos SET ativo = 0 WHERE codigo IN ('u1', 'u2')",
+        # Rede credenciada: metadados na tabela operadoras
+        "ALTER TABLE operadoras ADD COLUMN rede_adm TEXT",
+        "ALTER TABLE operadoras ADD COLUMN rede_rodape TEXT",
     ]
     for sql in safe:
         try:
@@ -204,6 +210,22 @@ def init_db():
                 criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS rede_credenciada (
+                id SERIAL PRIMARY KEY,
+                operadora_id INTEGER REFERENCES operadoras(id) ON DELETE CASCADE,
+                grupo TEXT NOT NULL DEFAULT '',
+                grupo_ordem INTEGER DEFAULT 0,
+                nome TEXT NOT NULL,
+                local TEXT,
+                tags TEXT,
+                obs TEXT,
+                tag_extra TEXT,
+                ordem INTEGER DEFAULT 0,
+                ativo INTEGER DEFAULT 1,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
         conn.commit()
         _migrations_pg(conn)
     else:
@@ -280,6 +302,22 @@ def init_db():
                 precos TEXT NOT NULL,
                 ativo INTEGER DEFAULT 1,
                 ordem INTEGER DEFAULT 0,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS rede_credenciada (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                operadora_id INTEGER REFERENCES operadoras(id) ON DELETE CASCADE,
+                grupo TEXT NOT NULL DEFAULT '',
+                grupo_ordem INTEGER DEFAULT 0,
+                nome TEXT NOT NULL,
+                local TEXT,
+                tags TEXT,
+                obs TEXT,
+                tag_extra TEXT,
+                ordem INTEGER DEFAULT 0,
+                ativo INTEGER DEFAULT 1,
                 criado_em TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)

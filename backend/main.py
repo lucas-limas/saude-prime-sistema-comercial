@@ -299,6 +299,36 @@ class UpdatePlanoRequest(BaseModel):
     ordem: Optional[int] = None
 
 
+class RedeItemRequest(BaseModel):
+    operadora_id: int
+    grupo: str = ""
+    grupo_ordem: int = 0
+    nome: str
+    local: Optional[str] = None
+    tags: Optional[list] = None
+    obs: Optional[str] = None
+    tag_extra: Optional[dict] = None
+    ordem: int = 0
+    ativo: int = 1
+
+
+class UpdateRedeItemRequest(BaseModel):
+    grupo: Optional[str] = None
+    grupo_ordem: Optional[int] = None
+    nome: Optional[str] = None
+    local: Optional[str] = None
+    tags: Optional[list] = None
+    obs: Optional[str] = None
+    tag_extra: Optional[dict] = None
+    ordem: Optional[int] = None
+    ativo: Optional[int] = None
+
+
+class RedeMetaRequest(BaseModel):
+    rede_adm: Optional[str] = None
+    rede_rodape: Optional[str] = None
+
+
 # ── Auth ──────────────────────────────────────────────────────────────────────
 
 @app.post("/api/login")
@@ -708,13 +738,19 @@ FAIXAS = ['0 a 18','19 a 23','24 a 28','29 a 33','34 a 38','39 a 43','44 a 48','
 def catalogo_publico():
     conn = get_connection()
     ops_rows = conn.execute(
-        "SELECT id, chave, nome, cor, cls, info FROM operadoras WHERE ativo = 1 ORDER BY ordem, id"
+        "SELECT id, chave, nome, cor, cls, info, rede_adm, rede_rodape FROM operadoras WHERE ativo = 1 ORDER BY ordem, id"
     ).fetchall()
     planos_rows = conn.execute(
         """SELECT p.codigo, o.chave as op, p.nome, p.aco, p.tipo, p.fvidas, p.mod, p.vig, p.precos
            FROM planos p JOIN operadoras o ON p.operadora_id = o.id
            WHERE p.ativo = 1 AND o.ativo = 1
            ORDER BY o.ordem, p.ordem, p.id"""
+    ).fetchall()
+    rede_rows = conn.execute(
+        """SELECT rc.grupo, rc.grupo_ordem, rc.nome, rc.local, rc.tags, rc.obs, rc.tag_extra, rc.ordem, o.chave as op_chave
+           FROM rede_credenciada rc JOIN operadoras o ON rc.operadora_id = o.id
+           WHERE rc.ativo = 1 AND o.ativo = 1
+           ORDER BY o.ordem, rc.grupo_ordem, rc.ordem, rc.id"""
     ).fetchall()
     conn.close()
     operadoras = {r["chave"]: {"nome": r["nome"], "cor": r["cor"] or "", "cls": r["cls"] or "", "info": r["info"] or ""} for r in ops_rows}
@@ -732,7 +768,32 @@ def catalogo_publico():
         if r["mod"]:    p["mod"] = r["mod"]
         if r["vig"]:    p["vig"] = r["vig"]
         planos.append(p)
-    return {"faixas": FAIXAS, "operadoras": operadoras, "planos": planos}
+    # Build rede dict only when there are rows in the DB
+    rede = {}
+    if rede_rows:
+        op_meta_map = {r["chave"]: r for r in ops_rows}
+        for r in rede_rows:
+            op = r["op_chave"]
+            if op not in rede:
+                meta = op_meta_map.get(op, {})
+                rede[op] = {
+                    "adm": (meta["rede_adm"] or "") if meta else "",
+                    "grupos": [],
+                    "rodape": (meta["rede_rodape"] or "") if meta else "",
+                }
+            grupo_titulo = r["grupo"] or ""
+            grupos = rede[op]["grupos"]
+            existing = next((g for g in grupos if g["titulo"] == grupo_titulo), None)
+            if not existing:
+                existing = {"titulo": grupo_titulo, "itens": []}
+                grupos.append(existing)
+            item = {"nome": r["nome"]}
+            if r["local"]:     item["local"] = r["local"]
+            if r["tags"]:      item["tags"] = json.loads(r["tags"])
+            if r["obs"]:       item["obs"] = r["obs"]
+            if r["tag_extra"]: item["tagExtra"] = json.loads(r["tag_extra"])
+            existing["itens"].append(item)
+    return {"faixas": FAIXAS, "operadoras": operadoras, "planos": planos, "rede": rede}
 
 
 # ── Superadmin: Catálogo — Operadoras ─────────────────────────────────────────
@@ -897,6 +958,105 @@ def toggle_plano(plano_id: int, admin=Depends(require_superadmin)):
     conn.commit()
     conn.close()
     return {"ativo": new_status}
+
+
+# ── Superadmin: Catálogo — Rede Credenciada ───────────────────────────────────
+
+@app.get("/api/superadmin/catalogo/rede")
+def listar_rede(operadora_id: Optional[int] = None, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if operadora_id:
+        rows = conn.execute(
+            "SELECT * FROM rede_credenciada WHERE operadora_id = ? ORDER BY grupo_ordem, ordem, id",
+            (operadora_id,)
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM rede_credenciada ORDER BY operadora_id, grupo_ordem, ordem, id"
+        ).fetchall()
+    conn.close()
+    result = []
+    for r in rows:
+        d = dict(r)
+        if d.get("tags"):      d["tags"]      = json.loads(d["tags"])
+        if d.get("tag_extra"): d["tag_extra"]  = json.loads(d["tag_extra"])
+        result.append(d)
+    return result
+
+@app.post("/api/superadmin/catalogo/rede")
+def criar_rede_item(body: RedeItemRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if not conn.execute("SELECT id FROM operadoras WHERE id = ?", (body.operadora_id,)).fetchone():
+        conn.close()
+        raise HTTPException(404, "Operadora não encontrada")
+    conn.execute(
+        """INSERT INTO rede_credenciada
+           (operadora_id, grupo, grupo_ordem, nome, local, tags, obs, tag_extra, ordem, ativo)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (
+            body.operadora_id, body.grupo, body.grupo_ordem, body.nome.strip(),
+            body.local, json.dumps(body.tags) if body.tags is not None else None,
+            body.obs,  json.dumps(body.tag_extra) if body.tag_extra is not None else None,
+            body.ordem, body.ativo,
+        ),
+    )
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "criar_rede_item", f"Rede op={body.operadora_id} item={body.nome}")
+    return {"ok": True}
+
+@app.patch("/api/superadmin/catalogo/rede/{item_id}")
+def atualizar_rede_item(item_id: int, body: UpdateRedeItemRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if not conn.execute("SELECT id FROM rede_credenciada WHERE id = ?", (item_id,)).fetchone():
+        conn.close()
+        raise HTTPException(404, "Item de rede não encontrado")
+    updates, params = [], []
+    for field in ("grupo", "grupo_ordem", "nome", "local", "obs", "ordem", "ativo"):
+        val = getattr(body, field)
+        if val is not None:
+            updates.append(f"{field} = ?"); params.append(val.strip() if isinstance(val, str) else val)
+    if body.tags is not None:
+        updates.append("tags = ?"); params.append(json.dumps(body.tags))
+    if body.tag_extra is not None:
+        updates.append("tag_extra = ?"); params.append(json.dumps(body.tag_extra))
+    if updates:
+        params.append(item_id)
+        conn.execute(f"UPDATE rede_credenciada SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+    conn.close()
+    return {"ok": True}
+
+@app.delete("/api/superadmin/catalogo/rede/{item_id}")
+def deletar_rede_item(item_id: int, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    row = conn.execute("SELECT nome FROM rede_credenciada WHERE id = ?", (item_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Item de rede não encontrado")
+    conn.execute("DELETE FROM rede_credenciada WHERE id = ?", (item_id,))
+    conn.commit()
+    conn.close()
+    log_action(admin["sub"], "deletar_rede_item", f"Rede item={row['nome']} removido")
+    return {"ok": True}
+
+@app.patch("/api/superadmin/catalogo/operadoras/{op_id}/rede-meta")
+def atualizar_rede_meta(op_id: int, body: RedeMetaRequest, admin=Depends(require_superadmin)):
+    conn = get_connection()
+    if not conn.execute("SELECT id FROM operadoras WHERE id = ?", (op_id,)).fetchone():
+        conn.close()
+        raise HTTPException(404, "Operadora não encontrada")
+    updates, params = [], []
+    if body.rede_adm is not None:
+        updates.append("rede_adm = ?"); params.append(body.rede_adm)
+    if body.rede_rodape is not None:
+        updates.append("rede_rodape = ?"); params.append(body.rede_rodape)
+    if updates:
+        params.append(op_id)
+        conn.execute(f"UPDATE operadoras SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+    conn.close()
+    return {"ok": True}
 
 
 # ── Superadmin: Importar catálogo em lote (dados.js → DB) ─────────────────────

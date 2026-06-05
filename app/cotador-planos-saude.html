@@ -1747,6 +1747,51 @@ function showCar(op, btn) {
   btn.classList.add(clsMap[op] || ('on-'+op[0]));
 }
 
+function renderRedeTab() {
+  const tagClass = { PS:'rt-ps', INT:'rt-int', AMB:'rt-amb', MAT:'rt-mat' };
+  const opsBar  = document.querySelector('.rede-ops');
+  const tabRede = document.getElementById('tab-rede');
+  if (!opsBar || !tabRede || !window.REDE_DATA) return;
+  const keys = Object.keys(window.REDE_DATA).filter(k => window.REDE_DATA[k]);
+  if (!keys.length) return;
+  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa'};
+  // rebuild operator buttons
+  opsBar.innerHTML = keys.map((k, i) => {
+    const meta  = (window.OP_META || {})[k] || {};
+    const onCls = clsMap[k] || ('on-' + k[0]);
+    return `<button class="car-btn${i===0?' '+onCls:''}" onclick="showRede('${k}',this)">${meta.nome||k}</button>`;
+  }).join('');
+  // remove old static panels
+  tabRede.querySelectorAll('.rede-panel').forEach(el => el.remove());
+  const legendCard = tabRede.querySelector('.card');
+  // generate new panels from REDE_DATA
+  keys.forEach((k, idx) => {
+    const rd   = window.REDE_DATA[k];
+    const meta = (window.OP_META || {})[k] || {};
+    const cls  = meta.cls || clsMap[k] || ('on-' + k[0]);
+    const gdCls = cls.replace('on-','gd-');
+    const rhCls = cls.replace('on-','rh-');
+    let gruposHtml = '';
+    (rd.grupos || []).forEach(g => {
+      const itensHtml = (g.itens || []).map(it => {
+        let tagsHtml = (it.tags||[]).map(t => `<span class="rtag ${tagClass[t]||''}">${t}</span>`).join('');
+        if (it.tagExtra) tagsHtml += `<span class="rtag" style="background:${it.tagExtra.cor};color:${it.tagExtra.texto}">${it.tagExtra.label}</span>`;
+        const localHtml = it.local ? `<span class="rloc">${it.local}</span>` : '';
+        const obsHtml   = it.obs   ? `<div style="font-size:10px;color:var(--ink3);padding:2px 0 0 9px">${it.obs}</div>` : '';
+        return `<div class="rg-item"><span class="rg-dot ${gdCls}"></span><span>${it.nome}${localHtml}${tagsHtml}</span></div>${obsHtml}`;
+      }).join('');
+      gruposHtml += `<div class="rg"><div class="rg-title">${g.titulo}</div>${itensHtml}</div>`;
+    });
+    const footHtml = rd.rodape ? `<div class="rede-foot">${rd.rodape}</div>` : '';
+    const panel = document.createElement('div');
+    panel.className = 'rede-panel' + (idx===0 ? ' on' : '');
+    panel.id = 'rede-' + k;
+    panel.innerHTML = `<div class="rede-card"><div class="rede-head ${rhCls}"><div class="rh-name">${meta.nome||k}</div><div class="rh-adm">${rd.adm||''}</div></div><div class="rede-body">${gruposHtml}</div>${footHtml}</div>`;
+    if (legendCard) tabRede.insertBefore(panel, legendCard);
+    else tabRede.appendChild(panel);
+  });
+}
+
 function showRede(op, btn) {
   const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa'};
   document.querySelectorAll('.rede-panel').forEach(p=>p.classList.remove('on'));
@@ -1811,6 +1856,11 @@ async function _initCotador() {
       const data = await res.json();
       PLANOS  = data.planos   || [];
       OP_META = data.operadoras || {};
+      if (data.rede && typeof data.rede === 'object') {
+        Object.keys(data.rede).forEach(opKey => {
+          if (data.rede[opKey]) window.REDE_DATA[opKey] = data.rede[opKey];
+        });
+      }
       // Injeta variáveis CSS para operadoras novas (cor hex → var(--chave))
       const _dynStyle = document.createElement('style');
       Object.entries(OP_META).forEach(([op, meta]) => {
@@ -1832,6 +1882,7 @@ async function _initCotador() {
     console.warn('Falha ao carregar catálogo da API:', e);
   }
   _loadingDiv.remove();
+  renderRedeTab();
   buildFaixas();
   buildOpConfig();
   render();

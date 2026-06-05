@@ -375,6 +375,7 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
       <div style="display:flex;gap:8px;margin-bottom:16px">
         <button class="cat-tab active" onclick="catTab('operadoras',this)">Operadoras</button>
         <button class="cat-tab" onclick="catTab('planos',this)">Planos</button>
+        <button class="cat-tab" onclick="catTab('rede',this)">Rede</button>
         <button class="cat-tab" onclick="catTab('importar',this)" style="margin-left:auto;background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:#fbbf24">⬆ Importar dados.js</button>
       </div>
 
@@ -501,6 +502,52 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
         </div>
 
         <div id="sa-planos-body"><div class="admin-loading">Carregando...</div></div>
+      </div>
+
+      <!-- REDE CREDENCIADA -->
+      <div id="cat-sub-rede" style="display:none">
+        <div class="form-card">
+          <h3>Meta da Rede por Operadora</h3>
+          <div class="form-grid">
+            <div class="form-field"><label>Operadora</label>
+              <select id="cat-rd-op-meta" onchange="loadRedeMeta()"><option value="">Selecione</option></select>
+            </div>
+            <div class="form-field"><label>Administradora / Atualização</label><input type="text" id="cat-rd-adm" placeholder="Ex: Adm. Esplendor · Atualizada 04/2026"></div>
+            <div class="form-field" style="grid-column:1/-1"><label>Rodapé do painel</label><input type="text" id="cat-rd-rodape" placeholder="Ex: Telemedicina isenta de coparticipação"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-novo" onclick="salvarRedeMeta()">Salvar Meta</button>
+            <span class="form-msg" id="cat-rd-meta-msg"></span>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 id="cat-rd-form-title">Adicionar Item</h3>
+          <input type="hidden" id="cat-rd-item-id">
+          <div class="form-grid">
+            <div class="form-field"><label>Operadora</label>
+              <select id="cat-rd-op"><option value="">Selecione</option></select>
+            </div>
+            <div class="form-field"><label>Grupo (seção)</label><input type="text" id="cat-rd-grupo" placeholder="Ex: Hospitais, Laboratórios"></div>
+            <div class="form-field"><label>Ordem do grupo</label><input type="number" id="cat-rd-grupo-ordem" value="0" min="0"></div>
+            <div class="form-field" style="grid-column:span 2"><label>Nome do estabelecimento</label><input type="text" id="cat-rd-nome" placeholder="Ex: Hospital Santa Lúcia Norte"></div>
+            <div class="form-field"><label>Localização</label><input type="text" id="cat-rd-local" placeholder="Ex: Asa Norte"></div>
+            <div class="form-field"><label>Tags (PS, INT, AMB, MAT)</label><input type="text" id="cat-rd-tags" placeholder="Ex: PS, INT"></div>
+            <div class="form-field" style="grid-column:1/-1"><label>Observação</label><input type="text" id="cat-rd-obs" placeholder="Ex: Atendimento primário obrigatório"></div>
+            <div class="form-field"><label>Ordem</label><input type="number" id="cat-rd-ordem" value="0" min="0"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-novo" id="cat-rd-btn" onclick="salvarRedeItem()">Adicionar Item</button>
+            <button class="btn-toggle" id="cat-rd-cancel" style="display:none" onclick="cancelarRedeEdit()">Cancelar</button>
+            <span class="form-msg" id="cat-rd-msg"></span>
+          </div>
+        </div>
+
+        <div class="section-bar" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <h3>Itens cadastrados</h3>
+          <select id="cat-rd-filtro-op" onchange="loadRede()" class="pf-ctrl"><option value="">Todas as operadoras</option></select>
+        </div>
+        <div id="sa-rede-body"><div class="admin-loading">Carregando...</div></div>
       </div>
     </div>
   </div>
@@ -872,11 +919,177 @@ let _cat_ops = [], _cat_planos = [], _catPlanosListeners = false;
 function catTab(tab, btn) {
   document.getElementById('cat-sub-ops').style.display      = tab === 'operadoras' ? '' : 'none';
   document.getElementById('cat-sub-planos').style.display   = tab === 'planos'     ? '' : 'none';
+  document.getElementById('cat-sub-rede').style.display     = tab === 'rede'       ? '' : 'none';
   document.getElementById('cat-sub-importar').style.display = tab === 'importar'   ? '' : 'none';
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (tab === 'operadoras') loadOpsCat();
   else if (tab === 'planos') loadPlanosCat();
+  else if (tab === 'rede') { _populateRedeOpSelects(); loadRede(); }
+}
+
+// ── Rede Credenciada ──────────────────────────────────────────────────────────
+
+let _cat_rede = [];
+
+function _populateRedeOpSelects() {
+  const ops = _cat_ops.filter(o => o.ativo);
+  ['cat-rd-op', 'cat-rd-op-meta', 'cat-rd-filtro-op'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const cur = sel.value;
+    const placeholder = id === 'cat-rd-filtro-op'
+      ? '<option value="">Todas as operadoras</option>'
+      : '<option value="">Selecione</option>';
+    sel.innerHTML = placeholder + ops.map(o => `<option value="${o.id}">${o.nome}</option>`).join('');
+    sel.value = cur;
+  });
+}
+
+async function loadRede() {
+  const body = document.getElementById('sa-rede-body');
+  if (!body) return;
+  body.innerHTML = '<div class="admin-loading">Carregando...</div>';
+  const filtroOp = document.getElementById('cat-rd-filtro-op').value;
+  const qs = filtroOp ? `?operadora_id=${filtroOp}` : '';
+  try {
+    const res = await fetch(`${API}/api/superadmin/catalogo/rede${qs}`, {headers: authH()});
+    _cat_rede = await res.json();
+    _renderRedeList();
+  } catch {
+    body.innerHTML = '<div class="admin-loading">Erro ao carregar.</div>';
+  }
+}
+
+function _renderRedeList() {
+  const body = document.getElementById('sa-rede-body');
+  const opMap = Object.fromEntries(_cat_ops.map(o => [o.id, o.nome]));
+  if (!_cat_rede.length) {
+    body.innerHTML = '<div class="admin-loading" style="color:rgba(255,255,255,.35)">Nenhum item cadastrado.</div>';
+    return;
+  }
+  const grouped = {};
+  _cat_rede.forEach(r => {
+    const k = r.operadora_id;
+    if (!grouped[k]) grouped[k] = { nome: opMap[k] || k, itens: [] };
+    grouped[k].itens.push(r);
+  });
+  body.innerHTML = Object.entries(grouped).map(([, g]) => `
+    <div style="margin-bottom:18px">
+      <div class="section-bar" style="margin-bottom:4px"><h3>${g.nome}</h3></div>
+      <table class="admin-table"><thead>
+        <tr><th>Grupo</th><th>Nome</th><th>Local</th><th>Tags</th><th>Obs</th><th>Ord</th><th>Ativo</th><th>Ações</th></tr>
+      </thead><tbody>
+        ${g.itens.map(r => `<tr>
+          <td style="color:rgba(255,255,255,.5);font-size:12px">${r.grupo||''}</td>
+          <td>${r.nome}</td>
+          <td style="color:rgba(255,255,255,.55);font-size:12px">${r.local||'—'}</td>
+          <td style="font-size:11px">${(r.tags||[]).join(', ')||'—'}</td>
+          <td style="color:rgba(255,255,255,.5);font-size:11px;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${r.obs||''}">${r.obs||'—'}</td>
+          <td style="text-align:center">${r.ordem}</td>
+          <td style="text-align:center">${r.ativo ? '✅' : '❌'}</td>
+          <td><button class="btn-edit" onclick="editRedeItem(${r.id})">Editar</button>
+              <button class="btn-del"  onclick="deletarRedeItem(${r.id},'${r.nome.replace(/'/g,"\\'")}')">Excluir</button></td>
+        </tr>`).join('')}
+      </tbody></table>
+    </div>`).join('');
+}
+
+function editRedeItem(id) {
+  const r = _cat_rede.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('cat-rd-item-id').value     = r.id;
+  document.getElementById('cat-rd-op').value          = r.operadora_id;
+  document.getElementById('cat-rd-grupo').value       = r.grupo || '';
+  document.getElementById('cat-rd-grupo-ordem').value = r.grupo_ordem ?? 0;
+  document.getElementById('cat-rd-nome').value        = r.nome;
+  document.getElementById('cat-rd-local').value       = r.local || '';
+  document.getElementById('cat-rd-tags').value        = (r.tags||[]).join(', ');
+  document.getElementById('cat-rd-obs').value         = r.obs || '';
+  document.getElementById('cat-rd-ordem').value       = r.ordem ?? 0;
+  document.getElementById('cat-rd-form-title').textContent = 'Editar Item';
+  document.getElementById('cat-rd-btn').textContent   = 'Salvar Alterações';
+  document.getElementById('cat-rd-cancel').style.display = '';
+  document.getElementById('cat-sub-rede').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function cancelarRedeEdit() {
+  ['cat-rd-item-id','cat-rd-nome','cat-rd-local','cat-rd-tags','cat-rd-obs','cat-rd-grupo'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('cat-rd-grupo-ordem').value = '0';
+  document.getElementById('cat-rd-ordem').value = '0';
+  document.getElementById('cat-rd-form-title').textContent = 'Adicionar Item';
+  document.getElementById('cat-rd-btn').textContent = 'Adicionar Item';
+  document.getElementById('cat-rd-cancel').style.display = 'none';
+  document.getElementById('cat-rd-msg').textContent = '';
+}
+
+async function salvarRedeItem() {
+  const msg    = document.getElementById('cat-rd-msg');
+  const itemId = document.getElementById('cat-rd-item-id').value;
+  const opId   = parseInt(document.getElementById('cat-rd-op').value);
+  const nome   = document.getElementById('cat-rd-nome').value.trim();
+  if (!opId || !nome) { msg.textContent = 'Operadora e nome são obrigatórios.'; msg.style.color='#f87171'; return; }
+  const tagsRaw = document.getElementById('cat-rd-tags').value.trim();
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : null;
+  const payload = {
+    operadora_id: opId,
+    grupo: document.getElementById('cat-rd-grupo').value.trim(),
+    grupo_ordem: parseInt(document.getElementById('cat-rd-grupo-ordem').value)||0,
+    nome,
+    local: document.getElementById('cat-rd-local').value.trim() || null,
+    tags,
+    obs: document.getElementById('cat-rd-obs').value.trim() || null,
+    ordem: parseInt(document.getElementById('cat-rd-ordem').value)||0,
+  };
+  msg.textContent = 'Salvando...'; msg.style.color='rgba(255,255,255,.5)';
+  try {
+    const url = itemId
+      ? `${API}/api/superadmin/catalogo/rede/${itemId}`
+      : `${API}/api/superadmin/catalogo/rede`;
+    const res = await fetch(url, {method: itemId ? 'PATCH' : 'POST', headers: authH(), body: JSON.stringify(payload)});
+    if (!res.ok) { const e = await res.json(); msg.textContent = e.detail||'Erro.'; msg.style.color='#f87171'; return; }
+    msg.textContent = itemId ? 'Atualizado!' : 'Adicionado!'; msg.style.color='#4ade80';
+    cancelarRedeEdit();
+    loadRede();
+  } catch { msg.textContent = 'Erro de rede.'; msg.style.color='#f87171'; }
+}
+
+async function deletarRedeItem(id, nome) {
+  if (!confirm(`Excluir "${nome}"?`)) return;
+  try {
+    const res = await fetch(`${API}/api/superadmin/catalogo/rede/${id}`, {method:'DELETE', headers: authH()});
+    if (!res.ok) { alert('Erro ao excluir.'); return; }
+    loadRede();
+  } catch { alert('Erro de rede.'); }
+}
+
+function loadRedeMeta() {
+  const opId = document.getElementById('cat-rd-op-meta').value;
+  if (!opId) return;
+  const op = _cat_ops.find(o => o.id == opId);
+  document.getElementById('cat-rd-adm').value    = op?.rede_adm    || '';
+  document.getElementById('cat-rd-rodape').value = op?.rede_rodape || '';
+}
+
+async function salvarRedeMeta() {
+  const msg  = document.getElementById('cat-rd-meta-msg');
+  const opId = document.getElementById('cat-rd-op-meta').value;
+  if (!opId) { msg.textContent = 'Selecione uma operadora.'; msg.style.color='#f87171'; return; }
+  const payload = {
+    rede_adm:    document.getElementById('cat-rd-adm').value.trim()    || null,
+    rede_rodape: document.getElementById('cat-rd-rodape').value.trim() || null,
+  };
+  msg.textContent = 'Salvando...'; msg.style.color='rgba(255,255,255,.5)';
+  try {
+    const res = await fetch(`${API}/api/superadmin/catalogo/operadoras/${opId}/rede-meta`,
+      {method:'PATCH', headers: authH(), body: JSON.stringify(payload)});
+    if (!res.ok) { const e = await res.json(); msg.textContent = e.detail||'Erro.'; msg.style.color='#f87171'; return; }
+    msg.textContent = 'Salvo!'; msg.style.color='#4ade80';
+    const op = _cat_ops.find(o => o.id == opId);
+    if (op) { op.rede_adm = payload.rede_adm; op.rede_rodape = payload.rede_rodape; }
+  } catch { msg.textContent = 'Erro de rede.'; msg.style.color='#f87171'; }
 }
 
 async function importarDadosJS() {
