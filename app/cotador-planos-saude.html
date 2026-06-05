@@ -1862,8 +1862,16 @@ async function _initCotador() {
         const porOp = {};
         dbPlanos.forEach(p => { (porOp[p.op] = porOp[p.op] || []).push(p); });
         Object.keys(porOp).forEach(opKey => {
-          PLANOS = PLANOS.filter(p => p.op !== opKey);
-          porOp[opKey].forEach(p => PLANOS.push(p));
+          const dbPlansForOp = porOp[opKey];
+          const hasValidPrecos = dbPlansForOp.some(p =>
+            Array.isArray(p.precos) && p.precos.some(v => Number(v) > 0)
+          );
+          if (hasValidPrecos) {
+            PLANOS = PLANOS.filter(p => p.op !== opKey);
+            dbPlansForOp.forEach(p => PLANOS.push(p));
+          } else {
+            console.warn('[catalogo] Preços zerados no banco para "' + opKey + '" — mantendo fallback do dados.js');
+          }
         });
       }
       if (data.operadoras && Object.keys(data.operadoras).length) {
