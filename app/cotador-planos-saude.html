@@ -1854,8 +1854,21 @@ async function _initCotador() {
     const res = await fetch('/api/catalogo');
     if (res.ok) {
       const data = await res.json();
-      PLANOS  = data.planos   || [];
-      OP_META = data.operadoras || {};
+      // Inicializa com fallback do dados.js, depois substitui por operadora se o banco tiver dados
+      PLANOS  = (window.PLANOS  || []).slice();
+      OP_META = Object.assign({}, window.OP_META || {});
+      const dbPlanos = data.planos || [];
+      if (dbPlanos.length) {
+        const porOp = {};
+        dbPlanos.forEach(p => { (porOp[p.op] = porOp[p.op] || []).push(p); });
+        Object.keys(porOp).forEach(opKey => {
+          PLANOS = PLANOS.filter(p => p.op !== opKey);
+          porOp[opKey].forEach(p => PLANOS.push(p));
+        });
+      }
+      if (data.operadoras && Object.keys(data.operadoras).length) {
+        Object.assign(OP_META, data.operadoras);
+      }
       if (data.rede && typeof data.rede === 'object') {
         Object.keys(data.rede).forEach(opKey => {
           if (data.rede[opKey]) window.REDE_DATA[opKey] = data.rede[opKey];
