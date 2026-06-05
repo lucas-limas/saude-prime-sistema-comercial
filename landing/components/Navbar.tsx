@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Logo from "./Logo";
 
 const navLinks = [
   { label: "O sistema", href: "#produto" },
@@ -34,13 +35,8 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center transition-colors group-hover:bg-white/15">
-            <span className="text-xs font-bold text-white tracking-tight">SP</span>
-          </div>
-          <span className="font-semibold text-white text-sm">
-            Saúde <span className="text-gold">Prime</span>
-          </span>
+        <a href="#" className="flex items-center group opacity-90 hover:opacity-100 transition-opacity duration-200">
+          <Logo className="h-8 w-auto" />
         </a>
 
         {/* Desktop nav */}

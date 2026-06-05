@@ -1,3 +1,5 @@
+import Logo from "./Logo";
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -7,13 +9,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-[1fr_auto_auto_auto] gap-10 mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center">
-                <span className="text-[10px] font-bold text-white">SP</span>
-              </div>
-              <span className="text-sm font-semibold text-white">
-                Saúde <span className="text-gold">Prime</span>
-              </span>
+            <div className="mb-4">
+              <Logo className="h-7 w-auto opacity-80" />
             </div>
             <p className="text-xs text-muted leading-relaxed max-w-[200px]">
               Sistema comercial para corretoras de planos de saúde corporativos.
