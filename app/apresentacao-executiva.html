@@ -232,6 +232,15 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--ink);f
 .ht-amb{background:#d1fae5;color:#065f46}
 .ht-mat{background:#fce7f3;color:#9d174d}
 
+/* REDE TABLE */
+.rede-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:1rem}
+.rede-table th,.rede-table td{border:1px solid var(--line);padding:5px 8px;vertical-align:middle}
+.rede-table thead tr:nth-child(2) th{background:var(--navy);color:#fff;text-align:center;font-size:9px;font-weight:600;white-space:nowrap;padding:5px 7px}
+.rh-nome{text-align:left;font-weight:500;color:var(--navy);min-width:140px}
+.rh-local{text-align:left;color:var(--ink3);font-size:10px;min-width:90px}
+.rc-sim{text-align:center;color:#059669;font-weight:700;font-size:13px;background:#ecfdf5}
+.rc-nao{text-align:center;color:var(--ink3);background:var(--cream)}
+
 /* PACOTE / VANTAGENS */
 .vant-apres-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.875rem;margin-top:1rem}
 .va-card{border-radius:var(--r);border:1px solid var(--line);background:var(--cream);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.5rem}
@@ -659,65 +668,81 @@ fetch('/api/catalogo').then(r=>r.ok?r.json():null).then(data=>{
 }).catch(()=>{});
 
 const HOSPITAIS_DB = [
-  // ── Unity ──────────────────────────────────────────────────────────────
-  {id:'hsl',    nome:'Hospital Santa Lúcia',         local:'Asa Norte / Gama / Taguatinga — DF', icon:'🏥', tags:['PS','INT'], ops:['unity','segurosunimed','portosaude'],                  planos:'Unity · Seguros Unimed (Superior+) · Porto Saúde'},
-  {id:'hsm',    nome:'Hospital São Mateus',          local:'Cruzeiro — DF',                      icon:'🏥', tags:['PS','INT'], ops:['unity','plenum','segurosunimed','portosaude'],          planos:'Unity · Plenum · Seguros Unimed · Porto Saúde'},
-  {id:'hpai',   nome:'Hospital PAI',                 local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['unity'],                                              planos:'Unity Vida · Unity Star'},
-  {id:'hamma',  nome:'Hospital AMMA',                local:'Águas Claras — DF',                  icon:'🏥', tags:['INT','AMB'],ops:['unity','evo'],                                        planos:'Unity · Evo'},
-  // ── Evo ────────────────────────────────────────────────────────────────
-  {id:'hbras',  nome:'Hospital Brasília',            local:'Lago Sul / Águas Claras — DF',       icon:'🏥', tags:['PS','INT'], ops:['evo','plenum','medsenior','segurosunimed'],             planos:'Evo · Plenum · MedSênior · Seguros Unimed'},
-  {id:'amparo', nome:'Clínica Amparo (Grupo Sabin)', local:'Asa Norte / Sudoeste / Taguatinga',  icon:'🩺', tags:['AMB'],      ops:['evo'],                                               planos:'Evo ONE — Atenção Primária'},
-  // ── Unity + Evo + Plenum ───────────────────────────────────────────────
-  {id:'hhome',  nome:'Hospital Home',                local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['unity','evo','plenum','medsenior','segurosunimed'],     planos:'Unity Star · Evo NOW · Plenum · MedSênior · Seguros Unimed'},
-  {id:'hmb',    nome:'Maternidade Brasília',         local:'Sudoeste — DF',                      icon:'👶', tags:['INT','MAT'],ops:['unity','evo','plenum','segurosunimed'],                planos:'Unity Star · Evo · Plenum · Seguros Unimed'},
-  {id:'hfrat',  nome:'P.S. das Fraturas',           local:'Ceilândia — DF',                     icon:'🦴', tags:['PS','INT'], ops:['unity','plenum','segurosunimed'],                      planos:'Unity · Plenum · Seguros Unimed'},
-  // ── Plenum + MedSênior ─────────────────────────────────────────────────
-  {id:'halv',   nome:'Hospital Alvorada Brasília',   local:'Asa Sul — DF',                       icon:'🏥', tags:['PS','INT'], ops:['plenum','medsenior','segurosunimed'],                  planos:'Plenum · MedSênior · Seguros Unimed'},
-  {id:'hdaher', nome:'Hospital Daher',               local:'Lago Sul — DF',                      icon:'🏥', tags:['PS','INT'], ops:['plenum','medsenior','segurosunimed'],                  planos:'Plenum · MedSênior · Seguros Unimed'},
-  {id:'hsiriol',nome:'Hospital Sírio-Libanês',       local:'Asa Sul — DF',                       icon:'⭐', tags:['INT'],      ops:['plenum','medsenior','segurosunimed'],                  planos:'Plenum Sigma · MedSênior · Seguros Unimed (Superior+)'},
-  // ── Amil ───────────────────────────────────────────────────────────────
-  {id:'hbrasilia_amil',nome:'Hospital Brasília (Amil)',local:'Lago Sul / Águas Claras — DF',     icon:'🏥', tags:['PS','INT'], ops:['amil'],                                              planos:'Amil — todos os planos'},
-  {id:'hanch',  nome:'Hospital Anchieta',            local:'Taguatinga / Ceilândia — DF',        icon:'🏥', tags:['PS','INT'], ops:['amil','segurosunimed','portosaude'],                   planos:'Amil · Seguros Unimed · Porto Saúde'},
-  {id:'hluz',   nome:'Hospital Santa Luzia',         local:'Luziânia — GO',                      icon:'🏥', tags:['PS','INT'], ops:['amil'],                                              planos:'Amil — todos os planos'},
-  // ── Compartilhados (Labs/Diag) ─────────────────────────────────────────
-  {id:'sabin',  nome:'Sabin / DASA Diagnóstica',     local:'Múltiplas unidades — DF',            icon:'🔬', tags:['AMB'],      ops:['unity','evo','amil','medsenior','segurosunimed'],       planos:'Unity · Evo · Amil · MedSênior · Seguros Unimed'},
-  {id:'fleury', nome:'Fleury / Exame Diagnóstica',   local:'Brasília — DF',                      icon:'🔬', tags:['AMB'],      ops:['segurosunimed'],                                      planos:'Seguros Unimed — todos os planos'},
-  // ── Seguros Unimed — Hospitais exclusivos ──────────────────────────────
-  {id:'hsu_home2',   nome:'Home Hospital',                  local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_anna',    nome:'Hospital Anna Nery',              local:'Brasília — DF',                      icon:'🏥', tags:['PS'],       ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_sabin_h', nome:'Hospital Dr Albert Sabin',        local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_maux',    nome:'Hospital Maria Auxiliadora',       local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_pnorte',  nome:'Hospital Prontonorte',             local:'Norte do DF',                        icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_sfranc',  nome:'Hospital São Francisco',           local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT','MAT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_urol',    nome:'Hospital Urológico de Brasília',   local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_oftal',   nome:'Oftalmed / Hospital da Visão',     local:'Brasília — DF',                      icon:'👁', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_unimed',  nome:'Unimed Espaço Saúde Cuidar Mais', local:'Brasília — DF',                      icon:'🏥', tags:['INT','AMB'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_hob_bsb', nome:'HOB — Brasília',                   local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
-  {id:'hsu_hob_tag', nome:'HOB — Taguatinga Sul',             local:'Taguatinga — DF',                    icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
-  {id:'hsu_agclaras',nome:'Hospital Águas Claras',             local:'Águas Claras — DF',                  icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
-  {id:'hsu_spacini', nome:'Hospital Pacini',                   local:'Brasília — DF',                      icon:'🏥', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
-  {id:'hsu_shelen',  nome:'Hospital Santa Helena',             local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT','MAT'], ops:['segurosunimed'], planos:'Seguros Unimed — Completo+'},
-  {id:'hsu_coracao', nome:'Hospital do Coração do Brasil',     local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
-  {id:'hsu_sluz_df', nome:'Hospital Santa Luzia',              local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
-  {id:'hsu_rm',      nome:'RM Clínica de Reabilitação',        local:'Brasília — DF',                      icon:'🏥', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
-  {id:'hsu_cbv',     nome:'CBV — Centro Brasileiro da Visão',  local:'Brasília — DF',                      icon:'👁', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Superior+'},
-  {id:'hsu_dfstar',  nome:'Hospital DF Star',                  local:'Brasília — DF',                      icon:'⭐', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — Sênior'},
-  {id:'hsu_recanto', nome:'Clínica Recanto',                   local:'Brasília — DF',                      icon:'🏥', tags:['PS','INT'], ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  {id:'hsu_estanc',  nome:'Estância Resiliência',              local:'Brasília — DF',                      icon:'🏥', tags:['INT'],      ops:['segurosunimed'], planos:'Seguros Unimed — todos os planos'},
-  // ── Porto Saúde ────────────────────────────────────────────────────────
-  {id:'hps_anch',  nome:'Hospital Anchieta',           local:'Taguatinga / Ceilândia — DF',   icon:'🏥', tags:['PS','INT'], ops:['portosaude'],                      planos:'Porto Saúde — todos os planos'},
-  {id:'hps_bras',  nome:'Hospital Brasília',            local:'Lago Sul / Águas Claras — DF',  icon:'🏥', tags:['PS','INT'], ops:['portosaude'],                      planos:'Porto Saúde — todos os planos'},
-  {id:'hps_home',  nome:'Hospital Home',                local:'Asa Sul — DF',                  icon:'🏥', tags:['PS','INT'], ops:['portosaude'],                      planos:'Porto Saúde — todos os planos'},
-  {id:'hps_alv',   nome:'Hospital Alvorada Brasília',   local:'Asa Sul — DF',                  icon:'🏥', tags:['PS','INT'], ops:['portosaude'],                      planos:'Porto Saúde — todos os planos'},
-  {id:'hps_smarta',nome:'Hospital Santa Marta',         local:'Brasília — DF',                 icon:'🏥', tags:['PS','INT'], ops:['portosaude'],                      planos:'Porto Saúde — todos os planos'},
-  {id:'hps_daher', nome:'Hospital Daher',               local:'Lago Sul — DF',                 icon:'🏥', tags:['PS','INT'], ops:['portosaude'],                      planos:'Porto Saúde — todos os planos'},
-  {id:'hps_dfstar',nome:'Hospital DF Star',             local:'Brasília — DF',                 icon:'⭐', tags:['INT'],      ops:['portosaude'],                      planos:'Porto Saúde — Apartamento (P420 / Ouro)'},
-  {id:'hps_shelen',nome:'Hospital Santa Helena',        local:'Brasília — DF',                 icon:'🏥', tags:['PS','INT','MAT'], ops:['portosaude'],                planos:'Porto Saúde — Apartamento (P420 / Ouro)'},
-  // ── MedSênior exclusivos ───────────────────────────────────────────────
-  {id:'hms_sig',   nome:'MedSênior — P.A. 24h SIG',            local:'SIG — Brasília/DF',                 icon:'🏥', tags:['PS','CD'],  ops:['medsenior'], planos:'MedSênior — todos os planos'},
-  {id:'hms_tag',   nome:'MedSênior — P.A. 24h Taguatinga',     local:'Taguatinga — DF',                   icon:'🏥', tags:['PS','CD'],  ops:['medsenior'], planos:'MedSênior — todos os planos'},
-  {id:'hms_units', nome:'MedSênior — Unidades Ambulatoriais',  local:'Asa Sul / Taguatinga / Águas Claras — DF', icon:'🏥', tags:['AMB'], ops:['medsenior'], planos:'MedSênior — todos os planos'},
-  {id:'hsmarta',   nome:'Hospital Santa Marta',                 local:'Brasília — DF',                     icon:'🏥', tags:['PS','INT'], ops:['medsenior','segurosunimed'], planos:'MedSênior · Seguros Unimed'},
+// Chaves rede por operadora:
+// amil: BRONZE,PRATA,OURO,OURO_II,PLATINUM,PLATINUM_MAIS,S380,S450,S750,BLACK_I,S2500,BLACK_II,BLACK_S6500
+// unity: LIFE_VITAL,UNITY_VIDA,VIDA(=star)
+// portosaude: BRONZE_BSB_PRO,PRATA_BSB_PRO,OURO_BSB_PRO,P220,P320,P420,P520,BRONZE_BR,PRATA_MAIS,OURO_MAIS,DIAMANTE_MAIS
+// bradesco: EFETIVO,EFETIVO_PLUS,FLEX,IDEAL,NACIONAL,NACIONAL_PLUS,PREMIUM
+// sulamerica: DIRETO_NAC,EXATO,CLASSICO,ESPECIAL_RC,ESPECIAL100,EXECUTIVO,PRESTIGE
+// segurosunimed: COMPACTO,EFETIVO,COMPLETO,SUPERIOR,SUPERIOR_PLUS,SENIOR
+// evo: ONE,NOW  |  plenum: DELTA,OMEGA,BETA,SIGMA
+{id:'hagcl',   nome:'Hospital Águas Claras',      local:'Águas Claras — DF',      icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:1,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hamma',   nome:'Hospital AMMA',              local:'Águas Claras — DF',      icon:'🏥', tags:['INT','AMB'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:0,SUPERIOR_PLUS:0,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hsmn',    nome:'Hospital Santa Marta Norte', local:'Asa Norte — DF',         icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:1,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hshel',   nome:'Hospital Santa Helena',      local:'Asa Norte — DF',         icon:'🏥', tags:['PS','INT','MAT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:1,S750:1,BLACK_I:0,S2500:1,BLACK_II:0,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:1,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hslnorte',nome:'Hospital Santa Lúcia Norte', local:'Asa Norte — DF',         icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:1,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:1},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:1,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'halv',    nome:'Hospital Alvorada Brasília',  local:'Asa Sul — DF',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:1,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:1,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hpacini', nome:'Hospital Pacini',             local:'Asa Sul — DF',           icon:'🏥', tags:['INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:1},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hurol',   nome:'Hospital Urológico',          local:'Asa Sul — DF',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:0,S750:1,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:1,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hdfstar', nome:'Hospital DF Star',            local:'Asa Sul — DF',           icon:'⭐', tags:['INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:1,BLACK_II:0,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:0,SUPERIOR_PLUS:0,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hcoracao',nome:'Hospital do Coração',         local:'Asa Sul — DF',           icon:'❤️', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hhome',   nome:'Hospital Home',               local:'Asa Sul — DF',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:1,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:0,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hsl',     nome:'Hospital Santa Lúcia',        local:'Asa Sul — DF',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:1,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:1,P220:0,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:1,EFETIVO_PLUS:1,FLEX:0,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hsluz_as',nome:'Hospital Santa Luzia',        local:'Asa Sul — DF',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hpai',    nome:'Hospital PAI',                local:'Asa Sul — DF',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:0,SUPERIOR_PLUS:0,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hsiriol', nome:'Hospital Sírio-Libanês',      local:'Asa Sul — DF',           icon:'⭐', tags:['INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:1,S380:0,S450:0,S750:0,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:1,P220:0,P320:0,P420:1,P520:1,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:1}}},
+{id:'hclin_cei',nome:'Hospital das Clínicas',      local:'Ceilândia — DF',         icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:1},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hanch_cei',nome:'Hospital Anchieta Ceilândia',local:'Ceilândia — DF',         icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:0,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hsm',     nome:'Hospital São Mateus',         local:'Cruzeiro — DF',          icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:1,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:1},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hslgama', nome:'Hospital Santa Lúcia Gama',   local:'Gama — DF',              icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:1},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:1,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hbras',   nome:'Hospital Brasília',           local:'Lago Sul — DF',          icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:1,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:0,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:0,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hdaher',  nome:'Hospital Daher',              local:'Lago Sul — DF',          icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hmb',     nome:'Maternidade Brasília',        local:'Sudoeste — DF',          icon:'👶', tags:['INT','MAT'],
+ rede:{amil:{BRONZE:1,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hanch_tag',nome:'Hospital Anchieta',          local:'Taguatinga — DF',        icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:0,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:1,P220:0,P320:0,P420:1,P520:1,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:0,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:0,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hsmarta', nome:'Hospital Santa Marta',        local:'Taguatinga — DF',        icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:1,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:0,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hcerrado',nome:'Hospital Cerrado Valparaíso', local:'Valparaíso — GO',        icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:0,SUPERIOR_PLUS:0,SENIOR:0},evo:{ONE:1,NOW:1},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hmantevida',nome:'Hospital ManteVida',        local:'Taguatinga — DF',        icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hsluz_luz',nome:'Hospital Santa Luzia',       local:'Luziânia — GO',          icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'hsltag',  nome:'Hospital Santa Lúcia',        local:'Taguatinga — DF',        icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:1},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:1,EFETIVO_PLUS:1,FLEX:1,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:1,SUPERIOR_PLUS:0,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hlchaves',nome:'Hospital Luciano Chaves',     local:'Formosa — GO',           icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:1,UNITY_VIDA:1,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:0,SUPERIOR_PLUS:0,SENIOR:0},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+{id:'hhpaes',  nome:'Hospital HPAES',              local:'São Sebastião — DF',     icon:'🏥', tags:['PS','INT'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:0,PLATINUM_MAIS:0,S380:0,S450:0,S750:0,BLACK_I:0,S2500:0,BLACK_II:0,BLACK_S6500:0},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:0,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:0},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:0,PREMIUM:0},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:0,COMPLETO:0,SUPERIOR:0,SUPERIOR_PLUS:0,SENIOR:0},evo:{ONE:1,NOW:1},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
+// ── Laboratórios ────────────────────────────────────────────────────────
+{id:'lexame',  nome:'Exame Diagnóstica',           local:'Diversas unidades — DF', icon:'🔬', tags:['AMB'],
+ rede:{amil:{BRONZE:1,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:1,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:1,P320:1,P420:1,P520:1,BRONZE_BR:1,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:1,EFETIVO_PLUS:0,FLEX:1,IDEAL:0,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:1,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:1,OMEGA:1,BETA:1,SIGMA:1}}},
+{id:'lsabin',  nome:'Sabin Medicina Diagnóstica',  local:'Diversas unidades — DF', icon:'🔬', tags:['AMB'],
+ rede:{amil:{BRONZE:0,PRATA:1,OURO:1,OURO_II:1,PLATINUM:1,PLATINUM_MAIS:1,S380:1,S450:1,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:1},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:1,OURO_BSB_PRO:1,P220:0,P320:1,P420:1,P520:1,BRONZE_BR:0,PRATA_MAIS:1,OURO_MAIS:1,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:1,FLEX:1,IDEAL:1,NACIONAL:1,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:1,EXATO:0,CLASSICO:1,ESPECIAL_RC:1,ESPECIAL100:1,EXECUTIVO:1,PRESTIGE:1},segurosunimed:{COMPACTO:1,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:1,NOW:1},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:1}}},
+{id:'lfleury', nome:'Fleury / DASA',               local:'Diversas unidades — DF', icon:'🔬', tags:['AMB'],
+ rede:{amil:{BRONZE:0,PRATA:0,OURO:0,OURO_II:0,PLATINUM:1,PLATINUM_MAIS:1,S380:0,S450:0,S750:1,BLACK_I:1,S2500:1,BLACK_II:1,BLACK_S6500:1},unity:{LIFE_VITAL:0,UNITY_VIDA:0,VIDA:0},portosaude:{BRONZE_BSB_PRO:0,PRATA_BSB_PRO:0,OURO_BSB_PRO:0,P220:0,P320:0,P420:0,P520:1,BRONZE_BR:0,PRATA_MAIS:0,OURO_MAIS:0,DIAMANTE_MAIS:1},bradesco:{EFETIVO:0,EFETIVO_PLUS:0,FLEX:0,IDEAL:0,NACIONAL:0,NACIONAL_PLUS:1,PREMIUM:1},sulamerica:{DIRETO_NAC:0,EXATO:0,CLASSICO:0,ESPECIAL_RC:0,ESPECIAL100:0,EXECUTIVO:0,PRESTIGE:0},segurosunimed:{COMPACTO:0,EFETIVO:1,COMPLETO:1,SUPERIOR:1,SUPERIOR_PLUS:1,SENIOR:1},evo:{ONE:0,NOW:0},plenum:{DELTA:0,OMEGA:0,BETA:0,SIGMA:0}}},
 ];
 
 const VANTAGENS_DB = [
@@ -852,7 +877,7 @@ function buildHospitais() {
         : Object.keys(_opsData.activeOps).filter(k => _opsData.activeOps[k]))
     : null;
   const list = activeKeys
-    ? HOSPITAIS_DB.filter(h => h.ops && h.ops.some(op => activeKeys.includes(op)))
+    ? HOSPITAIS_DB.filter(h => h.rede && activeKeys.some(op => h.rede[op] && Object.values(h.rede[op]).some(v => v)))
     : HOSPITAIS_DB;
   if (!list.length) {
     c.innerHTML = '<div style="padding:1rem 1.5rem;font-size:13px;color:var(--ink3);font-style:italic">Nenhum hospital encontrado para as operadoras desta cotação.</div>';
@@ -1065,6 +1090,149 @@ function sanitize(str) {
     .replace(/'/g, '&#39;');
 }
 
+// ─── MAPEAMENTO PLANO → COLUNA DE REDE ────────────────────────────────
+const REDE_COL_LABELS = {
+  // unity
+  LIFE_VITAL:'Life Vital', UNITY_VIDA:'Vida', VIDA:'Star',
+  // evo
+  ONE:'ONE', NOW:'NOW',
+  // plenum
+  DELTA:'Delta', OMEGA:'Ômega', BETA:'Beta', SIGMA:'Sigma',
+  // amil
+  BRONZE:'Bronze', PRATA:'Prata', OURO:'Ouro', OURO_II:'Ouro II',
+  PLATINUM:'Platinum', PLATINUM_MAIS:'Platinum+',
+  S380:'S380', S450:'S450', S750:'S750',
+  BLACK_I:'Black I', S2500:'S2500', BLACK_II:'Black II', BLACK_S6500:'Black',
+  // portosaude
+  BRONZE_BSB_PRO:'Bronze BSB', PRATA_BSB_PRO:'Prata BSB', OURO_BSB_PRO:'Ouro BSB',
+  P220:'P220', P320:'P320', P420:'P420', P520:'P520',
+  BRONZE_BR:'Bronze BR', PRATA_MAIS:'Prata+', OURO_MAIS:'Ouro+', DIAMANTE_MAIS:'Diamante+',
+  // bradesco
+  EFETIVO:'Efetivo', EFETIVO_PLUS:'Efetivo+', FLEX:'Flex', IDEAL:'Ideal',
+  NACIONAL:'Nacional', NACIONAL_PLUS:'Nacional+', PREMIUM:'Premium',
+  // sulamerica
+  DIRETO_NAC:'Direto Nac.', EXATO:'Exato', CLASSICO:'Clássico',
+  ESPECIAL_RC:'Esp. RC', ESPECIAL100:'Esp. 100', EXECUTIVO:'Executivo', PRESTIGE:'Prestige',
+  // segurosunimed
+  COMPACTO:'Compacto', COMPLETO:'Completo', SUPERIOR:'Superior',
+  SUPERIOR_PLUS:'Superior+', SENIOR:'Sênior',
+};
+
+function getRedeCol(opKey, prodNome) {
+  const n = (prodNome||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if (opKey==='unity') {
+    if (n.includes('life vital')) return 'LIFE_VITAL';
+    if (n.includes('star')) return 'VIDA';
+    return 'UNITY_VIDA';
+  }
+  if (opKey==='evo') return n.includes('one') ? 'ONE' : 'NOW';
+  if (opKey==='plenum') {
+    if (n.includes('sigma')) return 'SIGMA';
+    if (n.includes('beta'))  return 'BETA';
+    if (n.includes('omega')) return 'OMEGA';
+    return 'DELTA';
+  }
+  if (opKey==='amil') {
+    if (n.includes('platinum mais')) return 'PLATINUM_MAIS';
+    if (n.includes('platinum'))      return 'PLATINUM';
+    if (n.includes('ouro ii'))       return 'OURO_II';
+    if (n.includes('ouro'))          return 'OURO';
+    if (n.includes('prata'))         return 'PRATA';
+    if (n.includes('s380'))          return 'S380';
+    if (n.includes('s450'))          return 'S450';
+    if (n.includes('s750'))          return 'S750';
+    if (n.includes('s2500'))         return 'S2500';
+    if (n.includes('black s6500'))   return 'BLACK_S6500';
+    if (n.includes('black ii'))      return 'BLACK_II';
+    if (n.includes('black i')||n.includes('black 1')) return 'BLACK_I';
+    return 'BRONZE';
+  }
+  if (opKey==='portosaude') {
+    if (n.includes('diamante'))      return 'DIAMANTE_MAIS';
+    if (n.includes('ouro mais'))     return 'OURO_MAIS';
+    if (n.includes('prata mais'))    return 'PRATA_MAIS';
+    if (n.includes('bronze br')||n.includes('bronze brasil')) return 'BRONZE_BR';
+    if (n.includes('p520'))          return 'P520';
+    if (n.includes('p420'))          return 'P420';
+    if (n.includes('p320'))          return 'P320';
+    if (n.includes('p220'))          return 'P220';
+    if (n.includes('ouro'))          return 'OURO_BSB_PRO';
+    if (n.includes('prata'))         return 'PRATA_BSB_PRO';
+    return 'BRONZE_BSB_PRO';
+  }
+  if (opKey==='bradesco') {
+    if (n.includes('premium'))         return 'PREMIUM';
+    if (n.includes('nacional plus'))   return 'NACIONAL_PLUS';
+    if (n.includes('nacional'))        return 'NACIONAL';
+    if (n.includes('ideal'))           return 'IDEAL';
+    if (n.includes('flex'))            return 'FLEX';
+    if (n.includes('efetivo plus'))    return 'EFETIVO_PLUS';
+    return 'EFETIVO';
+  }
+  if (opKey==='sulamerica') {
+    if (n.includes('prestige'))        return 'PRESTIGE';
+    if (n.includes('executivo'))       return 'EXECUTIVO';
+    if (n.includes('especial 100')||n.includes('100')) return 'ESPECIAL100';
+    if (n.includes('especial rc')||n.includes(' rc'))  return 'ESPECIAL_RC';
+    if (n.includes('classico'))        return 'CLASSICO';
+    if (n.includes('exato'))           return 'EXATO';
+    return 'DIRETO_NAC';
+  }
+  if (opKey==='segurosunimed') {
+    if (n.includes('senior')||n.includes('seni')) return 'SENIOR';
+    if (n.includes('superior plus'))   return 'SUPERIOR_PLUS';
+    if (n.includes('superior'))        return 'SUPERIOR';
+    if (n.includes('completo'))        return 'COMPLETO';
+    if (n.includes('efetivo'))         return 'EFETIVO';
+    return 'COMPACTO';
+  }
+  return null;
+}
+
+function buildRedeTable(hospSel, cols) {
+  if (!hospSel.length || !cols.length)
+    return '<div style="font-size:13px;color:var(--ink3);padding:1rem 0;font-style:italic">Nenhum hospital selecionado.</div>';
+
+  // Agrupar colunas por operadora para cabeçalho mesclado
+  const opGroups = [];
+  let curOp = null;
+  for (const c of cols) {
+    if (c.op !== curOp) { opGroups.push({op:c.op, count:1}); curOp=c.op; }
+    else opGroups[opGroups.length-1].count++;
+  }
+
+  const headerOps = opGroups.map(g => {
+    const m = OP_META[g.op] || {};
+    return `<th colspan="${g.count}" style="background:${m.cor||'#555'};color:#fff;text-align:center;font-size:9px;font-weight:700;letter-spacing:.04em;white-space:nowrap;padding:5px 8px">${(m.nome||g.op).toUpperCase()}</th>`;
+  }).join('');
+
+  const headerCols = cols.map(c =>
+    `<th style="text-align:center;white-space:nowrap">${REDE_COL_LABELS[c.col]||c.col}</th>`
+  ).join('');
+
+  const rows = hospSel.map(h => {
+    const cells = cols.map(c => {
+      const cov = h.rede?.[c.op]?.[c.col];
+      return cov ? `<td class="rc-sim">✓</td>` : `<td class="rc-nao">—</td>`;
+    }).join('');
+    return `<tr><td class="rh-nome">${h.icon} ${h.nome}</td><td class="rh-local">${h.local}</td>${cells}</tr>`;
+  }).join('');
+
+  return `<div style="overflow-x:auto">
+    <table class="rede-table">
+      <thead>
+        <tr>
+          <th class="rh-nome" rowspan="2" style="vertical-align:middle;background:var(--navy);color:#fff;font-size:9px;font-weight:700;padding:5px 8px">HOSPITAL</th>
+          <th class="rh-local" rowspan="2" style="vertical-align:middle;background:var(--navy);color:#fff;font-size:9px;font-weight:700;padding:5px 8px">LOCAL</th>
+          ${headerOps}
+        </tr>
+        <tr>${headerCols}</tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
 // ─── GERAR APRESENTAÇÃO ────────────────────────────────────────────────
 async function gerar() {
   // Coletar dados
@@ -1180,13 +1348,26 @@ async function gerar() {
     }).join('');
   }
 
-  const hospHTML = hospSel.length > 0 ? hospSel.map(h=>`
-    <div class="hosp-card">
-      <div class="hosp-icon">${h.icon}</div>
-      <div class="hosp-nome">${h.nome}</div>
-      <div class="hosp-local">📍 ${h.local}</div>
-      <div class="hosp-tags">${h.tags.map(t=>`<span class="htag ht-${t.toLowerCase()}">${t}</span>`).join('')}</div>
-    </div>`).join('') : '<div style="font-size:13px;color:var(--ink3);padding:1rem 0;font-style:italic">Nenhum hospital selecionado.</div>';
+  // Montar colunas da tabela de rede: pares únicos (op, redeCol)
+  const _redeCols = [];
+  { const _seen = new Set();
+    const _addCol = (opK, prodNome) => {
+      const col = getRedeCol(opK, prodNome);
+      if (!col) return;
+      const key = `${opK}|${col}`;
+      if (!_seen.has(key)) { _seen.add(key); _redeCols.push({op:opK, col}); }
+    };
+    if (isMulti) {
+      for (const oi of (_opsData.opsInfo||[])) {
+        const sp = (PLANOS_DB[oi.op]||[]).find(p=>p.id===oi.pid);
+        _addCol(oi.op, sp?.nome||oi.pid||'');
+      }
+    } else {
+      const sp = (PLANOS_DB[opKey]||[]).find(p=>p.id===planoId);
+      _addCol(opKey, sp?.nome||planoId||'');
+    }
+  }
+  const hospHTML = buildRedeTable(hospSel, _redeCols);
 
   const vantHTML = vantSel.length > 0 ? vantSel.map(v=>`
     <div class="va-card">
@@ -1331,14 +1512,10 @@ async function gerar() {
   <div class="sec">
     <div class="sec-eyebrow">${redeNum} — Mapeamento de Rede</div>
     <h2 class="sec-title">Onde você será atendido</h2>
-    <p class="sec-intro">Selecionamos os principais hospitais da rede que atendem <strong>diretamente o seu plano</strong>. Cada etiqueta indica exatamente o que está incluído na sua cobertura.</p>
-    <div class="rede-grid">${hospHTML}</div>
+    <p class="sec-intro">Veja quais hospitais são cobertos por <strong>cada plano</strong> das operadoras selecionadas. ✓ indica cobertura confirmada — — indica sem cobertura neste plano.</p>
+    ${hospHTML}
     <div style="margin-top:.875rem;font-size:10px;color:var(--ink3);padding-top:.75rem;border-top:1px solid var(--line)">
-      <span class="htag ht-ps">PS</span> Pronto-Socorro 24h &nbsp;
-      <span class="htag ht-int">INT</span> Internação &nbsp;
-      <span class="htag ht-amb">AMB</span> Ambulatório &nbsp;
-      <span class="htag ht-mat">MAT</span> Maternidade &nbsp;·&nbsp;
-      Rede sujeita a alterações — confirme no app da operadora.
+      ✓ Cobertura confirmada &nbsp;·&nbsp; — Não coberto &nbsp;·&nbsp; Rede sujeita a alterações — confirme no app da operadora.
     </div>
   </div>` : ''}
 
@@ -1549,7 +1726,7 @@ addVida(); // linha inicial
 const d = new Date(); d.setDate(d.getDate()+30);
 document.getElementById('g-validade').value = d.toISOString().split('T')[0];
 // Pré-selecionar hospitais populares
-['hhome','hmb','hbras','hamma'].forEach(id => {
+['hhome','hmb','hbras','hsm','hamma'].forEach(id => {
   const cb = document.querySelector(`input[name="hosp"][value="${id}"]`);
   if(cb){cb.checked=true;cb.closest('.hc-item')?.classList.add('checked');}
 });
