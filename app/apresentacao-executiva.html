@@ -1701,6 +1701,7 @@ function receiveFromCotador(data) {
   if (!qtds.some(q => q > 0)) addVida();
 
   buildHospitais();
+  preSelectHospitais();
   buildVantagens();
 
   // Pré-seleciona vantagens de TODAS as operadoras ativas
@@ -1717,19 +1718,23 @@ function receiveFromCotador(data) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ─── PRÉ-SELEÇÃO DE HOSPITAIS ─────────────────────────────────────────
+function preSelectHospitais() {
+  ['hhome','hmb','hbras','hsm','hamma'].forEach(id => {
+    const cb = document.querySelector(`input[name="hosp"][value="${id}"]`);
+    if(cb){cb.checked=true;cb.closest('.hc-item')?.classList.add('checked');}
+  });
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────
 buildPlanosSel();
 buildHospitais();
+preSelectHospitais();
 buildVantagens();
 addVida(); // linha inicial
 // Default validade = 30 dias
 const d = new Date(); d.setDate(d.getDate()+30);
 document.getElementById('g-validade').value = d.toISOString().split('T')[0];
-// Pré-selecionar hospitais populares
-['hhome','hmb','hbras','hsm','hamma'].forEach(id => {
-  const cb = document.querySelector(`input[name="hosp"][value="${id}"]`);
-  if(cb){cb.checked=true;cb.closest('.hc-item')?.classList.add('checked');}
-});
 // Pré-selecionar vantagens comuns
 ['v2','v7'].forEach(id => {
   const cb = document.querySelector(`input[name="vant"][value="${id}"]`);
