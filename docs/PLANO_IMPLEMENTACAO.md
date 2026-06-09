@@ -38,6 +38,12 @@ Após 2–3 dias em produção, verificar no banco se as cotações estão chega
 ## Etapa 2 — Estrutura de dados do CRM
 **Risco: zero | Duração estimada: 2–3 dias**
 
+### Correções de banco incluídas nesta etapa (análise senior 2026-06-09)
+1. **Índices** em `users.username`, `users.corretora_id`, `cotacoes.usuario`, `planos.operadora_id`, `rede_credenciada.operadora_id`, `audit_log.usuario`
+2. **`cotacoes.usuario` → `usuario_id` FK** para `users.id` — e mesmo ajuste em `audit_log.usuario`
+3. **`atualizado_em TEXT`** adicionado em todas as tabelas existentes e novas
+4. **Remover `ON DELETE CASCADE`** de `users → corretoras` — substituir por soft delete (`ativo = 0`)
+
 ### Novas tabelas no banco
 Adicionadas via `init_db()` com `CREATE TABLE IF NOT EXISTS` — aplicadas automaticamente no próximo deploy sem risco.
 
@@ -116,6 +122,15 @@ Testar todos os endpoints localmente com dados reais antes de fazer deploy.
 ## Etapa 3 — Interface CRM para o corretor
 **Risco: baixo | Duração estimada: 4–6 dias**
 
+### Correções de banco incluídas nesta etapa (análise senior 2026-06-09)
+- **Renomear campos abreviados** via migration safe:
+  - `planos.aco` → `acomodacao`
+  - `planos.fvidas` → `faixa_vidas`
+  - `planos.mod` → `moderador`
+  - `planos.vig` → `mes_vigencia`
+  - `operadoras.cls` → `classe_css`
+- Atualizar todos os SELECTs/INSERTs correspondentes no `main.py` e nos HTMLs
+
 Nova aba "Clientes" no `sistema-saude-prime.html`. O cotador e a apresentação continuam funcionando exatamente como antes.
 
 ### Tela de lista de clientes
@@ -144,6 +159,11 @@ Um corretor usar o CRM em produção por pelo menos uma semana e confirmar que o
 ## Etapa 4 — Migração completa para fonte única
 **Risco: baixo, mas exige validação prévia | Duração estimada: 1–2 dias**
 **Pré-requisito:** Etapas 1 e 2 estáveis em produção por pelo menos 2 semanas.
+
+### Correção de banco incluída nesta etapa (análise senior 2026-06-09)
+- **Remover `cor` e `cls` de `operadoras`** — valores CSS pertencem ao frontend, não ao banco
+- Mover cores para variáveis CSS estáticas no frontend antes de remover as colunas
+- Verificar que `/api/catalogo` e nenhum outro endpoint depende desses campos antes de dropar
 
 ### 4a — Migrar leitura do histórico
 - `loadHistory()` passa a chamar `GET /api/cotacoes` em vez do localStorage
@@ -250,6 +270,18 @@ Corretores usando a IA e dando retorno sobre a utilidade das respostas.
 ## Etapa 6 — IA com contexto do CRM
 **Risco: zero | Duração estimada: 3–4 dias**
 **Pré-requisito:** Etapas 3 (CRM) e 5 (IA básica) completas.
+
+### Correções de banco incluídas nesta etapa ou posterior (análise senior 2026-06-09)
+
+**A — Normalizar `planos.precos` em tabela separada**
+Criar tabela `plano_precos (id, plano_id, faixa_index, faixa_nome, preco NUMERIC)`.
+Migration: ler JSON de cada plano e inserir 10 linhas por plano. Remover coluna `precos` de `planos`.
+Habilita consultas analíticas: menor preço por faixa, evolução de preços entre vigências, relatórios comparativos.
+
+**B — Separar `session_token` e estado de bloqueio da tabela `users`**
+Criar tabelas `sessoes (id, usuario_id, session_token, ip, criado_em, expira_em, encerrado_em)` e `tentativas_login (id, usuario_id, tentativas, bloqueado_ate, atualizado_em)`.
+Remover `session_token`, `tentativas_login`, `bloqueado_ate` de `users`.
+Habilita múltiplos dispositivos simultâneos e histórico de sessões.
 
 ### O que muda no contexto enviado ao Claude
 ```python
