@@ -1,7 +1,7 @@
 # Plano de Implementação — CRM + IA + Fonte Única de Dados
 **Projeto:** Sistema Comercial Saúde Prime
 **Criado em:** 2026-06-09
-**Status atual:** Etapa 0 — planejamento concluído, nenhuma etapa iniciada
+**Status atual:** Etapa 1 concluída — dual-write ativo em produção desde 2026-06-09
 
 ---
 
@@ -22,18 +22,13 @@ Cada etapa é **aditiva**: entrega valor sem remover funcionalidade existente. O
 
 ---
 
-## Etapa 1 — Dual-write do histórico
-**Risco: zero | Duração estimada: 1–2 dias**
+## Etapa 1 — Dual-write do histórico ✅ CONCLUÍDA (2026-06-09)
 
-### O que implementar
-- Em `cotador-planos-saude.html`, a função `saveToHistory()` passa a chamar `POST /api/cotacoes` após gravar no localStorage
-- O token JWT é obtido via `window.parent.token()` (padrão já usado no cotador para `doLogout` e `syncApres`)
-- Se a chamada à API falhar, captura silenciosamente — localStorage já salvou, corretor não percebe nada
-
-### Resultado
-- O comportamento do corretor não muda absolutamente nada
-- O banco começa a receber cotações reais em produção
-- Nenhuma UI é alterada
+### O que foi implementado
+- `app/cotador-planos-saude.html` — função `saveToHistory()` (~linha 1959)
+- Após gravar no localStorage, dispara `POST /api/cotacoes` com token via `window.parent.token()`
+- Fire-and-forget: erros de rede capturados silenciosamente, localStorage não é afetado
+- Comportamento do corretor não mudou nada
 
 ### Critério para avançar para Etapa 2
 Após 2–3 dias em produção, verificar no banco se as cotações estão chegando com dados corretos.

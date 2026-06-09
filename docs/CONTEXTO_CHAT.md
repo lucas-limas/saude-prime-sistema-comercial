@@ -117,13 +117,12 @@ Existem 4 fontes simultâneas que precisam ser consolidadas em uma:
 
 ## Onde estamos agora
 
-**Status:** Etapa 0 concluída (análise + planejamento). Nenhuma etapa de código iniciada.
+**Status:** Etapa 1 concluída (2026-06-09). Dual-write ativo em produção.
 
-**Próxima ação:** implementar a Etapa 1 — dual-write do histórico de cotações.
+**Próxima ação:** implementar a Etapa 2 — tabelas do CRM no banco + novos endpoints da API.
 
-**Arquivos a modificar na Etapa 1:**
-- `app/cotador-planos-saude.html` — função `saveToHistory()` (linha ~1935)
-- Nenhum outro arquivo precisa mudar
+**O que foi feito na Etapa 1:**
+- `app/cotador-planos-saude.html` — `saveToHistory()` agora chama `POST /api/cotacoes` via `window.parent.token()` após gravar no localStorage. Fire-and-forget, sem impacto no corretor.
 
 ---
 

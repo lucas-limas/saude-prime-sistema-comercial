@@ -1960,6 +1960,15 @@ function saveToHistory() {
   hist.unshift(entry);
   if (hist.length > HIST_MAX) hist.length = HIST_MAX;
   localStorage.setItem(HIST_KEY, JSON.stringify(hist));
+
+  const tok = window.parent?.token?.();
+  if (tok) {
+    fetch('/api/cotacoes', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tok}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cliente: entry.nome, dados: entry })
+    }).catch(() => {});
+  }
 }
 
 function loadHistory() {
