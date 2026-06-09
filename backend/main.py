@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import re
 import secrets
@@ -16,12 +17,19 @@ from auth import verify_password, hash_password, create_access_token, decode_tok
 from database import get_connection, init_db
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logger = logging.getLogger("audit")
 
 app = FastAPI(title="Saúde Prime API", docs_url=None, redoc_url=None)
 
+_origins_env = os.getenv("ALLOWED_ORIGINS", "")
+ALLOWED_ORIGINS = [o.strip() for o in _origins_env.split(",") if o.strip()] or [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
@@ -34,13 +42,25 @@ BLOQUEIO_MINUTOS = 15
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
+_SENHAS_PROIBIDAS = {
+    "saude@2026", "admin@2026", "saude2026", "admin2026",
+    "Saude123", "Admin123", "Senha123", "123456789", "senha@123",
+    "Abc12345!", "Password1!", "Mudar@123",
+}
+
 def validate_password(password: str):
-    if len(password) < 8:
-        raise HTTPException(400, "Senha deve ter ao menos 8 caracteres")
+    if len(password) < 10:
+        raise HTTPException(400, "Senha deve ter ao menos 10 caracteres")
     if not re.search(r"[A-Z]", password):
         raise HTTPException(400, "Senha deve ter ao menos uma letra maiúscula")
+    if not re.search(r"[a-z]", password):
+        raise HTTPException(400, "Senha deve ter ao menos uma letra minúscula")
     if not re.search(r"[0-9]", password):
         raise HTTPException(400, "Senha deve ter ao menos um número")
+    if not re.search(r"[!@#$%^&*()\-_=+\[\]{};:',.<>?/\\|`~]", password):
+        raise HTTPException(400, "Senha deve ter ao menos um caractere especial (!@#$%...)")
+    if password in _SENHAS_PROIBIDAS:
+        raise HTTPException(400, "Senha muito comum ou previsível. Escolha outra.")
 
 
 def log_action(usuario: str, acao: str, detalhes: str, ip: str = ""):
@@ -52,8 +72,8 @@ def log_action(usuario: str, acao: str, detalhes: str, ip: str = ""):
         )
         conn.commit()
         conn.close()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.error(f"AUDIT LOG FALHOU — usuario={usuario} acao={acao} erro={e}")
 
 
 def check_corretora_ativa(corretora_id):
@@ -133,10 +153,18 @@ def startup():
         if old:
             conn.execute("UPDATE users SET role='superadmin' WHERE username='admin'")
         else:
+            import string
+            alphabet = string.ascii_letters + string.digits + "!@#$%"
+            senha_temp = "".join(secrets.choice(alphabet) for _ in range(16))
             conn.execute(
                 "INSERT INTO users (username, hashed_password, nome, role) VALUES (?, ?, ?, ?)",
-                ("admin", hash_password("saude@2026"), "Administrador", "superadmin"),
+                ("admin", hash_password(senha_temp), "Administrador", "superadmin"),
             )
+            print("\n" + "=" * 60)
+            print("  SUPERADMIN CRIADO — TROQUE A SENHA IMEDIATAMENTE")
+            print(f"  Usuário: admin")
+            print(f"  Senha temporária: {senha_temp}")
+            print("=" * 60 + "\n")
         conn.commit()
     conn.close()
     seed_catalogo()

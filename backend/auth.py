@@ -7,6 +7,15 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError(
+        "SECRET_KEY não definida. Configure a variável de ambiente antes de iniciar o servidor."
+    )
+if len(SECRET_KEY) < 32:
+    raise RuntimeError(
+        f"SECRET_KEY muito curta ({len(SECRET_KEY)} chars). Use ao menos 32 caracteres aleatórios."
+    )
+
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "480"))
 
