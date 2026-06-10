@@ -44,6 +44,9 @@ Após 2–3 dias em produção, verificar no banco se as cotações estão chega
 3. **`atualizado_em TEXT`** adicionado em todas as tabelas existentes e novas
 4. **Remover `ON DELETE CASCADE`** de `users → corretoras` — substituir por soft delete (`ativo = 0`)
 
+### Correção de código incluída nesta etapa (análise senior 2026-06-10)
+5. **DDL duplicado em `database.py`** — CREATE TABLE escrito duas vezes (PostgreSQL + SQLite). Ao criar as tabelas do CRM, garantir que cada nova tabela seja adicionada igualmente nos dois blocos.
+
 ### Novas tabelas no banco
 Adicionadas via `init_db()` com `CREATE TABLE IF NOT EXISTS` — aplicadas automaticamente no próximo deploy sem risco.
 
@@ -131,6 +134,12 @@ Testar todos os endpoints localmente com dados reais antes de fazer deploy.
   - `operadoras.cls` → `classe_css`
 - Atualizar todos os SELECTs/INSERTs correspondentes no `main.py` e nos HTMLs
 
+### Correções de código incluídas nesta etapa (análise senior 2026-06-10)
+- **Hapvida — decisão obrigatória antes de iniciar:** a operadora existe completa em `dados.js` mas não está no backend. Decidir se entra de vez (completar seed) ou sai de vez (limpar todas as referências no cotador e no dados.js)
+- **`clsMap` duplicado 3x** em `cotador-planos-saude.html` (linhas ~1750, ~1764, ~1803) — extrair para constante de módulo única
+- **`subCls` e `tbCls` dentro de `render()`** (linhas ~1607-1609) — mover para constantes de módulo fora da função
+- **`alert()` nativo** substituir por toast em `apresentacao-executiva.html` (linhas ~1740, ~1859, ~1864, ~1898) e `sistema-saude-prime.html` (linhas ~1109, ~1111)
+
 Nova aba "Clientes" no `sistema-saude-prime.html`. O cotador e a apresentação continuam funcionando exatamente como antes.
 
 ### Tela de lista de clientes
@@ -164,6 +173,11 @@ Um corretor usar o CRM em produção por pelo menos uma semana e confirmar que o
 - **Remover `cor` e `cls` de `operadoras`** — valores CSS pertencem ao frontend, não ao banco
 - Mover cores para variáveis CSS estáticas no frontend antes de remover as colunas
 - Verificar que `/api/catalogo` e nenhum outro endpoint depende desses campos antes de dropar
+
+### Correção de código incluída nesta etapa (análise senior 2026-06-10)
+- **`seed_catalogo()` incompleto em `main.py`** — só cobre 4 das 10 operadoras (Unity, Evo, Plenum, Amil). MedSênior, Seguros Unimed, Porto Saúde, Bradesco, Best Sênior e SulAmérica não têm planos no banco
+- **Completar antes de remover o fallback do `dados.js`** — sem planos no banco para essas 6 operadoras, removê-lo derruba metade do cotador
+- Usar `POST /api/superadmin/catalogo/importar` para inserir os planos em produção sem precisar reiniciar do zero
 
 ### 4a — Migrar leitura do histórico
 - `loadHistory()` passa a chamar `GET /api/cotacoes` em vez do localStorage
