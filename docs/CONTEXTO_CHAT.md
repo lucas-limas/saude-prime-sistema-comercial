@@ -117,12 +117,16 @@ Existem 4 fontes simultâneas que precisam ser consolidadas em uma:
 
 ## Onde estamos agora
 
-**Status:** Etapa 1 concluída (2026-06-09). Dual-write ativo em produção.
+**Status:** Etapa 2 concluída (2026-06-10). CRM com tabelas e endpoints em produção.
 
-**Próxima ação:** implementar a Etapa 2 — tabelas do CRM no banco + novos endpoints da API.
+**Próxima ação:** implementar a Etapa 3 — interface CRM no `sistema-saude-prime.html`.
 
-**O que foi feito na Etapa 1:**
+**O que foi feito na Etapa 1 (2026-06-09):**
 - `app/cotador-planos-saude.html` — `saveToHistory()` agora chama `POST /api/cotacoes` via `window.parent.token()` após gravar no localStorage. Fire-and-forget, sem impacto no corretor.
+
+**O que foi feito na Etapa 2 (2026-06-10):**
+- `backend/database.py` — tabelas `clientes`, `oportunidades`, `interacoes` nos blocos PG e SQLite; migrations para `atualizado_em` (7 tabelas), `cotacoes.cliente_id`, `cotacoes.usuario_id`, `audit_log.usuario_id`, 6 índices, remoção de CASCADE de `users → corretoras`
+- `backend/main.py` — 12 endpoints CRM: CRUD de clientes, oportunidades, interações e listagem de cotações por cliente (todos sob `require_corretor` com controle de acesso por role)
 
 ---
 

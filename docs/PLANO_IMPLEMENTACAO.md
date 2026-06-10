@@ -35,7 +35,7 @@ Após 2–3 dias em produção, verificar no banco se as cotações estão chega
 
 ---
 
-## Etapa 2 — Estrutura de dados do CRM
+## Etapa 2 — Estrutura de dados do CRM ✅ CONCLUÍDA (2026-06-10)
 **Risco: zero | Duração estimada: 2–3 dias**
 
 ### Correções de banco incluídas nesta etapa (análise senior 2026-06-09)
@@ -116,6 +116,15 @@ DELETE /api/interacoes/{id}                  → remove interação
 
 GET    /api/clientes/{id}/cotacoes           → cotações do banco vinculadas ao cliente
 ```
+
+### O que foi implementado (2026-06-10)
+- `database.py`: tabelas `clientes`, `oportunidades`, `interacoes` criadas nos blocos PG e SQLite
+- `database.py`: migrations para `atualizado_em` em todas as 7 tabelas existentes
+- `database.py`: migrations para `cotacoes.cliente_id`, `cotacoes.usuario_id`, `audit_log.usuario_id`
+- `database.py`: 6 índices de performance criados
+- `database.py`: migration PG remove `ON DELETE CASCADE` de `users → corretoras`; DDL atualizado para novas instalações
+- `main.py`: 12 endpoints CRM implementados (`/api/clientes`, `/api/oportunidades`, `/api/interacoes`)
+- `main.py`: `require_corretor` inclui `user['id']`; `log_action` aceita `usuario_id`; `salvar_cotacao` persiste `usuario_id`
 
 ### Critério para avançar para Etapa 3
 Testar todos os endpoints localmente com dados reais antes de fazer deploy.
