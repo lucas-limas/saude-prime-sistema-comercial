@@ -74,6 +74,29 @@ def _migrations_pg(conn):
         # Rede credenciada: metadados na tabela operadoras
         "ALTER TABLE operadoras ADD COLUMN rede_adm TEXT",
         "ALTER TABLE operadoras ADD COLUMN rede_rodape TEXT",
+        # Etapa 2: atualizado_em em todas as tabelas existentes
+        "ALTER TABLE corretoras ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE users ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE cotacoes ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE audit_log ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE operadoras ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE planos ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE rede_credenciada ADD COLUMN atualizado_em TEXT",
+        # Etapa 2: FKs novas em cotacoes (usuario TEXT coexiste com usuario_id)
+        "ALTER TABLE cotacoes ADD COLUMN cliente_id INTEGER REFERENCES clientes(id)",
+        "ALTER TABLE cotacoes ADD COLUMN usuario_id INTEGER REFERENCES users(id)",
+        # Etapa 2: FK nova em audit_log
+        "ALTER TABLE audit_log ADD COLUMN usuario_id INTEGER REFERENCES users(id)",
+        # Etapa 2: índices de performance
+        "CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)",
+        "CREATE INDEX IF NOT EXISTS idx_users_corretora_id ON users(corretora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_cotacoes_usuario ON cotacoes(usuario)",
+        "CREATE INDEX IF NOT EXISTS idx_planos_operadora_id ON planos(operadora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_rede_operadora_id ON rede_credenciada(operadora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_audit_usuario ON audit_log(usuario)",
+        # Etapa 2: remover ON DELETE CASCADE de users → corretoras (soft delete via ativo=0)
+        "ALTER TABLE users DROP CONSTRAINT IF EXISTS users_corretora_id_fkey",
+        "ALTER TABLE users ADD CONSTRAINT users_corretora_id_fkey FOREIGN KEY (corretora_id) REFERENCES corretoras(id)",
     ]
     for sql in safe:
         try:
@@ -123,6 +146,27 @@ def _migrations_sqlite(c):
         # Rede credenciada: metadados na tabela operadoras
         "ALTER TABLE operadoras ADD COLUMN rede_adm TEXT",
         "ALTER TABLE operadoras ADD COLUMN rede_rodape TEXT",
+        # Etapa 2: atualizado_em em todas as tabelas existentes
+        "ALTER TABLE corretoras ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE users ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE cotacoes ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE audit_log ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE operadoras ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE planos ADD COLUMN atualizado_em TEXT",
+        "ALTER TABLE rede_credenciada ADD COLUMN atualizado_em TEXT",
+        # Etapa 2: FKs novas em cotacoes (SQLite: sem cláusula REFERENCES no ALTER)
+        "ALTER TABLE cotacoes ADD COLUMN cliente_id INTEGER",
+        "ALTER TABLE cotacoes ADD COLUMN usuario_id INTEGER",
+        # Etapa 2: FK nova em audit_log
+        "ALTER TABLE audit_log ADD COLUMN usuario_id INTEGER",
+        # Etapa 2: índices de performance
+        "CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)",
+        "CREATE INDEX IF NOT EXISTS idx_users_corretora_id ON users(corretora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_cotacoes_usuario ON cotacoes(usuario)",
+        "CREATE INDEX IF NOT EXISTS idx_planos_operadora_id ON planos(operadora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_rede_operadora_id ON rede_credenciada(operadora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_audit_usuario ON audit_log(usuario)",
+        # SQLite não suporta ALTER CONSTRAINT — CASCADE removido do CREATE TABLE para novas instalações
     ]
     for sql in safe:
         try:
@@ -153,7 +197,7 @@ def init_db():
                 hashed_password TEXT NOT NULL,
                 nome TEXT,
                 role TEXT DEFAULT 'corretor',
-                corretora_id INTEGER REFERENCES corretoras(id) ON DELETE CASCADE,
+                corretora_id INTEGER REFERENCES corretoras(id),
                 ativo INTEGER DEFAULT 1,
                 tentativas_login INTEGER DEFAULT 0,
                 bloqueado_ate TEXT,
@@ -224,6 +268,48 @@ def init_db():
                 ordem INTEGER DEFAULT 0,
                 ativo INTEGER DEFAULT 1,
                 criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS clientes (
+                id SERIAL PRIMARY KEY,
+                nome TEXT NOT NULL,
+                empresa TEXT,
+                cnpj TEXT,
+                telefone TEXT,
+                email TEXT,
+                n_vidas_estimado INTEGER,
+                segmento TEXT,
+                origem TEXT,
+                corretor_id INTEGER REFERENCES users(id),
+                corretora_id INTEGER REFERENCES corretoras(id),
+                ativo INTEGER DEFAULT 1,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS'),
+                atualizado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS oportunidades (
+                id SERIAL PRIMARY KEY,
+                cliente_id INTEGER NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
+                estagio TEXT DEFAULT 'lead',
+                valor_estimado REAL,
+                data_prevista_fechamento TEXT,
+                motivo_perda TEXT,
+                obs TEXT,
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS'),
+                atualizado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS interacoes (
+                id SERIAL PRIMARY KEY,
+                cliente_id INTEGER NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
+                tipo TEXT NOT NULL,
+                descricao TEXT,
+                usuario TEXT REFERENCES users(username),
+                criado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS'),
+                atualizado_em TEXT DEFAULT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
             )
         """)
         conn.commit()
@@ -319,6 +405,48 @@ def init_db():
                 ordem INTEGER DEFAULT 0,
                 ativo INTEGER DEFAULT 1,
                 criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS clientes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                empresa TEXT,
+                cnpj TEXT,
+                telefone TEXT,
+                email TEXT,
+                n_vidas_estimado INTEGER,
+                segmento TEXT,
+                origem TEXT,
+                corretor_id INTEGER REFERENCES users(id),
+                corretora_id INTEGER REFERENCES corretoras(id),
+                ativo INTEGER DEFAULT 1,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS oportunidades (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                cliente_id INTEGER NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
+                estagio TEXT DEFAULT 'lead',
+                valor_estimado REAL,
+                data_prevista_fechamento TEXT,
+                motivo_perda TEXT,
+                obs TEXT,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS interacoes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                cliente_id INTEGER NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
+                tipo TEXT NOT NULL,
+                descricao TEXT,
+                usuario TEXT REFERENCES users(username),
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TEXT DEFAULT CURRENT_TIMESTAMP
             )
         """)
         _migrations_sqlite(c)

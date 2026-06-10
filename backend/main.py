@@ -63,12 +63,12 @@ def validate_password(password: str):
         raise HTTPException(400, "Senha muito comum ou previsível. Escolha outra.")
 
 
-def log_action(usuario: str, acao: str, detalhes: str, ip: str = ""):
+def log_action(usuario: str, acao: str, detalhes: str, ip: str = "", usuario_id: Optional[int] = None):
     try:
         conn = get_connection()
         conn.execute(
-            "INSERT INTO audit_log (usuario, acao, detalhes, ip) VALUES (?, ?, ?, ?)",
-            (usuario, acao, detalhes, ip),
+            "INSERT INTO audit_log (usuario, usuario_id, acao, detalhes, ip) VALUES (?, ?, ?, ?, ?)",
+            (usuario, usuario_id, acao, detalhes, ip),
         )
         conn.commit()
         conn.close()
@@ -129,11 +129,12 @@ def require_corretor(user=Depends(get_current_user)):
     check_corretora_ativa(user.get("corretora_id"))
     conn = get_connection()
     row = conn.execute(
-        "SELECT ativo FROM users WHERE username = ?", (user["sub"],)
+        "SELECT id, ativo FROM users WHERE username = ?", (user["sub"],)
     ).fetchone()
     conn.close()
     if not row or not row["ativo"]:
         raise HTTPException(403, "Usuário inativo")
+    user["id"] = row["id"]
     return user
 
 
@@ -355,6 +356,46 @@ class UpdateRedeItemRequest(BaseModel):
 class RedeMetaRequest(BaseModel):
     rede_adm: Optional[str] = None
     rede_rodape: Optional[str] = None
+
+
+class ClienteRequest(BaseModel):
+    nome: str
+    empresa: Optional[str] = None
+    cnpj: Optional[str] = None
+    telefone: Optional[str] = None
+    email: Optional[str] = None
+    n_vidas_estimado: Optional[int] = None
+    segmento: Optional[str] = None
+    origem: Optional[str] = None
+
+class UpdateClienteRequest(BaseModel):
+    nome: Optional[str] = None
+    empresa: Optional[str] = None
+    cnpj: Optional[str] = None
+    telefone: Optional[str] = None
+    email: Optional[str] = None
+    n_vidas_estimado: Optional[int] = None
+    segmento: Optional[str] = None
+    origem: Optional[str] = None
+    ativo: Optional[int] = None
+
+class OportunidadeRequest(BaseModel):
+    estagio: Optional[str] = "lead"
+    valor_estimado: Optional[float] = None
+    data_prevista_fechamento: Optional[str] = None
+    motivo_perda: Optional[str] = None
+    obs: Optional[str] = None
+
+class UpdateOportunidadeRequest(BaseModel):
+    estagio: Optional[str] = None
+    valor_estimado: Optional[float] = None
+    data_prevista_fechamento: Optional[str] = None
+    motivo_perda: Optional[str] = None
+    obs: Optional[str] = None
+
+class InteracaoRequest(BaseModel):
+    tipo: str
+    descricao: Optional[str] = None
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
@@ -736,8 +777,8 @@ def deletar_usuario_corretora(user_id: int, admin=Depends(require_admin)):
 def salvar_cotacao(body: CotacaoRequest, user=Depends(require_corretor)):
     conn = get_connection()
     conn.execute(
-        "INSERT INTO cotacoes (usuario, corretora_id, cliente, dados) VALUES (?, ?, ?, ?)",
-        (user["sub"], user.get("corretora_id"), body.cliente, json.dumps(body.dados, ensure_ascii=False)),
+        "INSERT INTO cotacoes (usuario, usuario_id, corretora_id, cliente, dados) VALUES (?, ?, ?, ?, ?)",
+        (user["sub"], user.get("id"), user.get("corretora_id"), body.cliente, json.dumps(body.dados, ensure_ascii=False)),
     )
     conn.commit()
     conn.close()
@@ -1216,6 +1257,267 @@ async def importar_rede(request: Request, admin=Depends(require_superadmin)):
     conn.close()
     log_action(admin["sub"], "importar_rede", f"{itens_novos} itens e {metas_atualizadas} metas importados")
     return {"ok": True, "itens_novos": itens_novos, "metas_atualizadas": metas_atualizadas}
+
+
+# ── CRM: Clientes ─────────────────────────────────────────────────────────────
+
+def _check_cliente_acesso(cliente, user):
+    """Garante que o usuário tem acesso ao cliente. Lança 403 se não tiver."""
+    role = user.get("role")
+    if role == "superadmin":
+        return
+    if role == "admin":
+        if cliente["corretora_id"] != user.get("corretora_id"):
+            raise HTTPException(403, "Sem permissão para acessar este cliente")
+    else:
+        if cliente["corretor_id"] != user.get("id"):
+            raise HTTPException(403, "Sem permissão para acessar este cliente")
+
+
+@app.get("/api/clientes")
+def listar_clientes(user=Depends(require_corretor)):
+    conn = get_connection()
+    role = user.get("role")
+    if role == "superadmin":
+        rows = conn.execute(
+            "SELECT * FROM clientes WHERE ativo = 1 ORDER BY criado_em DESC"
+        ).fetchall()
+    elif role == "admin":
+        rows = conn.execute(
+            "SELECT * FROM clientes WHERE corretora_id = ? AND ativo = 1 ORDER BY criado_em DESC",
+            (user.get("corretora_id"),),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM clientes WHERE corretor_id = ? AND ativo = 1 ORDER BY criado_em DESC",
+            (user.get("id"),),
+        ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+@app.post("/api/clientes")
+def criar_cliente(body: ClienteRequest, user=Depends(require_corretor)):
+    conn = get_connection()
+    conn.execute(
+        """INSERT INTO clientes
+           (nome, empresa, cnpj, telefone, email, n_vidas_estimado, segmento, origem, corretor_id, corretora_id)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (
+            body.nome.strip(), body.empresa, body.cnpj, body.telefone,
+            body.email, body.n_vidas_estimado, body.segmento, body.origem,
+            user.get("id"), user.get("corretora_id"),
+        ),
+    )
+    conn.commit()
+    row = conn.execute(
+        "SELECT * FROM clientes ORDER BY id DESC LIMIT 1"
+    ).fetchone()
+    conn.close()
+    log_action(user["sub"], "criar_cliente", f"Cliente: {body.nome}", usuario_id=user.get("id"))
+    return dict(row)
+
+
+@app.get("/api/clientes/{cliente_id}")
+def obter_cliente(cliente_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(404, "Cliente não encontrado")
+    cliente = dict(row)
+    _check_cliente_acesso(cliente, user)
+    return cliente
+
+
+@app.patch("/api/clientes/{cliente_id}")
+def atualizar_cliente(cliente_id: int, body: UpdateClienteRequest, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    updates, params = [], []
+    for field in ("nome", "empresa", "cnpj", "telefone", "email", "n_vidas_estimado", "segmento", "origem", "ativo"):
+        val = getattr(body, field)
+        if val is not None:
+            updates.append(f"{field} = ?")
+            params.append(val.strip() if isinstance(val, str) else val)
+    if updates:
+        updates.append("atualizado_em = ?")
+        params.append(datetime.utcnow().isoformat())
+        params.append(cliente_id)
+        conn.execute(f"UPDATE clientes SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
+@app.delete("/api/clientes/{cliente_id}")
+def desativar_cliente(cliente_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    conn.execute(
+        "UPDATE clientes SET ativo = 0, atualizado_em = ? WHERE id = ?",
+        (datetime.utcnow().isoformat(), cliente_id),
+    )
+    conn.commit()
+    conn.close()
+    log_action(user["sub"], "desativar_cliente", f"Cliente {cliente_id}", usuario_id=user.get("id"))
+    return {"ok": True}
+
+
+# ── CRM: Oportunidades ─────────────────────────────────────────────────────────
+
+@app.get("/api/clientes/{cliente_id}/oportunidades")
+def listar_oportunidades(cliente_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    rows = conn.execute(
+        "SELECT * FROM oportunidades WHERE cliente_id = ? ORDER BY criado_em DESC",
+        (cliente_id,),
+    ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+@app.post("/api/clientes/{cliente_id}/oportunidades")
+def criar_oportunidade(cliente_id: int, body: OportunidadeRequest, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    conn.execute(
+        """INSERT INTO oportunidades
+           (cliente_id, estagio, valor_estimado, data_prevista_fechamento, motivo_perda, obs)
+           VALUES (?, ?, ?, ?, ?, ?)""",
+        (cliente_id, body.estagio, body.valor_estimado, body.data_prevista_fechamento, body.motivo_perda, body.obs),
+    )
+    conn.commit()
+    novo = conn.execute(
+        "SELECT * FROM oportunidades WHERE cliente_id = ? ORDER BY id DESC LIMIT 1",
+        (cliente_id,),
+    ).fetchone()
+    conn.close()
+    return dict(novo)
+
+
+@app.patch("/api/oportunidades/{op_id}")
+def atualizar_oportunidade(op_id: int, body: UpdateOportunidadeRequest, user=Depends(require_corretor)):
+    conn = get_connection()
+    op = conn.execute("SELECT * FROM oportunidades WHERE id = ?", (op_id,)).fetchone()
+    if not op:
+        conn.close()
+        raise HTTPException(404, "Oportunidade não encontrada")
+    cliente = conn.execute("SELECT * FROM clientes WHERE id = ?", (op["cliente_id"],)).fetchone()
+    if not cliente:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(cliente), user)
+    updates, params = [], []
+    for field in ("estagio", "valor_estimado", "data_prevista_fechamento", "motivo_perda", "obs"):
+        val = getattr(body, field)
+        if val is not None:
+            updates.append(f"{field} = ?")
+            params.append(val)
+    if updates:
+        updates.append("atualizado_em = ?")
+        params.append(datetime.utcnow().isoformat())
+        params.append(op_id)
+        conn.execute(f"UPDATE oportunidades SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
+# ── CRM: Interações ────────────────────────────────────────────────────────────
+
+@app.get("/api/clientes/{cliente_id}/interacoes")
+def listar_interacoes(cliente_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    rows = conn.execute(
+        "SELECT * FROM interacoes WHERE cliente_id = ? ORDER BY criado_em DESC",
+        (cliente_id,),
+    ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+@app.post("/api/clientes/{cliente_id}/interacoes")
+def criar_interacao(cliente_id: int, body: InteracaoRequest, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    conn.execute(
+        "INSERT INTO interacoes (cliente_id, tipo, descricao, usuario) VALUES (?, ?, ?, ?)",
+        (cliente_id, body.tipo, body.descricao, user["sub"]),
+    )
+    conn.commit()
+    nova = conn.execute(
+        "SELECT * FROM interacoes WHERE cliente_id = ? ORDER BY id DESC LIMIT 1",
+        (cliente_id,),
+    ).fetchone()
+    conn.close()
+    return dict(nova)
+
+
+@app.delete("/api/interacoes/{interacao_id}")
+def deletar_interacao(interacao_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    inter = conn.execute("SELECT * FROM interacoes WHERE id = ?", (interacao_id,)).fetchone()
+    if not inter:
+        conn.close()
+        raise HTTPException(404, "Interação não encontrada")
+    cliente = conn.execute("SELECT * FROM clientes WHERE id = ?", (inter["cliente_id"],)).fetchone()
+    if not cliente:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(cliente), user)
+    conn.execute("DELETE FROM interacoes WHERE id = ?", (interacao_id,))
+    conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
+# ── CRM: Cotações vinculadas ao cliente ────────────────────────────────────────
+
+@app.get("/api/clientes/{cliente_id}/cotacoes")
+def listar_cotacoes_cliente(cliente_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM clientes WHERE id = ?", (cliente_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cliente não encontrado")
+    _check_cliente_acesso(dict(row), user)
+    rows = conn.execute(
+        "SELECT id, usuario, cliente, dados, criado_em FROM cotacoes WHERE cliente_id = ? ORDER BY criado_em DESC",
+        (cliente_id,),
+    ).fetchall()
+    conn.close()
+    return [
+        {"id": r["id"], "usuario": r["usuario"], "cliente": r["cliente"],
+         "dados": json.loads(r["dados"]), "criado_em": r["criado_em"]}
+        for r in rows
+    ]
 
 
 # ── Redirects para caminhos antigos (raiz → app/) ─────────────────────────────
