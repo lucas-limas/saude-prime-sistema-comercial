@@ -117,9 +117,9 @@ Existem 4 fontes simultâneas que precisam ser consolidadas em uma:
 
 ## Onde estamos agora
 
-**Status:** Etapa 2 concluída (2026-06-10). CRM com tabelas e endpoints em produção.
+**Status:** Etapa 3 concluída (2026-06-10). Hapvida no banco, colunas renomeadas, refatorações de código.
 
-**Próxima ação:** implementar a Etapa 3 — interface CRM no `sistema-saude-prime.html`.
+**Próxima ação:** implementar a Etapa 3 (interface) — aba "Clientes" CRM no `sistema-saude-prime.html`.
 
 **O que foi feito na Etapa 1 (2026-06-09):**
 - `app/cotador-planos-saude.html` — `saveToHistory()` agora chama `POST /api/cotacoes` via `window.parent.token()` após gravar no localStorage. Fire-and-forget, sem impacto no corretor.
@@ -127,6 +127,12 @@ Existem 4 fontes simultâneas que precisam ser consolidadas em uma:
 **O que foi feito na Etapa 2 (2026-06-10):**
 - `backend/database.py` — tabelas `clientes`, `oportunidades`, `interacoes` nos blocos PG e SQLite; migrations para `atualizado_em` (7 tabelas), `cotacoes.cliente_id`, `cotacoes.usuario_id`, `audit_log.usuario_id`, 6 índices, remoção de CASCADE de `users → corretoras`
 - `backend/main.py` — 12 endpoints CRM: CRUD de clientes, oportunidades, interações e listagem de cotações por cliente (todos sob `require_corretor` com controle de acesso por role)
+
+**O que foi feito na Etapa 3 — parte técnica (2026-06-10):**
+- `backend/database.py` — DDL de `planos` usa `acomodacao`, `faixa_vidas`, `moderador`, `mes_vigencia`; migrations `RENAME COLUMN` (PG) e `INSERT OR IGNORE` (SQLite); seed Hapvida com 10 planos
+- `backend/main.py` — `importar_catalogo`, `criar_plano`, `atualizar_plano`, `catalogo_publico` atualizados para novos nomes de coluna; Hapvida adicionado ao `seed_catalogo()`
+- `app/cotador-planos-saude.html` — `OP_CLS_MAP`, `subCls`, `subAttr`, `tbCls` extraídos de dentro de funções para escopo de módulo
+- `app/apresentacao-executiva.html` + `app/sistema-saude-prime.html` — `alert()` substituídos por `showToast()` (toast CSS + função adicionados)
 
 ---
 
