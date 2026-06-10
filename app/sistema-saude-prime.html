@@ -284,6 +284,8 @@ html[data-theme="light"] .admin-table code{color:rgba(0,0,0,.45)!important}
 html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
 /* old admin overlay compat */
 #admin-overlay.hidden{display:none}
+#sp-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a2e;color:#fff;padding:10px 22px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999}
+#sp-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -1106,9 +1108,9 @@ async function deletarRedeItem(id, nome) {
   if (!confirm(`Excluir "${nome}"?`)) return;
   try {
     const res = await fetch(`${API}/api/superadmin/catalogo/rede/${id}`, {method:'DELETE', headers: authH()});
-    if (!res.ok) { alert('Erro ao excluir.'); return; }
+    if (!res.ok) { showToast('Erro ao excluir.'); return; }
     loadRede();
-  } catch { alert('Erro de rede.'); }
+  } catch { showToast('Erro de rede.'); }
 }
 
 function loadRedeMeta() {
@@ -1522,6 +1524,16 @@ document.querySelector('.frames').style.display = 'none';
     }
   } catch {}
 })();
+
+let _toastTimer;
+function showToast(msg, dur=3000) {
+  let el = document.getElementById('sp-toast');
+  if (!el) { el = document.createElement('div'); el.id='sp-toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
 </script>
 
 </body>

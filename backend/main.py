@@ -188,7 +188,8 @@ def seed_catalogo():
         ("portosaude",   "Porto Saúde",        "var(--portosaude)",   "on-ps", "PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde", 7),
         ("bradesco",     "Bradesco Saúde",     "var(--bradesco)",     "on-b",  "PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros", 8),
         ("bestsenior",   "Best Sênior",        "var(--bestsenior)",   "on-bs", "PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde", 9),
-        ("sulamerica",   "SulAmérica Saúde",   "var(--sulamerica)",   "on-sa", "PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde", 10),
+        ("sulamerica",   "SulAmérica Saúde",   "var(--sulamerica)",   "on-sa",  "PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde", 10),
+        ("hapvida",      "Hapvida",            "var(--hapvida)",      "on-hap", "PME 2–29 vidas · Tabela Brasília · Nosso Médico e Nosso Plano · Com coparticipação parcial ou completa · Rede credenciada DF", 11),
     ]
     for chave, nome, cor, cls, info, ordem in _OPS:
         conn.execute(
@@ -244,13 +245,24 @@ def seed_catalogo():
         ("am_ad_cp_8", "amil","Copart. Parcial — Platinum Mais R2 (Apt)","apt","adesao",None,None,None,[ 985.99,1153.60,1407.40,1688.87,1773.34, 1950.66, 2438.34, 2682.17, 3352.69, 5867.23],18),
         ("am_ad_cp_9", "amil","Copart. Parcial — Platinum R1 (Apt)",     "apt","adesao",None,None,None,[ 785.62, 919.16,1121.39,1345.67,1412.94, 1554.24, 1942.81, 2137.09, 2671.37, 4674.90],19),
         ("am_ad_cp_10","amil","Copart. Parcial — Platinum R2 (Apt)",     "apt","adesao",None,None,None,[ 793.43, 928.31,1132.54,1359.04,1426.99, 1569.70, 1962.12, 2158.33, 2697.91, 4721.35],20),
+        # HAPVIDA
+        ("hap_nm_cp_enf","hapvida","Copart Parcial — Nosso Médico (Enf)","enf","pme","02-29",None,None,[147.09,164.74,184.51,212.19,244.02,290.38,362.98,453.73,771.34,863.90],1),
+        ("hap_nm_cp_apt","hapvida","Copart Parcial — Nosso Médico (Apt)","apt","pme","02-29",None,None,[220.58,247.05,276.70,318.21,365.94,435.47,544.34,680.43,1156.73,1295.54],2),
+        ("hap_nm_cc_enf","hapvida","Copart Completa — Nosso Médico (Enf)","enf","pme","02-29",None,None,[129.46,145.00,162.40,186.76,214.77,255.58,319.48,399.35,678.90,760.37],3),
+        ("hap_nm_cc_apt","hapvida","Copart Completa — Nosso Médico (Apt)","apt","pme","02-29",None,None,[194.12,217.41,243.50,280.03,322.03,383.22,479.03,598.79,1017.94,1140.09],4),
+        ("hap_np_cp_amb","hapvida","Copart Parcial — Nosso Plano (Amb)","amb","pme","02-29",None,None,[148.42,166.23,186.18,214.11,246.23,293.01,366.26,457.83,778.31,871.71],5),
+        ("hap_np_cp_enf","hapvida","Copart Parcial — Nosso Plano (Enf)","enf","pme","02-29",None,None,[163.26,182.85,204.79,235.51,270.84,322.30,402.88,503.60,856.12,958.85],6),
+        ("hap_np_cp_apt","hapvida","Copart Parcial — Nosso Plano (Apt)","apt","pme","02-29",None,None,[244.93,274.32,307.24,353.33,406.33,483.53,604.41,755.51,1284.37,1438.40],7),
+        ("hap_np_cc_amb","hapvida","Copart Completa — Nosso Plano (Amb)","amb","pme","02-29",None,None,[120.72,135.21,151.44,174.16,200.28,238.33,297.91,372.39,633.06,709.03],8),
+        ("hap_np_cc_enf","hapvida","Copart Completa — Nosso Plano (Enf)","enf","pme","02-29",None,None,[143.68,160.92,180.23,207.26,232.35,282.64,354.55,443.19,753.48,843.83],9),
+        ("hap_np_cc_apt","hapvida","Copart Completa — Nosso Plano (Apt)","apt","pme","02-29",None,None,[215.54,241.40,270.37,310.93,357.57,425.51,531.89,664.86,1130.26,1265.89],10),
     ]
     for i, (codigo, op_chave, nome, aco, tipo, fvidas, mod, vig, precos, ordem) in enumerate(_PLANOS):
         op_id = ops_map.get(op_chave)
         if not op_id:
             continue
         conn.execute(
-            "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (codigo, op_id, nome, aco, tipo, fvidas, mod, vig, json.dumps(precos), ordem),
         )
     conn.commit()
@@ -810,7 +822,8 @@ def catalogo_publico():
         "SELECT id, chave, nome, cor, cls, info, rede_adm, rede_rodape FROM operadoras WHERE ativo = 1 ORDER BY ordem, id"
     ).fetchall()
     planos_rows = conn.execute(
-        """SELECT p.codigo, o.chave as op, p.nome, p.aco, p.tipo, p.fvidas, p.mod, p.vig, p.precos
+        """SELECT p.codigo, o.chave as op, p.nome, p.acomodacao as aco, p.tipo,
+                  p.faixa_vidas as fvidas, p.moderador as mod, p.mes_vigencia as vig, p.precos
            FROM planos p JOIN operadoras o ON p.operadora_id = o.id
            WHERE p.ativo = 1 AND o.ativo = 1
            ORDER BY o.ordem, p.ordem, p.id"""
@@ -956,7 +969,7 @@ def criar_plano(body: PlanoRequest, admin=Depends(require_superadmin)):
         conn.close()
         raise HTTPException(409, "Código de plano já existe.")
     conn.execute(
-        "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ativo, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ativo, ordem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (body.codigo.strip(), body.operadora_id, body.nome.strip(), body.aco, body.tipo, body.fvidas, body.mod, body.vig, json.dumps(body.precos), body.ativo, body.ordem),
     )
     conn.commit()
@@ -973,11 +986,13 @@ def atualizar_plano(plano_id: int, body: UpdatePlanoRequest, admin=Depends(requi
     if body.precos is not None and len(body.precos) != 10:
         conn.close()
         raise HTTPException(400, "precos deve ter exatamente 10 valores")
+    _COL = {"aco": "acomodacao", "fvidas": "faixa_vidas", "mod": "moderador", "vig": "mes_vigencia"}
     updates, params = [], []
     for field in ("nome", "aco", "tipo", "fvidas", "mod", "vig", "ativo", "ordem"):
         val = getattr(body, field)
         if val is not None:
-            updates.append(f"{field} = ?"); params.append(val.strip() if isinstance(val, str) else val)
+            db_col = _COL.get(field, field)
+            updates.append(f"{db_col} = ?"); params.append(val.strip() if isinstance(val, str) else val)
     if body.precos is not None:
         updates.append("precos = ?"); params.append(json.dumps(body.precos))
     if updates:
@@ -1176,7 +1191,7 @@ async def importar_catalogo(request: Request, admin=Depends(require_superadmin))
             except (ValueError, TypeError):
                 vig_int = None
             conn.execute(
-                "INSERT INTO planos (codigo, operadora_id, nome, aco, tipo, fvidas, mod, vig, precos, ordem) "
+                "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) "
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (codigo, op_id, str(pl.get("nome","") or ""), str(pl.get("aco","enf") or "enf"),
                  pl.get("tipo") or None, pl.get("fvidas") or None,

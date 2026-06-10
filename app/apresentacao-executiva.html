@@ -363,6 +363,8 @@ body{-webkit-overflow-scrolling:touch}
   /* Modal de quota fica bottom sheet */
   .add-vida-btn{margin:8px 12px}
 }
+#sp-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a2e;color:#fff;padding:10px 22px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999}
+#sp-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 <script src="dados.js"></script>
 </head>
@@ -1737,7 +1739,7 @@ function compartilhar() {
   if (navigator.share) {
     navigator.share({title:'Estudo de Planos — CotPrime', text: msg});
   } else {
-    navigator.clipboard.writeText(msg).then(() => alert('Mensagem copiada! Cole no WhatsApp ou e-mail.'));
+    navigator.clipboard.writeText(msg).then(() => showToast('Mensagem copiada! Cole no WhatsApp ou e-mail.'));
   }
 }
 
@@ -1856,12 +1858,12 @@ document.getElementById('g-validade').value = d.toISOString().split('T')[0];
 // ─── EXPORTAR PDF ─────────────────────────────────────────────────────
 async function exportarPDF(btn) {
   if (!window.html2canvas || !window.jspdf) {
-    alert('Biblioteca PDF ainda carregando. Tente novamente em instantes.');
+    showToast('Biblioteca PDF ainda carregando. Tente novamente em instantes.');
     return;
   }
   const el = document.querySelector('#apres-content .apres-wrap');
   if (!el) {
-    alert('Gere a apresentação primeiro antes de exportar.');
+    showToast('Gere a apresentação primeiro antes de exportar.');
     return;
   }
   const orig = btn.innerHTML;
@@ -1895,10 +1897,20 @@ async function exportarPDF(btn) {
     const nome = (document.getElementById('g-nome')?.value || 'Proposta').replace(/[^a-zA-Z0-9À-ɏ\s]/g,'').trim().replace(/\s+/g,'_');
     pdf.save('SaudePrime_' + nome + '.pdf');
   } catch(e) {
-    alert('Erro ao gerar PDF: ' + e.message);
+    showToast('Erro ao gerar PDF: ' + e.message);
   }
   btn.innerHTML = orig;
   btn.disabled = false;
+}
+
+let _toastTimer;
+function showToast(msg, dur=3000) {
+  let el = document.getElementById('sp-toast');
+  if (!el) { el = document.createElement('div'); el.id='sp-toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), dur);
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>

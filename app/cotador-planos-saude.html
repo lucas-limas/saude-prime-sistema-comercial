@@ -1581,6 +1581,12 @@ function planAvailable(p) {
   return !qtds.some((q, i) => q > 0 && p.precos[i] === 0);
 }
 
+// ── CONSTANTES DE ESTILO POR OPERADORA ──────────────────────────────
+const OP_CLS_MAP = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa', hapvida:'on-hap'};
+const subCls  = op => ({unity:'sub-u',evo:'sub-e',plenum:'sub-p',amil:'sub-a',medsenior:'sub-ms',segurosunimed:'sub-su',portosaude:'sub-ps',bradesco:'sub-bd',bestsenior:'sub-bs',sulamerica:'sub-sa',hapvida:'sub-hap'}[op]);
+const subAttr = op => { const c=subCls(op); if(c) return `class="${c}"`; const col=(OP_META[op]||{}).cor||'var(--ink2)'; return `style="font-size:13px;font-weight:600;color:${col}"`; };
+const tbCls   = op => ({unity:'tb-u',evo:'tb-e',plenum:'tb-p',amil:'tb-a',medsenior:'tb-ms',segurosunimed:'tb-su',portosaude:'tb-ps',bradesco:'tb-bd',bestsenior:'tb-bs',sulamerica:'tb-sa',hapvida:'tb-hap'}[op]);
+
 // ── RENDER ───────────────────────────────────────────────────────────
 function render() {
   const tv = qtds.reduce((a,b)=>a+b,0);
@@ -1604,9 +1610,6 @@ function render() {
   if (tv === 0) { renderNotes(cols); return; }
 
   const opColor = op => (OP_META[op]||{}).cor || `var(--${op==='segurosunimed'?'seguros-unimed':op})`;
-  const subCls  = op => ({unity:'sub-u',evo:'sub-e',plenum:'sub-p',amil:'sub-a',medsenior:'sub-ms',segurosunimed:'sub-su',portosaude:'sub-ps',bradesco:'sub-bd',bestsenior:'sub-bs',sulamerica:'sub-sa',hapvida:'sub-hap'}[op]);
-  const subAttr = op => { const c=subCls(op); if(c) return `class="${c}"`; const col=(OP_META[op]||{}).cor||'var(--ink2)'; return `style="font-size:13px;font-weight:600;color:${col}"`; };
-  const tbCls   = op => ({unity:'tb-u',evo:'tb-e',plenum:'tb-p',amil:'tb-a',medsenior:'tb-ms',segurosunimed:'tb-su',portosaude:'tb-ps',bradesco:'tb-bd',bestsenior:'tb-bs',sulamerica:'tb-sa',hapvida:'tb-hap'}[op]);
 
   const usedTipos = [...new Set(cols.map(c => tipoOp[c.op]))];
   const mixedTipos = usedTipos.length > 1;
@@ -1747,11 +1750,10 @@ function showTab(id, btn) {
 }
 
 function showCar(op, btn) {
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa', hapvida:'on-hap'};
   document.querySelectorAll('.car-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('car-'+op).classList.add('on');
-  btn.classList.add(clsMap[op] || ('on-'+op[0]));
+  btn.classList.add(OP_CLS_MAP[op] || ('on-'+op[0]));
 }
 
 function renderRedeTab() {
@@ -1761,11 +1763,10 @@ function renderRedeTab() {
   if (!opsBar || !tabRede || !window.REDE_DATA) return;
   const keys = Object.keys(window.REDE_DATA).filter(k => window.REDE_DATA[k]);
   if (!keys.length) return;
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa', hapvida:'on-hap'};
   // rebuild operator buttons
   opsBar.innerHTML = keys.map((k, i) => {
     const meta  = (window.OP_META || {})[k] || {};
-    const onCls = clsMap[k] || ('on-' + k[0]);
+    const onCls = OP_CLS_MAP[k] || ('on-' + k[0]);
     return `<button class="car-btn${i===0?' '+onCls:''}" onclick="showRede('${k}',this)">${meta.nome||k}</button>`;
   }).join('');
   // remove old static panels
@@ -1775,7 +1776,7 @@ function renderRedeTab() {
   keys.forEach((k, idx) => {
     const rd   = window.REDE_DATA[k];
     const meta = (window.OP_META || {})[k] || {};
-    const cls  = meta.cls || clsMap[k] || ('on-' + k[0]);
+    const cls  = meta.cls || OP_CLS_MAP[k] || ('on-' + k[0]);
     const gdCls = cls.replace('on-','gd-');
     const rhCls = cls.replace('on-','rh-');
     let gruposHtml = '';
@@ -1800,11 +1801,10 @@ function renderRedeTab() {
 }
 
 function showRede(op, btn) {
-  const clsMap = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa', hapvida:'on-hap'};
   document.querySelectorAll('.rede-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.rede-ops .car-btn').forEach(b=>b.className='car-btn');
   document.getElementById('rede-'+op).classList.add('on');
-  btn.classList.add(clsMap[op] || ('on-'+op[0]));
+  btn.classList.add(OP_CLS_MAP[op] || ('on-'+op[0]));
 }
 
 // ── UTILITÁRIOS ─────────────────────────────────────────────────────

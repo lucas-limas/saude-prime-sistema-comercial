@@ -97,6 +97,24 @@ def _migrations_pg(conn):
         # Etapa 2: remover ON DELETE CASCADE de users → corretoras (soft delete via ativo=0)
         "ALTER TABLE users DROP CONSTRAINT IF EXISTS users_corretora_id_fkey",
         "ALTER TABLE users ADD CONSTRAINT users_corretora_id_fkey FOREIGN KEY (corretora_id) REFERENCES corretoras(id)",
+        # Etapa 3: renomear campos abreviados em planos
+        "ALTER TABLE planos RENAME COLUMN aco TO acomodacao",
+        "ALTER TABLE planos RENAME COLUMN fvidas TO faixa_vidas",
+        "ALTER TABLE planos RENAME COLUMN mod TO moderador",
+        "ALTER TABLE planos RENAME COLUMN vig TO mes_vigencia",
+        # Etapa 3: Hapvida — inserir operadora se não existir
+        "INSERT INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES ('hapvida', 'Hapvida', 'var(--hapvida)', 'on-hap', 'PME 2–29 vidas \xb7 Tabela Bras\xedlia \xb7 Nosso M\xe9dico e Nosso Plano \xb7 Com coparticipa\xe7\xe3o parcial ou completa \xb7 Rede credenciada DF', 11) ON CONFLICT (chave) DO NOTHING",
+        # Etapa 3: Hapvida — inserir planos (subquery garante operadora_id correto)
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cp_enf', id, 'Copart Parcial — Nosso M\xe9dico (Enf)', 'enf', 'pme', '02-29', '[147.09,164.74,184.51,212.19,244.02,290.38,362.98,453.73,771.34,863.90]', 1 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cp_apt', id, 'Copart Parcial — Nosso M\xe9dico (Apt)', 'apt', 'pme', '02-29', '[220.58,247.05,276.70,318.21,365.94,435.47,544.34,680.43,1156.73,1295.54]', 2 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cc_enf', id, 'Copart Completa — Nosso M\xe9dico (Enf)', 'enf', 'pme', '02-29', '[129.46,145.00,162.40,186.76,214.77,255.58,319.48,399.35,678.90,760.37]', 3 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cc_apt', id, 'Copart Completa — Nosso M\xe9dico (Apt)', 'apt', 'pme', '02-29', '[194.12,217.41,243.50,280.03,322.03,383.22,479.03,598.79,1017.94,1140.09]', 4 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cp_amb', id, 'Copart Parcial — Nosso Plano (Amb)', 'amb', 'pme', '02-29', '[148.42,166.23,186.18,214.11,246.23,293.01,366.26,457.83,778.31,871.71]', 5 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cp_enf', id, 'Copart Parcial — Nosso Plano (Enf)', 'enf', 'pme', '02-29', '[163.26,182.85,204.79,235.51,270.84,322.30,402.88,503.60,856.12,958.85]', 6 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cp_apt', id, 'Copart Parcial — Nosso Plano (Apt)', 'apt', 'pme', '02-29', '[244.93,274.32,307.24,353.33,406.33,483.53,604.41,755.51,1284.37,1438.40]', 7 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cc_amb', id, 'Copart Completa — Nosso Plano (Amb)', 'amb', 'pme', '02-29', '[120.72,135.21,151.44,174.16,200.28,238.33,297.91,372.39,633.06,709.03]', 8 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cc_enf', id, 'Copart Completa — Nosso Plano (Enf)', 'enf', 'pme', '02-29', '[143.68,160.92,180.23,207.26,232.35,282.64,354.55,443.19,753.48,843.83]', 9 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
+        "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cc_apt', id, 'Copart Completa — Nosso Plano (Apt)', 'apt', 'pme', '02-29', '[215.54,241.40,270.37,310.93,357.57,425.51,531.89,664.86,1130.26,1265.89]', 10 FROM operadoras WHERE chave='hapvida' ON CONFLICT (codigo) DO NOTHING",
     ]
     for sql in safe:
         try:
@@ -167,6 +185,24 @@ def _migrations_sqlite(c):
         "CREATE INDEX IF NOT EXISTS idx_rede_operadora_id ON rede_credenciada(operadora_id)",
         "CREATE INDEX IF NOT EXISTS idx_audit_usuario ON audit_log(usuario)",
         # SQLite não suporta ALTER CONSTRAINT — CASCADE removido do CREATE TABLE para novas instalações
+        # Etapa 3: renomear campos abreviados em planos (SQLite 3.25+ suporta RENAME COLUMN)
+        "ALTER TABLE planos RENAME COLUMN aco TO acomodacao",
+        "ALTER TABLE planos RENAME COLUMN fvidas TO faixa_vidas",
+        "ALTER TABLE planos RENAME COLUMN mod TO moderador",
+        "ALTER TABLE planos RENAME COLUMN vig TO mes_vigencia",
+        # Etapa 3: Hapvida — inserir operadora se não existir
+        "INSERT OR IGNORE INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES ('hapvida', 'Hapvida', 'var(--hapvida)', 'on-hap', 'PME 2–29 vidas \xb7 Tabela Bras\xedlia \xb7 Nosso M\xe9dico e Nosso Plano \xb7 Com coparticipa\xe7\xe3o parcial ou completa \xb7 Rede credenciada DF', 11)",
+        # Etapa 3: Hapvida — inserir planos (subquery garante operadora_id correto)
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cp_enf', id, 'Copart Parcial — Nosso M\xe9dico (Enf)', 'enf', 'pme', '02-29', '[147.09,164.74,184.51,212.19,244.02,290.38,362.98,453.73,771.34,863.90]', 1 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cp_apt', id, 'Copart Parcial — Nosso M\xe9dico (Apt)', 'apt', 'pme', '02-29', '[220.58,247.05,276.70,318.21,365.94,435.47,544.34,680.43,1156.73,1295.54]', 2 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cc_enf', id, 'Copart Completa — Nosso M\xe9dico (Enf)', 'enf', 'pme', '02-29', '[129.46,145.00,162.40,186.76,214.77,255.58,319.48,399.35,678.90,760.37]', 3 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_nm_cc_apt', id, 'Copart Completa — Nosso M\xe9dico (Apt)', 'apt', 'pme', '02-29', '[194.12,217.41,243.50,280.03,322.03,383.22,479.03,598.79,1017.94,1140.09]', 4 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cp_amb', id, 'Copart Parcial — Nosso Plano (Amb)', 'amb', 'pme', '02-29', '[148.42,166.23,186.18,214.11,246.23,293.01,366.26,457.83,778.31,871.71]', 5 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cp_enf', id, 'Copart Parcial — Nosso Plano (Enf)', 'enf', 'pme', '02-29', '[163.26,182.85,204.79,235.51,270.84,322.30,402.88,503.60,856.12,958.85]', 6 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cp_apt', id, 'Copart Parcial — Nosso Plano (Apt)', 'apt', 'pme', '02-29', '[244.93,274.32,307.24,353.33,406.33,483.53,604.41,755.51,1284.37,1438.40]', 7 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cc_amb', id, 'Copart Completa — Nosso Plano (Amb)', 'amb', 'pme', '02-29', '[120.72,135.21,151.44,174.16,200.28,238.33,297.91,372.39,633.06,709.03]', 8 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cc_enf', id, 'Copart Completa — Nosso Plano (Enf)', 'enf', 'pme', '02-29', '[143.68,160.92,180.23,207.26,232.35,282.64,354.55,443.19,753.48,843.83]', 9 FROM operadoras WHERE chave='hapvida'",
+        "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, precos, ordem) SELECT 'hap_np_cc_apt', id, 'Copart Completa — Nosso Plano (Apt)', 'apt', 'pme', '02-29', '[215.54,241.40,270.37,310.93,357.57,425.51,531.89,664.86,1130.26,1265.89]', 10 FROM operadoras WHERE chave='hapvida'",
     ]
     for sql in safe:
         try:
@@ -243,11 +279,11 @@ def init_db():
                 codigo TEXT UNIQUE NOT NULL,
                 operadora_id INTEGER REFERENCES operadoras(id) ON DELETE CASCADE,
                 nome TEXT NOT NULL,
-                aco TEXT NOT NULL,
+                acomodacao TEXT NOT NULL,
                 tipo TEXT,
-                fvidas TEXT,
-                mod TEXT,
-                vig INTEGER,
+                faixa_vidas TEXT,
+                moderador TEXT,
+                mes_vigencia INTEGER,
                 precos TEXT NOT NULL,
                 ativo INTEGER DEFAULT 1,
                 ordem INTEGER DEFAULT 0,
@@ -380,11 +416,11 @@ def init_db():
                 codigo TEXT UNIQUE NOT NULL,
                 operadora_id INTEGER REFERENCES operadoras(id) ON DELETE CASCADE,
                 nome TEXT NOT NULL,
-                aco TEXT NOT NULL,
+                acomodacao TEXT NOT NULL,
                 tipo TEXT,
-                fvidas TEXT,
-                mod TEXT,
-                vig INTEGER,
+                faixa_vidas TEXT,
+                moderador TEXT,
+                mes_vigencia INTEGER,
                 precos TEXT NOT NULL,
                 ativo INTEGER DEFAULT 1,
                 ordem INTEGER DEFAULT 0,
