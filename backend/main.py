@@ -179,22 +179,22 @@ def seed_catalogo():
         return
 
     _OPS = [
-        ("unity",        "Unity Saúde",       "var(--unity)",        "on-u",  "Adm. Esplendor · Mai/2026 · Taxa assoc. R$ 5,00 · Assoc: UEB, UVA, UNIPRO, ANC, UNSP · Telemedicina gratuita", 1),
-        ("evo",          "Evo Saúde",          "var(--evo)",          "on-e",  "Adm. Easyplan · Reajuste set/2026 · Odonto ODONTOGROUP incluso · Telemedicina 24h · Taxa assoc. R$ 5,00", 2),
-        ("plenum",       "Plenum Saúde",       "var(--plenum)",       "on-p",  "Adm. Easyplan · Reajuste mar/2027 · Seguro Viagem AIG + UTI Móvel 24h · Sírio-Libanês (Sigma) · Taxa assoc. R$ 5,00", 3),
-        ("amil",         "Amil",               "var(--amil)",         "on-a",  "Vigência mai/2026 · Amil Dental incluso 12 meses grátis (R$ 14,99/mês após) · Rede nacional · Reembolso disponível nos planos Platinum", 4),
-        ("medsenior",    "MedSênior",          "var(--medsenior)",    "on-ms", "Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas", 5),
-        ("segurosunimed","Seguros Unimed",      "var(--seguros-unimed)","on-su","PME · Compulsório e Facultativo · 2–99 vidas · Rede DF + UE nacional · Essencial I/II/III/IV disponíveis", 6),
-        ("portosaude",   "Porto Saúde",        "var(--portosaude)",   "on-ps", "PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde", 7),
-        ("bradesco",     "Bradesco Saúde",     "var(--bradesco)",     "on-b",  "PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros", 8),
-        ("bestsenior",   "Best Sênior",        "var(--bestsenior)",   "on-bs", "PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde", 9),
-        ("sulamerica",   "SulAmérica Saúde",   "var(--sulamerica)",   "on-sa",  "PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde", 10),
-        ("hapvida",      "Hapvida",            "var(--hapvida)",      "on-hap", "PME 2–29 vidas · Tabela Brasília · Nosso Médico e Nosso Plano · Com coparticipação parcial ou completa · Rede credenciada DF", 11),
+        ("unity",        "Unity Saúde",       "Adm. Esplendor · Mai/2026 · Taxa assoc. R$ 5,00 · Assoc: UEB, UVA, UNIPRO, ANC, UNSP · Telemedicina gratuita", 1),
+        ("evo",          "Evo Saúde",          "Adm. Easyplan · Reajuste set/2026 · Odonto ODONTOGROUP incluso · Telemedicina 24h · Taxa assoc. R$ 5,00", 2),
+        ("plenum",       "Plenum Saúde",       "Adm. Easyplan · Reajuste mar/2027 · Seguro Viagem AIG + UTI Móvel 24h · Sírio-Libanês (Sigma) · Taxa assoc. R$ 5,00", 3),
+        ("amil",         "Amil",               "Vigência mai/2026 · Amil Dental incluso 12 meses grátis (R$ 14,99/mês após) · Rede nacional · Reembolso disponível nos planos Platinum", 4),
+        ("medsenior",    "MedSênior",          "Vigência mai/2026 · Pessoa Física · Sem coparticipação · Rede Brasília · Coleta domiciliar Lab. MedSênior · Oficinas do Bem inclusas", 5),
+        ("segurosunimed","Seguros Unimed",      "PME · Compulsório e Facultativo · 2–99 vidas · Rede DF + UE nacional · Essencial I/II/III/IV disponíveis", 6),
+        ("portosaude",   "Porto Saúde",        "PME · Planos Bronze / Prata / Ouro · Com e sem coparticipação parcial · Rede credenciada DF · Porto Seguro Saúde", 7),
+        ("bradesco",     "Bradesco Saúde",     "PME · Planos Nacionais · Tabela jan/2026 · Rede credenciada DF · Bradesco Seguros", 8),
+        ("bestsenior",   "Best Sênior",        "PF e PME · Exclusivo 44+ · Tabela Mar-Abr/2026 · Rede credenciada DF · Best Sênior Saúde", 9),
+        ("sulamerica",   "SulAmérica Saúde",   "PME Compulsório · Vigência 12m ou 24m · 3–99 vidas · Com e sem copart 30% · Rede credenciada DF · SulAmérica Seguro Saúde", 10),
+        ("hapvida",      "Hapvida",            "PME 2–29 vidas · Tabela Brasília · Nosso Médico e Nosso Plano · Com coparticipação parcial ou completa · Rede credenciada DF", 11),
     ]
-    for chave, nome, cor, cls, info, ordem in _OPS:
+    for chave, nome, info, ordem in _OPS:
         conn.execute(
-            "INSERT INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES (?, ?, ?, ?, ?, ?)",
-            (chave, nome, cor, cls, info, ordem),
+            "INSERT INTO operadoras (chave, nome, info, ordem) VALUES (?, ?, ?, ?)",
+            (chave, nome, info, ordem),
         )
     conn.commit()
 
@@ -256,6 +256,251 @@ def seed_catalogo():
         ("hap_np_cc_amb","hapvida","Copart Completa — Nosso Plano (Amb)","amb","pme","02-29",None,None,[120.72,135.21,151.44,174.16,200.28,238.33,297.91,372.39,633.06,709.03],8),
         ("hap_np_cc_enf","hapvida","Copart Completa — Nosso Plano (Enf)","enf","pme","02-29",None,None,[143.68,160.92,180.23,207.26,232.35,282.64,354.55,443.19,753.48,843.83],9),
         ("hap_np_cc_apt","hapvida","Copart Completa — Nosso Plano (Apt)","apt","pme","02-29",None,None,[215.54,241.40,270.37,310.93,357.57,425.51,531.89,664.86,1130.26,1265.89],10),
+        # MEDSENIOR (ms1–ms8) — preços só a partir de 59 anos (índices 0–6 = 0)
+        ("ms1","medsenior","Sem copart — DF3 Enfermaria","enf","pf",None,None,None,[0,0,0,0,0,0,0,803.50,964.20,1263.10],1),
+        ("ms2","medsenior","Sem copart — DF4 Apartamento","apt","pf",None,None,None,[0,0,0,0,0,0,0,964.19,1157.03,1515.71],2),
+        ("ms3","medsenior","Sem copart — Black Apartamento","apt","pf",None,None,None,[0,0,0,0,0,0,0,1205.92,1447.10,1895.70],3),
+        ("ms4","medsenior","Sem copart — Infinite Apartamento","apt","pf",None,None,None,[0,0,0,0,0,0,0,1818.30,2181.96,2858.37],4),
+        ("ms5","medsenior","PME — DF Enfermaria","enf","pme",None,None,None,[0,0,0,0,0,0,0,723.14,867.77,1136.78],5),
+        ("ms6","medsenior","PME — DF Apartamento","apt","pme",None,None,None,[0,0,0,0,0,0,0,867.78,1041.34,1364.16],6),
+        ("ms7","medsenior","PME — Black Apartamento","apt","pme",None,None,None,[0,0,0,0,0,0,0,1085.34,1302.41,1706.16],7),
+        ("ms8","medsenior","PME — Infinite Apartamento","apt","pme",None,None,None,[0,0,0,0,0,0,0,1487.70,1785.24,2338.66],8),
+        # PORTO SAÚDE (ps_1–ps_8)
+        ("ps_1","portosaude","Sem copart — Bronze Brasília Pro","enf","pme",None,None,None,[243.53,295.33,356.27,407.87,441.93,456.40,545.18,586.91,725.17,1218.96],1),
+        ("ps_2","portosaude","Com copart — Bronze Brasília Pro","enf","pme",None,None,None,[187.52,227.41,274.33,314.06,340.29,351.43,419.79,451.92,558.38,938.60],2),
+        ("ps_3","portosaude","Sem copart — Prata Brasília Pro","enf","pme",None,None,None,[287.92,349.16,421.20,482.21,522.48,539.58,644.54,693.88,857.34,1441.12],3),
+        ("ps_4","portosaude","Com copart — Prata Brasília Pro","enf","pme",None,None,None,[221.70,268.85,324.33,371.30,402.31,415.48,496.30,534.29,660.15,1109.66],4),
+        ("ps_5","portosaude","Sem copart — P420","apt","pme",None,None,None,[414.59,502.78,606.52,694.36,752.35,776.98,928.12,999.16,1234.54,2075.16],5),
+        ("ps_6","portosaude","Com copart — P420","apt","pme",None,None,None,[339.96,412.28,497.35,569.38,616.92,637.12,761.06,819.31,1012.32,1701.53],6),
+        ("ps_7","portosaude","Sem copart — Ouro Brasília Pro","apt","pme",None,None,None,[381.88,463.11,558.66,639.57,692.98,715.67,854.89,920.32,1137.13,1911.42],7),
+        ("ps_8","portosaude","Com copart — Ouro Brasília Pro","apt","pme",None,None,None,[313.14,379.75,458.10,524.45,568.25,586.85,701.01,754.66,932.44,1567.36],8),
+        # BEST SÊNIOR (bse_pf1–bse_pme4) — preços só a partir de 44 anos (índices 0–5 = 0)
+        ("bse_pf1","bestsenior","Sem copart — Classic (Enf)","enf","pf",None,None,None,[0,0,0,0,0,0,676.09,851.88,1090.40,1504.75],1),
+        ("bse_pf2","bestsenior","Sem copart — Classic (Apt)","apt","pf",None,None,None,[0,0,0,0,0,0,829.65,1045.37,1338.07,1846.54],2),
+        ("bse_pf3","bestsenior","Sem copart — Prime (Apt)","apt","pf",None,None,None,[0,0,0,0,0,0,982.49,1237.94,1584.56,2186.69],3),
+        ("bse_pf4","bestsenior","Sem copart — Platinum (Apt)","apt","pf",None,None,None,[0,0,0,0,0,0,1189.90,1499.28,1919.08,2648.33],4),
+        ("bse_pme1","bestsenior","Sem copart — Classic PJ (Enf)","enf","pme",None,None,None,[0,0,0,0,0,0,608.48,766.69,981.36,1353.64],5),
+        ("bse_pme2","bestsenior","Sem copart — Classic PJ (Apt)","apt","pme",None,None,None,[0,0,0,0,0,0,746.69,940.84,1204.26,1661.89],6),
+        ("bse_pme3","bestsenior","Sem copart — Prime PJ (Apt)","apt","pme",None,None,None,[0,0,0,0,0,0,884.24,1114.15,1426.10,1968.02],7),
+        ("bse_pme4","bestsenior","Sem copart — Platinum PJ (Apt)","apt","pme",None,None,None,[0,0,0,0,0,0,1070.91,1349.36,1727.17,2383.50],8),
+        # BRADESCO (bd_1–bd_7)
+        ("bd_1","bradesco","Sem copart — Nacional Plus 4 (Apt)","apt","pme",None,None,None,[1111.89,1312.03,1587.55,1905.08,2171.76,2236.91,2723.58,3203.48,3812.14,6670.86],1),
+        ("bd_2","bradesco","Sem copart — Premium 6 (Apt)","apt","pme",None,None,None,[1535.55,1811.95,2192.44,2630.95,2999.26,3089.24,3761.34,4424.09,5264.67,9212.65],2),
+        ("bd_3","bradesco","Copart total — Nacional Plus 4 (Apt)","apt","pme",None,None,None,[889.51,1049.62,1270.03,1524.05,1737.40,1789.52,2178.85,2562.76,3049.68,5336.64],3),
+        ("bd_4","bradesco","Sem copart — Efetivo (Enf)","enf","pme",None,None,None,[400.01,472.01,571.13,685.36,781.30,804.74,979.81,1152.46,1371.43,2399.87],4),
+        ("bd_5","bradesco","Sem copart — Nacional Flex (Enf)","enf","pme",None,None,None,[466.28,550.22,665.76,798.91,910.76,938.08,1142.16,1343.41,1598.66,2797.50],5),
+        ("bd_6","bradesco","Copart total — Efetivo (Enf)","enf","pme",None,None,None,[308.01,363.45,439.77,527.73,601.60,619.65,754.46,887.39,1056.00,1847.90],6),
+        ("bd_7","bradesco","Copart total — Nacional Flex (Enf)","enf","pme",None,None,None,[359.04,423.67,512.63,615.16,701.28,722.32,879.47,1034.43,1230.97,2154.07],7),
+        # SEGUROS UNIMED — Compulsório 02-04
+        ("su_c04_1","segurosunimed","Sem copart — Compacto","enf","pme","02-04","comp",None,[516.84,632.61,792.11,875.32,932.33,1081.49,1292.82,1550.52,1840.83,3101.03],1),
+        ("su_c04_2","segurosunimed","Com copart — Compacto","enf","pme","02-04","comp",None,[382.84,468.60,586.75,648.38,690.61,801.10,957.65,1148.53,1363.57,2297.06],2),
+        ("su_c04_3","segurosunimed","Sem copart — Efetivo","apt","pme","02-04","comp",None,[580.25,710.22,889.29,982.71,1046.71,1214.17,1451.43,1740.74,2066.67,3481.49],3),
+        ("su_c04_4","segurosunimed","Com copart — Efetivo","apt","pme","02-04","comp",None,[429.81,526.09,658.73,727.93,775.34,899.38,1075.13,1289.44,1530.86,2578.88],4),
+        ("su_c04_5","segurosunimed","Sem copart — Completo","apt","pme","02-04","comp",None,[686.94,840.82,1052.81,1163.41,1239.18,1437.43,1718.32,2060.83,2446.69,4121.67],5),
+        ("su_c04_6","segurosunimed","Com copart — Completo","apt","pme","02-04","comp",None,[508.85,622.83,779.86,861.78,917.91,1064.76,1272.83,1526.54,1812.36,3053.09],6),
+        ("su_c04_7","segurosunimed","Sem copart — Superior","apt","pme","02-04","comp",None,[760.09,930.35,1164.91,1287.29,1371.12,1590.49,1901.29,2280.27,2707.21,4560.53],7),
+        ("su_c04_8","segurosunimed","Com copart — Superior","apt","pme","02-04","comp",None,[608.07,744.28,931.93,1029.83,1096.90,1272.39,1521.03,1824.21,2165.77,3648.42],8),
+        ("su_c04_9","segurosunimed","Sem copart — Superior Plus","apt","pme","02-04","comp",None,[843.75,1032.74,1293.12,1428.97,1522.03,1765.54,2110.55,2531.24,3005.17,5062.47],9),
+        ("su_c04_10","segurosunimed","Com copart — Superior Plus","apt","pme","02-04","comp",None,[675.00,826.20,1034.50,1143.17,1217.63,1412.43,1688.44,2024.99,2404.14,4049.98],10),
+        ("su_c04_11","segurosunimed","Sem copart — Sênior","apt","pme","02-04","comp",None,[1615.57,1977.45,2476.02,2736.13,2914.32,3380.58,4041.18,4846.70,5754.17,9693.41],11),
+        ("su_c04_12","segurosunimed","Com copart — Sênior","apt","pme","02-04","comp",None,[1404.84,1719.53,2153.06,2379.24,2534.19,2939.63,3514.07,4214.52,5003.62,8429.05],12),
+        # SEGUROS UNIMED — Compulsório 05-29
+        ("su_c29_1","segurosunimed","Sem copart — Compacto","enf","pme","05-29","comp",None,[458.88,561.66,703.27,777.15,827.77,960.20,1147.83,1376.63,1634.38,2753.25],13),
+        ("su_c29_2","segurosunimed","Com copart — Compacto","enf","pme","05-29","comp",None,[339.91,416.05,520.94,575.67,613.16,711.26,850.25,1019.72,1210.65,2039.45],14),
+        ("su_c29_3","segurosunimed","Sem copart — Efetivo","apt","pme","05-29","comp",None,[515.17,630.57,789.55,872.50,929.32,1078.00,1288.65,1545.52,1834.89,3091.04],15),
+        ("su_c29_4","segurosunimed","Com copart — Efetivo","apt","pme","05-29","comp",None,[381.61,467.09,584.85,646.29,688.39,798.52,954.56,1144.83,1359.18,2289.66],16),
+        ("su_c29_5","segurosunimed","Sem copart — Completo","apt","pme","05-29","comp",None,[609.90,746.52,934.74,1032.93,1100.21,1276.22,1525.61,1829.71,2172.29,3659.42],17),
+        ("su_c29_6","segurosunimed","Com copart — Completo","apt","pme","05-29","comp",None,[451.78,552.98,692.40,765.14,814.97,945.35,1130.08,1355.34,1609.11,2710.68],18),
+        ("su_c29_7","segurosunimed","Sem copart — Superior","apt","pme","05-29","comp",None,[674.84,826.01,1034.27,1142.92,1217.35,1412.11,1688.06,2024.53,2403.60,4049.07],19),
+        ("su_c29_8","segurosunimed","Com copart — Superior","apt","pme","05-29","comp",None,[539.88,660.81,827.41,914.33,973.88,1129.69,1350.45,1619.63,1922.88,3239.26],20),
+        ("su_c29_9","segurosunimed","Sem copart — Superior Plus","apt","pme","05-29","comp",None,[749.12,916.92,1148.10,1268.71,1351.34,1567.53,1873.85,2247.36,2668.14,4494.72],21),
+        ("su_c29_10","segurosunimed","Com copart — Superior Plus","apt","pme","05-29","comp",None,[599.30,733.54,918.48,1014.97,1081.07,1254.03,1499.08,1797.89,2134.51,3595.78],22),
+        ("su_c29_11","segurosunimed","Sem copart — Sênior","apt","pme","05-29","comp",None,[1434.38,1755.68,2198.33,2429.27,2587.48,3001.45,3587.96,4303.15,5108.84,8606.29],23),
+        ("su_c29_12","segurosunimed","Com copart — Sênior","apt","pme","05-29","comp",None,[1247.29,1526.68,1911.60,2112.41,2249.98,2609.95,3119.97,3741.87,4442.47,7483.73],24),
+        # SEGUROS UNIMED — Compulsório 30-99
+        ("su_c99_1","segurosunimed","Sem copart — Compacto","enf","pme","30-99","comp",None,[420.23,514.37,644.05,711.71,758.06,879.34,1051.17,1260.70,1496.75,2521.40],25),
+        ("su_c99_2","segurosunimed","Com copart — Compacto","enf","pme","30-99","comp",None,[311.28,381.01,477.07,527.19,561.53,651.36,778.65,933.85,1108.70,1867.71],26),
+        ("su_c99_3","segurosunimed","Sem copart — Efetivo","apt","pme","30-99","comp",None,[471.79,577.47,723.07,799.02,851.06,987.22,1180.14,1415.37,1680.37,2830.74],27),
+        ("su_c99_4","segurosunimed","Com copart — Efetivo","apt","pme","30-99","comp",None,[349.47,427.76,535.60,591.87,630.42,731.27,874.17,1048.42,1244.72,2096.84],28),
+        ("su_c99_5","segurosunimed","Sem copart — Completo","apt","pme","30-99","comp",None,[558.54,683.66,856.02,945.95,1007.56,1168.75,1397.14,1675.63,1989.36,3351.26],29),
+        ("su_c99_6","segurosunimed","Com copart — Completo","apt","pme","30-99","comp",None,[413.74,506.41,634.09,700.70,746.34,865.74,1034.92,1241.21,1473.60,2482.42],30),
+        ("su_c99_7","segurosunimed","Sem copart — Superior","apt","pme","30-99","comp",None,[618.02,756.45,947.17,1046.67,1114.84,1293.20,1545.90,1854.05,2201.19,3708.10],31),
+        ("su_c99_8","segurosunimed","Com copart — Superior","apt","pme","30-99","comp",None,[494.41,605.16,757.74,837.34,891.87,1034.56,1236.72,1483.24,1760.95,2966.48],32),
+        ("su_c99_9","segurosunimed","Sem copart — Superior Plus","apt","pme","30-99","comp",None,[686.04,839.71,1051.42,1161.87,1237.54,1435.53,1716.05,2058.11,2443.46,4116.22],33),
+        ("su_c99_10","segurosunimed","Com copart — Superior Plus","apt","pme","30-99","comp",None,[548.83,671.77,841.14,929.50,990.03,1148.42,1372.84,1646.49,1954.76,3292.97],34),
+        ("su_c99_11","segurosunimed","Sem copart — Sênior","apt","pme","30-99","comp",None,[1313.59,1607.84,2013.21,2224.70,2369.59,2748.69,3285.82,3940.78,4678.62,7881.55],35),
+        ("su_c99_12","segurosunimed","Com copart — Sênior","apt","pme","30-99","comp",None,[1142.25,1398.12,1750.62,1934.52,2060.51,2390.17,2857.23,3426.76,4068.37,6853.53],36),
+        # SEGUROS UNIMED — Facultativo 02-04
+        ("su_f04_1","segurosunimed","Sem copart — Compacto","enf","pme","02-04","fac",None,[568.52,695.87,871.32,962.85,1025.56,1189.63,1422.10,1705.57,2024.91,3411.14],37),
+        ("su_f04_2","segurosunimed","Com copart — Compacto","enf","pme","02-04","fac",None,[421.13,515.46,645.42,713.22,759.67,881.21,1053.41,1263.38,1499.93,2526.77],38),
+        ("su_f04_3","segurosunimed","Sem copart — Efetivo","apt","pme","02-04","fac",None,[638.27,781.25,978.22,1080.98,1151.38,1335.58,1596.57,1914.82,2273.33,3829.63],39),
+        ("su_f04_4","segurosunimed","Com copart — Efetivo","apt","pme","02-04","fac",None,[472.79,578.70,724.60,800.72,852.87,989.32,1182.65,1418.38,1683.95,2836.77],40),
+        ("su_f04_5","segurosunimed","Sem copart — Completo","apt","pme","02-04","fac",None,[755.64,924.90,1158.09,1279.75,1363.10,1581.17,1890.15,2266.92,2691.36,4533.83],41),
+        ("su_f04_6","segurosunimed","Com copart — Completo","apt","pme","02-04","fac",None,[559.73,685.11,857.85,947.96,1009.70,1171.24,1400.11,1679.20,1993.60,3358.39],42),
+        ("su_f04_7","segurosunimed","Sem copart — Superior","apt","pme","02-04","fac",None,[836.10,1023.38,1281.40,1416.01,1508.24,1749.53,2091.41,2508.29,2977.93,5016.58],43),
+        ("su_f04_8","segurosunimed","Com copart — Superior","apt","pme","02-04","fac",None,[668.88,818.71,1025.12,1132.81,1206.59,1399.63,1673.13,2006.63,2382.34,4013.27],44),
+        ("su_f04_9","segurosunimed","Sem copart — Superior Plus","apt","pme","02-04","fac",None,[928.12,1136.02,1422.44,1571.86,1674.24,1942.09,2321.60,2784.36,3305.69,5568.72],45),
+        ("su_f04_10","segurosunimed","Com copart — Superior Plus","apt","pme","02-04","fac",None,[742.50,908.82,1137.95,1257.49,1339.39,1553.67,1857.28,2227.49,2644.55,4454.98],46),
+        ("su_f04_11","segurosunimed","Sem copart — Sênior","apt","pme","02-04","fac",None,[1777.12,2175.20,2723.62,3009.74,3205.75,3718.63,4445.30,5331.37,6329.58,10662.75],47),
+        ("su_f04_12","segurosunimed","Com copart — Sênior","apt","pme","02-04","fac",None,[1545.33,1891.48,2368.37,2617.16,2787.61,3233.59,3865.48,4635.98,5503.99,9271.95],48),
+        # SEGUROS UNIMED — Facultativo 05-29
+        ("su_f29_1","segurosunimed","Sem copart — Compacto","enf","pme","05-29","fac",None,[504.76,617.83,773.60,854.87,910.54,1056.22,1262.62,1514.29,1797.82,3028.58],49),
+        ("su_f29_2","segurosunimed","Com copart — Compacto","enf","pme","05-29","fac",None,[373.90,457.65,573.04,633.24,674.48,782.38,935.27,1121.70,1331.72,2243.39],50),
+        ("su_f29_3","segurosunimed","Sem copart — Efetivo","apt","pme","05-29","fac",None,[566.69,693.63,868.51,959.75,1022.25,1185.80,1417.52,1700.07,2018.38,3400.14],51),
+        ("su_f29_4","segurosunimed","Com copart — Efetivo","apt","pme","05-29","fac",None,[419.77,513.80,643.34,710.92,757.22,878.37,1050.01,1259.31,1495.10,2518.62],52),
+        ("su_f29_5","segurosunimed","Sem copart — Completo","apt","pme","05-29","fac",None,[670.89,821.17,1028.21,1136.23,1210.23,1403.85,1678.17,2012.68,2389.52,4025.37],53),
+        ("su_f29_6","segurosunimed","Com copart — Completo","apt","pme","05-29","fac",None,[496.96,608.28,761.64,841.65,896.46,1039.89,1243.09,1490.88,1770.02,2981.75],54),
+        ("su_f29_7","segurosunimed","Sem copart — Superior","apt","pme","05-29","fac",None,[742.33,908.61,1137.69,1257.21,1339.09,1553.32,1856.86,2226.99,2643.95,4453.98],55),
+        ("su_f29_8","segurosunimed","Com copart — Superior","apt","pme","05-29","fac",None,[593.86,726.89,910.16,1005.77,1071.27,1242.66,1485.49,1781.59,2115.16,3563.18],56),
+        ("su_f29_9","segurosunimed","Sem copart — Superior Plus","apt","pme","05-29","fac",None,[824.03,1008.62,1262.91,1395.58,1486.47,1724.29,2061.23,2472.10,2934.96,4944.19],57),
+        ("su_f29_10","segurosunimed","Com copart — Superior Plus","apt","pme","05-29","fac",None,[659.23,806.89,1010.33,1116.46,1189.18,1379.43,1648.99,1977.68,2347.96,3955.35],58),
+        ("su_f29_11","segurosunimed","Sem copart — Sênior","apt","pme","05-29","fac",None,[1577.82,1931.25,2418.17,2672.20,2846.23,3301.59,3946.76,4733.46,5619.72,9466.92],59),
+        ("su_f29_12","segurosunimed","Com copart — Sênior","apt","pme","05-29","fac",None,[1372.02,1679.35,2102.75,2323.65,2474.98,2870.95,3431.97,4116.05,4886.72,8232.11],60),
+        # SEGUROS UNIMED — Facultativo 30-99
+        ("su_f99_1","segurosunimed","Sem copart — Compacto","enf","pme","30-99","fac",None,[462.26,565.80,708.46,782.88,833.87,967.27,1156.29,1386.77,1646.42,2773.54],61),
+        ("su_f99_2","segurosunimed","Com copart — Compacto","enf","pme","30-99","fac",None,[342.41,419.11,524.78,579.91,617.68,716.50,856.51,1027.24,1219.57,2054.48],62),
+        ("su_f99_3","segurosunimed","Sem copart — Efetivo","apt","pme","30-99","fac",None,[518.97,635.22,795.37,878.93,936.17,1085.94,1298.15,1556.91,1848.41,3113.81],63),
+        ("su_f99_4","segurosunimed","Com copart — Efetivo","apt","pme","30-99","fac",None,[384.42,470.53,589.16,651.06,693.46,804.40,961.59,1153.26,1369.19,2306.53],64),
+        ("su_f99_5","segurosunimed","Sem copart — Completo","apt","pme","30-99","fac",None,[614.40,752.02,941.63,1040.54,1108.31,1285.63,1536.85,1843.19,2188.30,3686.39],65),
+        ("su_f99_6","segurosunimed","Com copart — Completo","apt","pme","30-99","fac",None,[455.11,557.05,697.50,770.77,820.97,952.32,1138.41,1365.33,1620.96,2730.66],66),
+        ("su_f99_7","segurosunimed","Sem copart — Superior","apt","pme","30-99","fac",None,[679.82,832.10,1041.89,1151.34,1226.32,1422.52,1700.50,2039.45,2421.31,4078.90],67),
+        ("su_f99_8","segurosunimed","Com copart — Superior","apt","pme","30-99","fac",None,[543.85,665.68,833.51,921.07,981.06,1138.01,1360.40,1631.56,1937.04,3263.12],68),
+        ("su_f99_9","segurosunimed","Sem copart — Superior Plus","apt","pme","30-99","fac",None,[754.64,923.68,1156.56,1278.06,1361.29,1579.08,1887.66,2263.92,2687.80,4527.84],69),
+        ("su_f99_10","segurosunimed","Com copart — Superior Plus","apt","pme","30-99","fac",None,[603.71,738.94,925.25,1022.45,1089.04,1263.27,1510.13,1811.14,2150.24,3622.27],70),
+        ("su_f99_11","segurosunimed","Sem copart — Sênior","apt","pme","30-99","fac",None,[1444.95,1768.62,2214.53,2447.17,2606.55,3023.56,3614.40,4334.85,5146.48,8669.71],71),
+        ("su_f99_12","segurosunimed","Com copart — Sênior","apt","pme","30-99","fac",None,[1256.48,1537.93,1925.68,2127.97,2266.56,2629.18,3142.96,3769.44,4475.20,7538.88],72),
+        # SEGUROS UNIMED — Essencial Compulsório 02-04
+        ("su_ec04_1","segurosunimed","Sem copart — Essencial I","enf","pme","02-04","comp",None,[341.65,418.18,523.61,578.61,616.30,714.90,854.60,1024.94,1216.85,2049.89],73),
+        ("su_ec04_2","segurosunimed","Sem copart — Essencial II","apt","pme","02-04","comp",None,[382.30,467.94,585.92,647.47,689.64,799.97,956.29,1146.91,1361.65,2293.82],74),
+        ("su_ec04_3","segurosunimed","Com copart — Essencial III","enf","pme","02-04","comp",None,[253.07,309.76,387.86,428.60,456.52,529.55,633.03,759.22,901.37,1518.43],75),
+        ("su_ec04_4","segurosunimed","Com copart — Essencial IV","apt","pme","02-04","comp",None,[283.19,346.62,434.01,479.61,510.84,592.57,708.37,849.56,1008.63,1699.13],76),
+        # SEGUROS UNIMED — Essencial Compulsório 05-29
+        ("su_ec29_1","segurosunimed","Sem copart — Essencial I","enf","pme","05-29","comp",None,[303.33,371.28,464.89,513.72,547.18,634.72,758.75,910.00,1080.38,1819.99],77),
+        ("su_ec29_2","segurosunimed","Sem copart — Essencial II","apt","pme","05-29","comp",None,[339.43,415.46,520.21,574.86,612.29,710.25,849.05,1018.29,1208.94,2036.57],78),
+        ("su_ec29_3","segurosunimed","Com copart — Essencial III","enf","pme","05-29","comp",None,[224.69,275.02,344.36,380.54,405.32,470.16,562.04,674.07,800.28,1348.14],79),
+        ("su_ec29_4","segurosunimed","Com copart — Essencial IV","apt","pme","05-29","comp",None,[251.43,307.75,385.34,425.82,453.55,526.11,628.92,754.29,895.51,1508.57],80),
+        # SEGUROS UNIMED — Essencial Compulsório 30-99
+        ("su_ec99_1","segurosunimed","Sem copart — Essencial I","enf","pme","30-99","comp",None,[277.79,340.01,425.74,470.46,501.10,581.27,694.86,833.36,989.40,1666.73],81),
+        ("su_ec99_2","segurosunimed","Sem copart — Essencial II","apt","pme","30-99","comp",None,[310.84,380.47,476.40,526.45,560.73,650.44,777.55,932.53,1107.14,1865.07],82),
+        ("su_ec99_3","segurosunimed","Com copart — Essencial III","enf","pme","30-99","comp",None,[205.77,251.86,315.36,348.49,371.19,430.57,514.71,617.31,732.89,1234.61],83),
+        ("su_ec99_4","segurosunimed","Com copart — Essencial IV","apt","pme","30-99","comp",None,[230.26,281.83,352.89,389.96,415.36,481.81,575.96,690.77,820.10,1381.53],84),
+        # SEGUROS UNIMED — Essencial Facultativo 02-04
+        ("su_ef04_1","segurosunimed","Sem copart — Essencial I","enf","pme","02-04","fac",None,[375.81,459.99,575.97,636.48,677.93,786.39,940.06,1127.44,1338.53,2254.87],85),
+        ("su_ef04_2","segurosunimed","Sem copart — Essencial II","apt","pme","02-04","fac",None,[420.53,514.73,644.51,712.22,758.60,879.97,1051.92,1261.60,1497.82,2523.20],86),
+        ("su_ef04_3","segurosunimed","Com copart — Essencial III","enf","pme","02-04","fac",None,[278.38,340.74,426.64,471.46,502.17,582.51,696.34,835.14,991.50,1670.28],87),
+        ("su_ef04_4","segurosunimed","Com copart — Essencial IV","apt","pme","02-04","fac",None,[311.51,381.28,477.42,527.57,561.93,651.83,779.20,934.52,1109.49,1869.04],88),
+        # SEGUROS UNIMED — Essencial Facultativo 05-29
+        ("su_ef29_1","segurosunimed","Sem copart — Essencial I","enf","pme","05-29","fac",None,[333.67,408.41,511.38,565.10,601.90,698.19,834.63,1001.00,1188.42,2001.99],89),
+        ("su_ef29_2","segurosunimed","Sem copart — Essencial II","apt","pme","05-29","fac",None,[373.37,457.01,572.23,632.34,673.52,781.28,933.95,1120.11,1329.84,2240.23],90),
+        ("su_ef29_3","segurosunimed","Com copart — Essencial III","enf","pme","05-29","fac",None,[247.16,302.52,378.80,418.59,445.85,517.18,618.24,741.48,880.31,1482.96],91),
+        ("su_ef29_4","segurosunimed","Com copart — Essencial IV","apt","pme","05-29","fac",None,[276.57,338.52,423.87,468.40,498.91,578.73,691.82,829.71,985.06,1659.43],92),
+        # SEGUROS UNIMED — Essencial Facultativo 30-99
+        ("su_ef99_1","segurosunimed","Sem copart — Essencial I","enf","pme","30-99","fac",None,[305.57,374.01,468.31,517.51,551.21,639.40,764.35,916.70,1088.34,1833.40],93),
+        ("su_ef99_2","segurosunimed","Sem copart — Essencial II","apt","pme","30-99","fac",None,[341.93,418.52,524.04,579.09,616.81,715.49,855.30,1025.79,1217.85,2051.58],94),
+        ("su_ef99_3","segurosunimed","Com copart — Essencial III","enf","pme","30-99","fac",None,[226.35,277.05,346.90,383.34,408.31,473.63,566.18,679.04,806.18,1358.08],95),
+        ("su_ef99_4","segurosunimed","Com copart — Essencial IV","apt","pme","30-99","fac",None,[253.28,310.02,388.18,428.96,456.89,529.99,633.56,759.84,902.11,1519.69],96),
+        # SULAMERICA — PME 03-04v 12m
+        ("sa_04_12_sc_1","sulamerica","Sem copart — Direto Enf","enf","pme","03-04",None,12,[388.10,485.12,601.55,667.72,714.46,828.78,990.72,1161.13,1382.33,2328.55],1),
+        ("sa_04_12_sc_2","sulamerica","Sem copart — Direto Qto","apt","pme","03-04",None,12,[429.21,536.51,665.27,738.45,790.15,916.58,1095.68,1284.14,1528.78,2575.22],2),
+        ("sa_04_12_sc_3","sulamerica","Sem copart — Especial RC","apt","pme","03-04",None,12,[703.93,879.90,1091.07,1211.10,1295.87,1503.21,1796.94,2106.00,2507.19,4223.36],3),
+        ("sa_04_12_sc_4","sulamerica","Sem copart — Especial 100 R1","apt","pme","03-04",None,12,[740.97,926.20,1148.50,1274.83,1364.07,1582.32,1891.52,2216.85,2639.15,4445.64],4),
+        ("sa_04_12_sc_5","sulamerica","Sem copart — Executivo R1","apt","pme","03-04",None,12,[1409.78,1762.21,2185.14,2425.50,2595.27,3010.52,3598.77,4217.76,5021.24,8458.27],5),
+        ("sa_04_12_sc_6","sulamerica","Sem copart — Executivo R2","apt","pme","03-04",None,12,[1685.85,2107.33,2613.09,2900.52,3103.54,3600.11,4303.58,5043.78,6004.62,10114.80],6),
+        ("sa_04_12_sc_7","sulamerica","Sem copart — Executivo R3","apt","pme","03-04",None,12,[1883.16,2353.96,2918.91,3239.99,3466.79,4021.47,4807.28,5634.13,6707.43,11298.65],7),
+        ("sa_04_12_sc_8","sulamerica","Sem copart — Prestige","apt","pme","03-04",None,12,[2469.80,3087.27,3828.22,4249.33,4546.77,5274.25,6304.84,7389.25,8796.92,14818.41],8),
+        ("sa_04_12_cc_1","sulamerica","Com copart — Direto Enf","enf","pme","03-04",None,12,[271.67,339.58,421.08,467.41,500.13,580.14,693.51,812.79,967.64,1629.99],9),
+        ("sa_04_12_cc_2","sulamerica","Com copart — Direto Qto","apt","pme","03-04",None,12,[300.45,375.56,465.69,516.92,553.11,641.61,766.98,898.91,1070.14,1802.65],10),
+        ("sa_04_12_cc_3","sulamerica","Com copart — Especial RC","apt","pme","03-04",None,12,[527.94,659.92,818.31,908.32,971.90,1127.41,1347.71,1579.50,1880.40,3167.51],11),
+        ("sa_04_12_cc_4","sulamerica","Com copart — Especial 100 R1","apt","pme","03-04",None,12,[555.73,694.65,861.37,956.14,1023.06,1186.74,1418.64,1662.63,1979.37,3334.24],12),
+        ("sa_04_12_cc_5","sulamerica","Com copart — Executivo R1","apt","pme","03-04",None,12,[1198.30,1497.88,1857.37,2061.66,2205.99,2558.94,3058.96,3585.10,4268.06,7189.54],13),
+        ("sa_04_12_cc_6","sulamerica","Com copart — Executivo R2","apt","pme","03-04",None,12,[1432.98,1791.23,2221.11,2465.44,2638.01,3060.09,3658.03,4287.23,5103.93,8597.57],14),
+        ("sa_04_12_cc_7","sulamerica","Com copart — Executivo R3","apt","pme","03-04",None,12,[1600.69,2000.88,2481.07,2754.00,2946.78,3418.26,4086.18,4789.01,5701.31,9603.86],15),
+        ("sa_04_12_cc_8","sulamerica","Com copart — Prestige","apt","pme","03-04",None,12,[2099.34,2624.17,3253.99,3611.93,3864.76,4483.11,5359.10,6280.87,7477.38,12595.65],16),
+        # SULAMERICA — PME 03-04v 24m
+        ("sa_04_24_sc_1","sulamerica","Sem copart — Direto Enf","enf","pme","03-04",None,24,[352.81,441.01,546.85,607.02,649.51,753.43,900.66,1055.57,1256.67,2116.86],17),
+        ("sa_04_24_sc_2","sulamerica","Sem copart — Direto Qto","apt","pme","03-04",None,24,[390.19,487.74,604.80,671.32,718.32,833.26,996.07,1167.41,1389.79,2341.11],18),
+        ("sa_04_24_sc_3","sulamerica","Sem copart — Especial RC","apt","pme","03-04",None,24,[639.92,799.91,991.88,1100.99,1178.06,1366.55,1633.58,1914.55,2279.27,3839.41],19),
+        ("sa_04_24_sc_4","sulamerica","Sem copart — Especial 100 R1","apt","pme","03-04",None,24,[673.61,842.01,1044.09,1158.94,1240.07,1438.48,1719.55,2015.31,2399.23,4041.49],20),
+        ("sa_04_24_sc_5","sulamerica","Sem copart — Executivo R1","apt","pme","03-04",None,24,[1281.60,1602.01,1986.49,2205.00,2359.34,2736.83,3271.61,3834.33,4564.76,7689.35],21),
+        ("sa_04_24_sc_6","sulamerica","Sem copart — Executivo R2","apt","pme","03-04",None,24,[1532.60,1915.74,2375.53,2636.83,2821.40,3272.83,3912.34,4585.27,5458.74,9195.27],22),
+        ("sa_04_24_sc_7","sulamerica","Sem copart — Executivo R3","apt","pme","03-04",None,24,[1711.96,2139.97,2653.56,2945.45,3151.63,3655.89,4370.25,5121.94,6097.67,10271.51],23),
+        ("sa_04_24_sc_8","sulamerica","Sem copart — Prestige","apt","pme","03-04",None,24,[2245.28,2806.61,3480.20,3863.02,4133.42,4794.77,5731.66,6717.51,7997.19,13471.29],24),
+        ("sa_04_24_cc_1","sulamerica","Com copart — Direto Enf","enf","pme","03-04",None,24,[246.97,308.71,382.80,424.91,454.66,527.40,630.46,738.91,879.67,1481.81],25),
+        ("sa_04_24_cc_2","sulamerica","Com copart — Direto Qto","apt","pme","03-04",None,24,[273.14,341.42,423.36,469.92,502.82,583.28,697.25,817.18,972.86,1638.78],26),
+        ("sa_04_24_cc_3","sulamerica","Com copart — Especial RC","apt","pme","03-04",None,24,[479.94,599.92,743.91,825.75,883.55,1024.92,1225.18,1435.91,1709.45,2879.56],27),
+        ("sa_04_24_cc_4","sulamerica","Com copart — Especial 100 R1","apt","pme","03-04",None,24,[505.21,631.51,783.07,869.22,930.06,1078.87,1289.67,1511.49,1799.42,3031.12],28),
+        ("sa_04_24_cc_5","sulamerica","Com copart — Executivo R1","apt","pme","03-04",None,24,[1089.36,1361.71,1688.51,1874.24,2005.44,2326.31,2780.87,3259.18,3880.05,6535.95],29),
+        ("sa_04_24_cc_6","sulamerica","Com copart — Executivo R2","apt","pme","03-04",None,24,[1302.71,1628.38,2019.19,2241.31,2398.20,2781.90,3325.49,3897.48,4639.93,7815.97],30),
+        ("sa_04_24_cc_7","sulamerica","Com copart — Executivo R3","apt","pme","03-04",None,24,[1455.17,1818.98,2255.52,2503.63,2678.89,3107.51,3714.71,4353.64,5183.01,8730.78],31),
+        ("sa_04_24_cc_8","sulamerica","Com copart — Prestige","apt","pme","03-04",None,24,[1908.49,2385.62,2958.17,3283.58,3513.41,4075.56,4871.92,5709.88,6797.62,11450.59],32),
+        # SULAMERICA — PME 05-29v 12m
+        ("sa_29_12_sc_1","sulamerica","Sem copart — Direto Enf","enf","pme","05-29",None,12,[329.88,412.34,511.32,567.56,607.29,704.46,842.12,986.97,1174.99,1979.27],33),
+        ("sa_29_12_sc_2","sulamerica","Sem copart — Direto Qto","apt","pme","05-29",None,12,[364.83,456.04,565.48,627.69,671.63,779.09,931.33,1091.53,1299.45,2188.94],34),
+        ("sa_29_12_sc_3","sulamerica","Sem copart — Especial RC","apt","pme","05-29",None,12,[598.33,747.92,927.40,1029.43,1101.48,1277.74,1527.39,1790.10,2131.12,3589.86],35),
+        ("sa_29_12_sc_4","sulamerica","Sem copart — Especial 100 R1","apt","pme","05-29",None,12,[629.82,787.28,976.21,1083.62,1159.47,1344.98,1607.79,1884.32,2243.29,3778.79],36),
+        ("sa_29_12_sc_5","sulamerica","Sem copart — Executivo R1","apt","pme","05-29",None,12,[1198.30,1497.88,1857.37,2061.66,2205.99,2558.94,3058.96,3585.10,4268.06,7189.54],37),
+        ("sa_29_12_sc_6","sulamerica","Sem copart — Executivo R2","apt","pme","05-29",None,12,[1432.98,1791.23,2221.11,2465.44,2638.01,3060.09,3658.03,4287.23,5103.93,8597.57],38),
+        ("sa_29_12_sc_7","sulamerica","Sem copart — Executivo R3","apt","pme","05-29",None,12,[1600.69,2000.88,2481.07,2754.00,2946.78,3418.26,4086.18,4789.01,5701.31,9603.86],39),
+        ("sa_29_12_sc_8","sulamerica","Sem copart — Prestige","apt","pme","05-29",None,12,[2099.34,2624.17,3253.99,3611.93,3864.76,4483.11,5359.10,6280.87,7477.38,12595.65],40),
+        ("sa_29_12_cc_1","sulamerica","Com copart — Direto Enf","enf","pme","05-29",None,12,[230.91,288.64,357.92,397.29,425.10,493.13,589.48,690.88,822.49,1385.46],41),
+        ("sa_29_12_cc_2","sulamerica","Com copart — Direto Qto","apt","pme","05-29",None,12,[255.38,319.23,395.84,439.38,470.14,545.36,651.93,764.07,909.62,1532.25],42),
+        ("sa_29_12_cc_3","sulamerica","Com copart — Especial RC","apt","pme","05-29",None,12,[448.74,560.93,695.56,772.07,826.12,958.30,1145.54,1342.58,1598.34,2692.39],43),
+        ("sa_29_12_cc_4","sulamerica","Com copart — Especial 100 R1","apt","pme","05-29",None,12,[472.37,590.46,732.17,812.72,869.60,1008.73,1205.84,1413.25,1682.46,2834.10],44),
+        ("sa_29_12_cc_5","sulamerica","Com copart — Executivo R1","apt","pme","05-29",None,12,[1018.56,1273.20,1578.77,1752.42,1875.09,2175.09,2600.11,3047.34,3627.85,6111.11],45),
+        ("sa_29_12_cc_6","sulamerica","Com copart — Executivo R2","apt","pme","05-29",None,12,[1218.03,1522.54,1887.95,2095.61,2242.31,2601.09,3109.33,3644.14,4338.35,7307.94],46),
+        ("sa_29_12_cc_7","sulamerica","Com copart — Executivo R3","apt","pme","05-29",None,12,[1360.58,1700.74,2108.92,2340.90,2504.76,2905.52,3473.25,4070.65,4846.11,8163.29],47),
+        ("sa_29_12_cc_8","sulamerica","Com copart — Prestige","apt","pme","05-29",None,12,[1784.43,2230.54,2765.90,3070.15,3285.04,3810.64,4555.25,5338.74,6355.78,10706.30],48),
+        # SULAMERICA — PME 05-29v 24m
+        ("sa_29_24_sc_1","sulamerica","Sem copart — Direto Enf","enf","pme","05-29",None,24,[299.89,374.86,464.83,515.97,552.08,640.42,765.56,897.24,1068.17,1799.34],49),
+        ("sa_29_24_sc_2","sulamerica","Sem copart — Direto Qto","apt","pme","05-29",None,24,[331.67,414.58,514.07,570.62,610.57,708.27,846.66,992.30,1181.32,1989.95],50),
+        ("sa_29_24_sc_3","sulamerica","Sem copart — Especial RC","apt","pme","05-29",None,24,[543.95,679.91,843.10,935.85,1001.36,1161.58,1388.54,1627.36,1937.38,3263.51],51),
+        ("sa_29_24_sc_4","sulamerica","Sem copart — Especial 100 R1","apt","pme","05-29",None,24,[572.56,715.71,887.47,985.10,1054.06,1222.71,1461.62,1713.01,2039.35,3435.27],52),
+        ("sa_29_24_sc_5","sulamerica","Sem copart — Executivo R1","apt","pme","05-29",None,24,[1089.36,1361.71,1688.51,1874.24,2005.44,2326.31,2780.87,3259.18,3880.05,6535.95],53),
+        ("sa_29_24_sc_6","sulamerica","Sem copart — Executivo R2","apt","pme","05-29",None,24,[1302.71,1628.38,2019.19,2241.31,2398.20,2781.90,3325.49,3897.48,4639.93,7815.97],54),
+        ("sa_29_24_sc_7","sulamerica","Sem copart — Executivo R3","apt","pme","05-29",None,24,[1455.17,1818.98,2255.52,2503.63,2678.89,3107.51,3714.71,4353.64,5183.01,8730.78],55),
+        ("sa_29_24_sc_8","sulamerica","Sem copart — Prestige","apt","pme","05-29",None,24,[1908.49,2385.62,2958.17,3283.58,3513.41,4075.56,4871.92,5709.88,6797.62,11450.59],56),
+        ("sa_29_24_cc_1","sulamerica","Com copart — Direto Enf","enf","pme","05-29",None,24,[209.92,262.40,325.38,361.18,386.46,448.29,535.89,628.07,747.72,1259.52],57),
+        ("sa_29_24_cc_2","sulamerica","Com copart — Direto Qto","apt","pme","05-29",None,24,[232.17,290.21,359.86,399.44,427.40,495.79,592.67,694.60,826.93,1392.96],58),
+        ("sa_29_24_cc_3","sulamerica","Com copart — Especial RC","apt","pme","05-29",None,24,[407.95,509.94,632.32,701.88,751.01,871.18,1041.40,1220.53,1453.03,2447.63],59),
+        ("sa_29_24_cc_4","sulamerica","Com copart — Especial 100 R1","apt","pme","05-29",None,24,[429.43,536.78,665.60,738.83,790.54,917.03,1096.21,1284.77,1529.51,2576.45],60),
+        ("sa_29_24_cc_5","sulamerica","Com copart — Executivo R1","apt","pme","05-29",None,24,[925.96,1157.46,1435.23,1593.11,1704.62,1977.36,2363.73,2770.31,3298.05,5555.55],61),
+        ("sa_29_24_cc_6","sulamerica","Com copart — Executivo R2","apt","pme","05-29",None,24,[1107.29,1384.13,1716.32,1905.10,2038.46,2364.62,2826.67,3312.86,3943.95,6643.58],62),
+        ("sa_29_24_cc_7","sulamerica","Com copart — Executivo R3","apt","pme","05-29",None,24,[1236.90,1546.13,1917.20,2128.09,2277.06,2641.38,3157.51,3700.60,4405.57,7421.17],63),
+        ("sa_29_24_cc_8","sulamerica","Com copart — Prestige","apt","pme","05-29",None,24,[1622.22,2027.78,2514.45,2791.04,2986.41,3464.22,4141.12,4853.39,5777.97,9733.01],64),
+        # SULAMERICA — PME 30-99v 12m
+        ("sa_99_12_sc_1","sulamerica","Sem copart — Direto Enf","enf","pme","30-99",None,12,[302.29,377.86,468.55,520.09,556.49,645.53,771.67,904.40,1076.68,1813.67],65),
+        ("sa_99_12_sc_2","sulamerica","Sem copart — Direto Qto","apt","pme","30-99",None,12,[334.32,417.90,518.20,575.20,615.46,713.94,853.44,1000.23,1190.77,2005.86],66),
+        ("sa_99_12_sc_3","sulamerica","Sem copart — Especial RC","apt","pme","30-99",None,12,[549.38,686.72,851.53,945.20,1011.37,1173.19,1402.43,1643.64,1956.75,3296.15],67),
+        ("sa_99_12_sc_4","sulamerica","Sem copart — Especial 100 R1","apt","pme","30-99",None,12,[578.29,722.86,896.35,994.94,1064.59,1234.93,1476.23,1730.14,2059.73,3469.62],68),
+        ("sa_99_12_sc_5","sulamerica","Sem copart — Executivo R1","apt","pme","30-99",None,12,[1106.79,1383.49,1715.53,1904.24,2037.53,2363.54,2825.38,3311.34,3942.14,6640.54],69),
+        ("sa_99_12_sc_6","sulamerica","Sem copart — Executivo R2","apt","pme","30-99",None,12,[1323.54,1654.43,2051.49,2277.16,2436.56,2826.41,3378.69,3959.83,4714.17,7941.02],70),
+        ("sa_99_12_sc_7","sulamerica","Sem copart — Executivo R3","apt","pme","30-99",None,12,[1478.46,1848.08,2291.62,2543.70,2721.76,3157.24,3774.17,4423.32,5265.96,8870.51],71),
+        ("sa_99_12_sc_8","sulamerica","Sem copart — Prestige","apt","pme","30-99",None,12,[1939.03,2423.79,3005.50,3336.10,3569.64,4140.78,4949.89,5801.27,6906.40,11633.83],72),
+        ("sa_99_12_cc_1","sulamerica","Com copart — Direto Enf","enf","pme","30-99",None,12,[211.60,264.50,327.98,364.06,389.54,451.87,540.16,633.07,753.67,1269.56],73),
+        ("sa_99_12_cc_2","sulamerica","Com copart — Direto Qto","apt","pme","30-99",None,12,[234.02,292.53,362.74,402.64,430.82,499.76,597.41,700.16,833.54,1404.10],74),
+        ("sa_99_12_cc_3","sulamerica","Com copart — Especial RC","apt","pme","30-99",None,12,[412.03,515.04,638.65,708.90,758.53,879.89,1051.82,1232.73,1467.57,2472.11],75),
+        ("sa_99_12_cc_4","sulamerica","Com copart — Especial 100 R1","apt","pme","30-99",None,12,[433.71,542.14,672.25,746.20,798.44,926.19,1107.16,1297.60,1544.78,2602.19],76),
+        ("sa_99_12_cc_5","sulamerica","Com copart — Executivo R1","apt","pme","30-99",None,12,[940.78,1175.97,1458.20,1618.61,1731.91,2009.02,2401.58,2814.65,3350.83,5644.48],77),
+        ("sa_99_12_cc_6","sulamerica","Com copart — Executivo R2","apt","pme","30-99",None,12,[1125.02,1406.27,1743.77,1935.59,2071.08,2402.46,2871.90,3365.87,4007.05,6749.89],78),
+        ("sa_99_12_cc_7","sulamerica","Com copart — Executivo R3","apt","pme","30-99",None,12,[1256.70,1570.87,1947.88,2162.15,2313.50,2683.66,3208.05,3759.83,4476.07,7539.94],79),
+        ("sa_99_12_cc_8","sulamerica","Com copart — Prestige","apt","pme","30-99",None,12,[1648.18,2060.22,2554.67,2835.69,3034.19,3519.66,4207.40,4931.07,5870.43,9888.75],80),
+        # SULAMERICA — PME 30-99v 24m
+        ("sa_99_24_sc_1","sulamerica","Sem copart — Direto Enf","enf","pme","30-99",None,24,[299.89,374.86,464.83,515.96,552.08,640.41,765.54,897.22,1068.13,1799.27],81),
+        ("sa_99_24_sc_2","sulamerica","Sem copart — Direto Qto","apt","pme","30-99",None,24,[331.66,414.58,514.08,570.63,610.57,708.26,846.66,992.28,1181.31,1989.92],82),
+        ("sa_99_24_sc_3","sulamerica","Sem copart — Especial RC","apt","pme","30-99",None,24,[543.94,679.93,843.11,935.86,1001.37,1161.59,1388.56,1627.39,1937.41,3263.56],83),
+        ("sa_99_24_sc_4","sulamerica","Sem copart — Especial 100 R1","apt","pme","30-99",None,24,[572.57,715.71,887.48,985.10,1054.06,1222.71,1461.63,1713.03,2039.36,3435.30],84),
+        ("sa_99_24_sc_5","sulamerica","Sem copart — Executivo R1","apt","pme","30-99",None,24,[1089.36,1361.70,1688.51,1874.24,2005.44,2326.31,2780.88,3259.19,3880.06,6535.96],85),
+        ("sa_99_24_sc_6","sulamerica","Sem copart — Executivo R2","apt","pme","30-99",None,24,[1302.70,1628.38,2019.19,2241.30,2398.20,2781.91,3325.49,3897.48,4639.94,7815.98],86),
+        ("sa_99_24_sc_7","sulamerica","Sem copart — Executivo R3","apt","pme","30-99",None,24,[1455.18,1818.97,2255.52,2503.63,2678.89,3107.51,3714.72,4353.65,5183.01,8730.78],87),
+        ("sa_99_24_sc_8","sulamerica","Sem copart — Prestige","apt","pme","30-99",None,24,[1908.50,2385.62,2958.17,3283.57,3513.42,4075.57,4871.94,5709.91,6797.63,11450.62],88),
+        ("sa_99_24_cc_1","sulamerica","Com copart — Direto Enf","enf","pme","30-99",None,24,[209.93,262.41,325.39,361.18,386.46,448.30,535.90,628.07,747.72,1259.53],89),
+        ("sa_99_24_cc_2","sulamerica","Com copart — Direto Qto","apt","pme","30-99",None,24,[232.17,290.21,359.86,399.45,427.41,495.79,592.67,694.61,826.93,1392.96],90),
+        ("sa_99_24_cc_3","sulamerica","Com copart — Especial RC","apt","pme","30-99",None,24,[407.96,509.95,632.34,701.90,751.03,871.19,1041.42,1220.55,1453.06,2447.68],91),
+        ("sa_99_24_cc_4","sulamerica","Com copart — Especial 100 R1","apt","pme","30-99",None,24,[429.43,536.79,665.62,738.84,790.56,917.05,1096.24,1284.79,1529.54,2576.51],92),
+        ("sa_99_24_cc_5","sulamerica","Com copart — Executivo R1","apt","pme","30-99",None,24,[925.96,1157.45,1435.24,1593.11,1704.63,1977.38,2363.76,2770.32,3298.06,5555.59],93),
+        ("sa_99_24_cc_6","sulamerica","Com copart — Executivo R2","apt","pme","30-99",None,24,[1107.30,1384.12,1716.31,1905.10,2038.46,2364.62,2826.66,3312.85,3943.94,6643.57],94),
+        ("sa_99_24_cc_7","sulamerica","Com copart — Executivo R3","apt","pme","30-99",None,24,[1236.90,1546.13,1917.20,2128.09,2277.06,2641.39,3157.52,3700.62,4405.57,7421.19],95),
+        ("sa_99_24_cc_8","sulamerica","Com copart — Prestige","apt","pme","30-99",None,24,[1622.22,2027.77,2514.43,2791.02,2986.40,3464.22,4141.13,4853.41,5777.97,9732.99],96),
     ]
     for i, (codigo, op_chave, nome, aco, tipo, fvidas, mod, vig, precos, ordem) in enumerate(_PLANOS):
         op_id = ops_map.get(op_chave)
@@ -301,16 +546,12 @@ class CotacaoRequest(BaseModel):
 class OperadoraRequest(BaseModel):
     chave: str
     nome: str
-    cor: Optional[str] = None
-    cls: Optional[str] = None
     info: Optional[str] = None
     ativo: Optional[int] = 1
     ordem: Optional[int] = 0
 
 class UpdateOperadoraRequest(BaseModel):
     nome: Optional[str] = None
-    cor: Optional[str] = None
-    cls: Optional[str] = None
     info: Optional[str] = None
     ativo: Optional[int] = None
     ordem: Optional[int] = None
@@ -819,7 +1060,7 @@ FAIXAS = ['0 a 18','19 a 23','24 a 28','29 a 33','34 a 38','39 a 43','44 a 48','
 def catalogo_publico():
     conn = get_connection()
     ops_rows = conn.execute(
-        "SELECT id, chave, nome, cor, cls, info, rede_adm, rede_rodape FROM operadoras WHERE ativo = 1 ORDER BY ordem, id"
+        "SELECT id, chave, nome, info, rede_adm, rede_rodape FROM operadoras WHERE ativo = 1 ORDER BY ordem, id"
     ).fetchall()
     planos_rows = conn.execute(
         """SELECT p.codigo, o.chave as op, p.nome, p.acomodacao as aco, p.tipo,
@@ -835,7 +1076,7 @@ def catalogo_publico():
            ORDER BY o.ordem, rc.grupo_ordem, rc.ordem, rc.id"""
     ).fetchall()
     conn.close()
-    operadoras = {r["chave"]: {"nome": r["nome"], "cor": r["cor"] or "", "cls": r["cls"] or "", "info": r["info"] or ""} for r in ops_rows}
+    operadoras = {r["chave"]: {"nome": r["nome"], "info": r["info"] or ""} for r in ops_rows}
     planos = []
     for r in planos_rows:
         p = {
@@ -900,8 +1141,8 @@ def criar_operadora(body: OperadoraRequest, admin=Depends(require_superadmin)):
         conn.close()
         raise HTTPException(409, "Chave de operadora já existe.")
     conn.execute(
-        "INSERT INTO operadoras (chave, nome, cor, cls, info, ativo, ordem) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        (body.chave.strip(), body.nome.strip(), body.cor, body.cls, body.info, body.ativo, body.ordem),
+        "INSERT INTO operadoras (chave, nome, info, ativo, ordem) VALUES (?, ?, ?, ?, ?)",
+        (body.chave.strip(), body.nome.strip(), body.info, body.ativo, body.ordem),
     )
     conn.commit()
     row = conn.execute("SELECT * FROM operadoras WHERE chave = ?", (body.chave.strip(),)).fetchone()
@@ -916,7 +1157,7 @@ def atualizar_operadora(op_id: int, body: UpdateOperadoraRequest, admin=Depends(
         conn.close()
         raise HTTPException(404, "Operadora não encontrada")
     updates, params = [], []
-    for field in ("nome", "cor", "cls", "info", "ativo", "ordem"):
+    for field in ("nome", "info", "ativo", "ordem"):
         val = getattr(body, field)
         if val is not None:
             updates.append(f"{field} = ?"); params.append(val.strip() if isinstance(val, str) else val)
@@ -1166,9 +1407,8 @@ async def importar_catalogo(request: Request, admin=Depends(require_superadmin))
             continue
         if not conn.execute("SELECT id FROM operadoras WHERE chave = ?", (chave,)).fetchone():
             conn.execute(
-                "INSERT INTO operadoras (chave, nome, cor, cls, info, ordem) VALUES (?, ?, ?, ?, ?, ?)",
-                (chave, str(op.get("nome","") or ""), str(op.get("cor","") or ""),
-                 str(op.get("cls","") or ""), str(op.get("info","") or ""), int(op.get("ordem", i+1) or 0)),
+                "INSERT INTO operadoras (chave, nome, info, ordem) VALUES (?, ?, ?, ?)",
+                (chave, str(op.get("nome","") or ""), str(op.get("info","") or ""), int(op.get("ordem", i+1) or 0)),
             )
             ops_novas += 1
     conn.commit()

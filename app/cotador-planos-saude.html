@@ -1521,7 +1521,7 @@ function buildOpConfig() {
     const div = document.createElement('div');
     div.className = 'op-config-item' + (isActive ? '' : ' op-inactive');
 
-    const _cor = meta.cor || '';
+    const _cor = OP_COR_MAP[op] || '';
     const head = `<div class="op-config-head">
       <span class="op-dot dot-${sfx}"${_cor?` style="background:${_cor}"`:''}></span>
       <span class="op-config-name cn-${sfx}"${_cor?` style="color:${_cor}"`:''}>${meta.nome}</span>
@@ -1583,8 +1583,9 @@ function planAvailable(p) {
 
 // ── CONSTANTES DE ESTILO POR OPERADORA ──────────────────────────────
 const OP_CLS_MAP = {medsenior:'on-ms', segurosunimed:'on-su', portosaude:'on-ps', bestsenior:'on-bs', sulamerica:'on-sa', hapvida:'on-hap'};
+const OP_COR_MAP = {unity:'var(--unity)',evo:'var(--evo)',plenum:'var(--plenum)',amil:'var(--amil)',medsenior:'var(--medsenior)',segurosunimed:'var(--seguros-unimed)',portosaude:'var(--portosaude)',bradesco:'var(--bradesco)',bestsenior:'var(--bestsenior)',sulamerica:'var(--sulamerica)',hapvida:'var(--hapvida)'};
 const subCls  = op => ({unity:'sub-u',evo:'sub-e',plenum:'sub-p',amil:'sub-a',medsenior:'sub-ms',segurosunimed:'sub-su',portosaude:'sub-ps',bradesco:'sub-bd',bestsenior:'sub-bs',sulamerica:'sub-sa',hapvida:'sub-hap'}[op]);
-const subAttr = op => { const c=subCls(op); if(c) return `class="${c}"`; const col=(OP_META[op]||{}).cor||'var(--ink2)'; return `style="font-size:13px;font-weight:600;color:${col}"`; };
+const subAttr = op => { const c=subCls(op); if(c) return `class="${c}"`; const col=OP_COR_MAP[op]||'var(--ink2)'; return `style="font-size:13px;font-weight:600;color:${col}"`; };
 const tbCls   = op => ({unity:'tb-u',evo:'tb-e',plenum:'tb-p',amil:'tb-a',medsenior:'tb-ms',segurosunimed:'tb-su',portosaude:'tb-ps',bradesco:'tb-bd',bestsenior:'tb-bs',sulamerica:'tb-sa',hapvida:'tb-hap'}[op]);
 
 // ── RENDER ───────────────────────────────────────────────────────────
@@ -1776,7 +1777,7 @@ function renderRedeTab() {
   keys.forEach((k, idx) => {
     const rd   = window.REDE_DATA[k];
     const meta = (window.OP_META || {})[k] || {};
-    const cls  = meta.cls || OP_CLS_MAP[k] || ('on-' + k[0]);
+    const cls  = OP_CLS_MAP[k] || ('on-' + k[0]);
     const gdCls = cls.replace('on-','gd-');
     const rhCls = cls.replace('on-','rh-');
     let gruposHtml = '';
@@ -1892,8 +1893,8 @@ async function _initCotador() {
       // Injeta variáveis CSS para operadoras novas (cor hex → var(--chave))
       const _dynStyle = document.createElement('style');
       Object.entries(OP_META).forEach(([op, meta]) => {
-        if (meta.cor && !meta.cor.startsWith('var(')) {
-          _dynStyle.textContent += `:root{--${op}:${meta.cor}}`;
+        if (OP_COR_MAP[op] && !OP_COR_MAP[op].startsWith('var(')) {
+          _dynStyle.textContent += `:root{--${op}:${OP_COR_MAP[op]}}`;
         }
       });
       if (_dynStyle.textContent) document.head.appendChild(_dynStyle);
