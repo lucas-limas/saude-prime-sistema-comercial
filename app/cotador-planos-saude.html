@@ -1736,7 +1736,11 @@ function criarApresentacao() {
     filtroVig
   };
 
-  saveToHistory();
+  _abrirModalCRM(clienteId => _prosseguirApresentacao(data, clienteId));
+}
+
+function _prosseguirApresentacao(data, clienteId) {
+  saveToHistory(clienteId);
   if (window.parent && window.parent.syncApres) {
     window.parent.syncApres(data);
   }
@@ -1847,6 +1851,117 @@ function limpar() {
 }
 
 
+// ── CONTEXTO CRM ─────────────────────────────────────────────────────
+let _crmClienteId   = Number(sessionStorage.getItem('crm_cliente_id'))   || null;
+let _crmClienteNome = sessionStorage.getItem('crm_cliente_nome') || null;
+sessionStorage.removeItem('crm_cliente_id');
+sessionStorage.removeItem('crm_cliente_nome');
+
+;(function(){
+  const ov = document.createElement('div');
+  ov.id = 'crm-modal-overlay';
+  ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9000;align-items:center;justify-content:center';
+  ov.innerHTML = `
+    <div id="crm-modal-box" style="background:var(--surface,#1e293b);border-radius:12px;border-top:3px solid #461BFF;padding:24px;width:480px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+      <div style="font-size:15px;font-weight:600;color:var(--t1,#f1f5f9);margin-bottom:6px">📋 Vincular ao CRM</div>
+      <div id="crm-modal-sub" style="font-size:13px;color:var(--t3,rgba(255,255,255,.5));margin-bottom:18px"></div>
+      <div id="crm-modal-body"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+        <button id="crm-modal-ignorar" onclick="_crmIgnorar()" style="padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:var(--t2,rgba(255,255,255,.7));font-size:13px;cursor:pointer;font-family:inherit">Ignorar</button>
+        <button id="crm-modal-confirmar" onclick="_crmConfirmar()" style="padding:8px 16px;border-radius:8px;border:none;background:#461BFF;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Confirmar vínculo</button>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+})();
+
+let _crmModalCb = null;
+let _crmSelectedId = null;
+let _crmSearchTimer = null;
+let _crmResultados = [];
+
+function _abrirModalCRM(cb) {
+  _crmModalCb = cb;
+  _crmSelectedId = _crmClienteId;
+  const ov = document.getElementById('crm-modal-overlay');
+  ov.style.display = 'flex';
+  if (_crmClienteId) { _crmEstadoA(); } else { _crmEstadoB(); }
+}
+function _crmIgnorar() {
+  document.getElementById('crm-modal-overlay').style.display = 'none';
+  if (_crmModalCb) { _crmModalCb(null); _crmModalCb = null; }
+}
+function _crmConfirmar() {
+  document.getElementById('crm-modal-overlay').style.display = 'none';
+  if (_crmModalCb) { _crmModalCb(_crmSelectedId || null); _crmModalCb = null; }
+}
+function _crmEstadoA() {
+  document.getElementById('crm-modal-sub').textContent = 'Esta cotação será vinculada ao cliente abaixo.';
+  document.getElementById('crm-modal-body').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(70,27,255,.12);border:1px solid rgba(70,27,255,.3);border-radius:8px;padding:12px 16px">
+      <div>
+        <div style="font-weight:600;color:var(--t1,#f1f5f9);font-size:14px">${_crmClienteNome||'Cliente'}</div>
+        <div style="font-size:11px;color:var(--t3,rgba(255,255,255,.45));margin-top:2px">Cliente do CRM</div>
+      </div>
+      <button onclick="_crmEstadoB()" style="font-size:12px;color:#461BFF;background:none;border:1px solid rgba(70,27,255,.4);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:inherit">Trocar cliente</button>
+    </div>`;
+  const btn = document.getElementById('crm-modal-confirmar');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+function _crmEstadoB() {
+  _crmSelectedId = null;
+  document.getElementById('crm-modal-sub').textContent = 'Busque o cliente para vincular esta cotação.';
+  document.getElementById('crm-modal-body').innerHTML = `
+    <input id="crm-search-inp" type="text" placeholder="Nome ou empresa..."
+      style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:var(--t1,#f1f5f9);font-size:14px;outline:none;font-family:inherit"
+      oninput="_crmSearchDelay(this.value)">
+    <div id="crm-search-list" style="margin-top:6px;max-height:190px;overflow-y:auto"></div>`;
+  const btn = document.getElementById('crm-modal-confirmar');
+  btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'default';
+  setTimeout(() => document.getElementById('crm-search-inp')?.focus(), 50);
+}
+function _crmSearchDelay(val) {
+  clearTimeout(_crmSearchTimer);
+  const list = document.getElementById('crm-search-list');
+  if (!val.trim()) { if (list) list.innerHTML = ''; return; }
+  _crmSearchTimer = setTimeout(() => _crmFetch(val.trim()), 300);
+}
+async function _crmFetch(q) {
+  const tok = window.parent?.token?.();
+  if (!tok) return;
+  try {
+    const res = await fetch(`/api/clientes?q=${encodeURIComponent(q)}`, {
+      headers: { Authorization: `Bearer ${tok}` }
+    });
+    if (!res.ok) return;
+    _crmResultados = await res.json();
+    const list = document.getElementById('crm-search-list');
+    if (!list) return;
+    if (!_crmResultados.length) {
+      list.innerHTML = '<div style="font-size:12px;color:var(--t3,rgba(255,255,255,.4));padding:8px 4px">Nenhum cliente encontrado</div>';
+      return;
+    }
+    list.innerHTML = _crmResultados.slice(0, 5).map((c, i) =>
+      `<div onclick="_crmSelIdx(${i},this)"
+        style="padding:9px 12px;border-radius:8px;cursor:pointer;transition:background .1s"
+        onmouseover="if(!this.classList.contains('sel'))this.style.background='rgba(255,255,255,.06)'"
+        onmouseout="if(!this.classList.contains('sel'))this.style.background='transparent'">
+        <div style="font-size:13px;font-weight:600;color:var(--t1,#f1f5f9)">${c.nome||'-'}</div>
+        ${c.empresa ? `<div style="font-size:11px;color:var(--t3,rgba(255,255,255,.45))">${c.empresa}</div>` : ''}
+      </div>`).join('');
+  } catch {}
+}
+function _crmSelIdx(idx, el) {
+  const c = _crmResultados[idx];
+  if (!c) return;
+  _crmSelectedId = c.id;
+  document.querySelectorAll('#crm-search-list > div').forEach(d => {
+    d.classList.remove('sel'); d.style.background = 'transparent'; d.style.outline = '';
+  });
+  el.classList.add('sel'); el.style.background = 'rgba(70,27,255,.2)'; el.style.outline = '1px solid rgba(70,27,255,.5)';
+  const btn = document.getElementById('crm-modal-confirmar');
+  btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+
 // ── INIT (async: carrega catálogo da API antes de montar a UI) ────────
 const _loadingDiv = document.createElement('div');
 _loadingDiv.id = 'cotador-loading';
@@ -1933,7 +2048,7 @@ _initCotador().then(() => {
 const HIST_KEY = 'sp_historico_cotacoes';
 const HIST_MAX = 20;
 
-function saveToHistory() {
+function saveToHistory(clienteId = null) {
   const nome = document.getElementById('nome')?.value?.trim() || 'Sem nome';
   const tv = qtds.reduce((a,b)=>a+b,0);
   if (tv === 0) return;
@@ -1955,7 +2070,8 @@ function saveToHistory() {
     winner, winnerTotal: winner?(withTotal.find(x=>x.op===winner)?.total||0):0,
     totalVidas: tv, qtds:[...qtds], selPlanos:{...selPlanos},
     activeOps:{...activeOps}, tipoOp:{...tipoOp},
-    filtroCopart, filtroMod, filtroVig
+    filtroCopart, filtroMod, filtroVig,
+    cliente_id: clienteId
   };
   const hist = loadHistory();
   hist.unshift(entry);
@@ -1967,7 +2083,7 @@ function saveToHistory() {
     fetch('/api/cotacoes', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${tok}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cliente: entry.nome, dados: entry })
+      body: JSON.stringify({ cliente: entry.nome, dados: entry, cliente_id: clienteId })
     }).catch(() => {});
   }
 }
@@ -1987,7 +2103,7 @@ function openHistorico() {
     body.innerHTML = hist.map(e => `
       <div class="hist-item" onclick="restaurarCotacao('${e.id}')">
         <div>
-          <div class="hist-nome">${e.nome}</div>
+          <div class="hist-nome">${e.nome}${e.cliente_id ? `<a href="crm-saude-prime.html" target="_top" onclick="event.stopPropagation();sessionStorage.setItem('crm_cliente_id','${e.cliente_id}')" style="font-size:11px;color:#461BFF;text-decoration:none;border:1px solid #461BFF;border-radius:4px;padding:2px 8px;margin-left:6px">Ver no CRM</a>` : ''}</div>
           <div class="hist-meta">${e.data} · ${e.totalVidas} vida${e.totalVidas!==1?'s':''} · ${e.winner?(OP_META[e.winner]?.nome||e.winner):'sem operadora'} ${e.winnerTotal>0?'· '+f(e.winnerTotal)+'/mês':''}</div>
         </div>
         <button class="hist-del" onclick="event.stopPropagation();deleteHistEntry('${e.id}')" title="Remover">✕</button>

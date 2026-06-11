@@ -542,6 +542,7 @@ class CreateUserRequest(BaseModel):
 class CotacaoRequest(BaseModel):
     cliente: str
     dados: dict
+    cliente_id: Optional[int] = None
 
 class OperadoraRequest(BaseModel):
     chave: str
@@ -1033,8 +1034,8 @@ def deletar_usuario_corretora(user_id: int, admin=Depends(require_admin)):
 def salvar_cotacao(body: CotacaoRequest, user=Depends(require_corretor)):
     conn = get_connection()
     conn.execute(
-        "INSERT INTO cotacoes (usuario, usuario_id, corretora_id, cliente, dados) VALUES (?, ?, ?, ?, ?)",
-        (user["sub"], user.get("id"), user.get("corretora_id"), body.cliente, json.dumps(body.dados, ensure_ascii=False)),
+        "INSERT INTO cotacoes (usuario, usuario_id, corretora_id, cliente, cliente_id, dados) VALUES (?, ?, ?, ?, ?, ?)",
+        (user["sub"], user.get("id"), user.get("corretora_id"), body.cliente, body.cliente_id, json.dumps(body.dados, ensure_ascii=False)),
     )
     conn.commit()
     conn.close()
@@ -1533,9 +1534,24 @@ def _check_cliente_acesso(cliente, user):
 
 
 @app.get("/api/clientes")
-def listar_clientes(view: Optional[str] = None, user=Depends(require_corretor)):
+def listar_clientes(view: Optional[str] = None, q: Optional[str] = None, user=Depends(require_corretor)):
     conn = get_connection()
     role = user.get("role")
+    if q is not None:
+        like = f"%{q}%"
+        sq = """
+            SELECT c.id, c.nome, c.empresa,
+                COALESCE((SELECT estagio FROM oportunidades WHERE cliente_id = c.id ORDER BY criado_em DESC LIMIT 1), 'lead') AS estagio_atual
+            FROM clientes c WHERE c.ativo = 1
+        """
+        if role == "superadmin":
+            rows = conn.execute(sq + "AND (c.nome LIKE ? OR c.empresa LIKE ?) ORDER BY c.nome LIMIT 20", (like, like)).fetchall()
+        elif role == "admin":
+            rows = conn.execute(sq + "AND c.corretora_id = ? AND (c.nome LIKE ? OR c.empresa LIKE ?) ORDER BY c.nome LIMIT 20", (user.get("corretora_id"), like, like)).fetchall()
+        else:
+            rows = conn.execute(sq + "AND c.corretor_id = ? AND (c.nome LIKE ? OR c.empresa LIKE ?) ORDER BY c.nome LIMIT 20", (user.get("id"), like, like)).fetchall()
+        conn.close()
+        return [dict(r) for r in rows]
     base = """
         SELECT c.*,
             (SELECT MAX(criado_em) FROM interacoes WHERE cliente_id = c.id) AS ultima_interacao_em,
@@ -1550,9 +1566,7 @@ def listar_clientes(view: Optional[str] = None, user=Depends(require_corretor)):
             (user.get("corretora_id"),),
         ).fetchall()
     elif role == "superadmin":
-        rows = conn.execute(
-            base + "WHERE c.ativo = 1 ORDER BY c.criado_em DESC"
-        ).fetchall()
+        rows = conn.execute(base + "WHERE c.ativo = 1 ORDER BY c.criado_em DESC").fetchall()
     elif role == "admin":
         rows = conn.execute(
             base + "WHERE c.corretora_id = ? AND c.ativo = 1 ORDER BY c.criado_em DESC",

@@ -600,6 +600,11 @@ async function init(){
     currentUser = await res.json();
     document.getElementById('user-nome-bar').textContent = currentUser.nome || currentUser.username || '';
     await loadKanban('meus');
+    const _autoId = sessionStorage.getItem('crm_cliente_id');
+    if (_autoId) {
+      sessionStorage.removeItem('crm_cliente_id');
+      openModal(Number(_autoId));
+    }
   } catch {
     window.location.href = 'sistema-saude-prime.html';
   }
@@ -967,6 +972,7 @@ async function toggleShare(){
 function cotarParaCliente(){
   if (!currentCliente) return;
   sessionStorage.setItem('crm_cliente_nome', currentCliente.nome || '');
+  sessionStorage.setItem('crm_cliente_id', String(currentCliente.id || ''));
   window.location.href = 'sistema-saude-prime.html';
 }
 
