@@ -2061,6 +2061,12 @@ _initCotador().then(() => {
     const b = document.getElementById('btn-sair-cot');
     if (b) b.style.display = 'inline-flex';
   }
+  // Restaurar cotação vinda do CRM
+  const pendingCot = sessionStorage.getItem('crm_cotacao_restore');
+  if (pendingCot) {
+    sessionStorage.removeItem('crm_cotacao_restore');
+    try { restaurarCotacaoFromObj(JSON.parse(pendingCot)); } catch {}
+  }
 });
 
 // ── HISTÓRICO DE COTAÇÕES ────────────────────────────────────────────
@@ -2133,6 +2139,25 @@ function openHistorico() {
 }
 
 function closeHistorico() { document.getElementById('hist-overlay').classList.remove('on'); }
+
+function restaurarCotacaoFromObj(e){
+  if (!e || !e.qtds) return;
+  qtds=[...e.qtds];
+  selPlanos=Object.fromEntries(Object.entries(e.selPlanos||{}).map(([k,v])=>[k,Array.isArray(v)?v:[v].filter(Boolean)]));
+  activeOps={...e.activeOps}; tipoOp={...e.tipoOp};
+  filtroCopart=e.filtroCopart||'todos'; filtroMod=e.filtroMod||'comp'; filtroVig=e.filtroVig||'vigentes';
+  document.getElementById('nome').value = e.nome||'';
+  if (e.obs) document.getElementById('obs').value = e.obs;
+  FAIXAS.forEach((_,i)=>{
+    const sp=document.getElementById('sn-'+i), chip=document.getElementById('chip-'+i);
+    if(sp){sp.textContent=qtds[i]||0;sp.className=qtds[i]>0?'step-num':'step-num zero';}
+    if(chip){if(qtds[i]>0)chip.classList.add('active');else chip.classList.remove('active');}
+  });
+  const tv=qtds.reduce((a,b)=>a+b,0);
+  document.getElementById('total-vidas').textContent=tv;
+  document.getElementById('total-badge').textContent=tv+' vida(s)';
+  updateTitle(); _updateFVidasHint(); _checkFVigRow(); buildOpConfig(); render();
+}
 
 function restaurarCotacao(id) {
   const e = loadHistory().find(x=>String(x.id)===String(id));

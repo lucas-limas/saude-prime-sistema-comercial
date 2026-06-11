@@ -470,6 +470,7 @@ html[data-theme="light"] .modal-box{box-shadow:0 20px 60px rgba(0,0,0,.18)}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             <span id="share-label">Compartilhar</span>
           </button>
+          <button id="btn-delete-cliente" class="m-btn" style="color:#ef4444;border-color:#ef4444;display:none" onclick="excluirCliente()">🗑 Excluir</button>
         </div>
       </div>
 
@@ -627,16 +628,19 @@ function diasSemContato(ultima){
   if (dias <= 5) return {text:`${dias}d`, cls:'orange'};
   return {text:`${dias}d`, cls:'red'};
 }
+function _isoZ(iso){ return iso && !iso.endsWith('Z') && !/[+-]\d\d:\d\d$/.test(iso) ? iso+'Z' : iso; }
+
 function relativeDate(isoStr){
   if (!isoStr) return '';
-  const dias = Math.floor((Date.now() - new Date(isoStr).getTime()) / 86400000);
+  const dias = Math.floor((Date.now() - new Date(_isoZ(isoStr)).getTime()) / 86400000);
   if (dias === 0) return 'hoje';
   if (dias === 1) return 'ontem';
+  if (dias < 0) return 'hoje';
   return `há ${dias} dias`;
 }
 function fmtDate(iso){
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+  return new Date(_isoZ(iso)).toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
 function isMyClient(c){ return currentUser && c.corretor_id === currentUser.id; }
 function canEdit(c){ return currentUser && (currentUser.role === 'admin' || currentUser.role === 'superadmin' || isMyClient(c)); }
@@ -747,15 +751,13 @@ async function advanceStage(clienteId, opId, currentStage){
 async function patchStage(clienteId, opId, newStage, motivo){
   const body = {estagio: newStage};
   if (motivo) body.motivo_perda = motivo;
+  let res;
   if (opId){
-    await fetch(`${API}/api/oportunidades/${opId}`, {
-      method:'PATCH', headers:authH(), body:JSON.stringify(body)
-    });
+    res = await fetch(`${API}/api/oportunidades/${opId}`, {method:'PATCH', headers:authH(), body:JSON.stringify(body)});
   } else {
-    await fetch(`${API}/api/clientes/${clienteId}/oportunidades`, {
-      method:'POST', headers:authH(), body:JSON.stringify(body)
-    });
+    res = await fetch(`${API}/api/clientes/${clienteId}/oportunidades`, {method:'POST', headers:authH(), body:JSON.stringify(body)});
   }
+  if (!res.ok){ const d = await res.json().catch(()=>({detail:'Erro'})); throw new Error(d.detail||'Erro ao atualizar estágio'); }
 }
 
 /* ── MODAL ── */
@@ -827,7 +829,8 @@ function renderModal(c, interacoes, cotacoes){
   // Funil
   document.querySelectorAll('.funil-stage').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.s === stage);
-    if (!editable) btn.onclick = null;
+    const s = btn.dataset.s;
+    btn.onclick = editable ? () => setStage(s) : null;
   });
 
   // WhatsApp
@@ -843,11 +846,14 @@ function renderModal(c, interacoes, cotacoes){
   shareLabel.textContent = comp ? 'Compartilhado' : 'Compartilhar';
   shareBtn.style.display = editable ? '' : 'none';
 
+  const deleteBtn = document.getElementById('btn-delete-cliente');
+  if (deleteBtn) deleteBtn.style.display = editable ? '' : 'none';
+
   // Interações
   renderInteracoes(interacoes);
 
   // Cotações
-  renderCotacoes(cotacoes);
+  renderCotacoesWrapper(cotacoes);
 }
 
 function buildFieldHtml(campo, val, editable, id){
@@ -976,6 +982,18 @@ function cotarParaCliente(){
   window.location.href = 'sistema-saude-prime.html';
 }
 
+async function excluirCliente(){
+  if (!currentCliente) return;
+  if (!confirm(`Excluir ${currentCliente.nome} do CRM? Esta ação não pode ser desfeita.`)) return;
+  try {
+    const res = await fetch(`${API}/api/clientes/${currentCliente.id}`, {method:'DELETE', headers:authH()});
+    if (!res.ok){ const d=await res.json().catch(()=>({detail:'Erro'})); showToast(d.detail||'Erro ao excluir'); return; }
+    showToast('Cliente excluído');
+    closeModal();
+    await loadKanban(currentView);
+  } catch { showToast('Erro ao excluir'); }
+}
+
 /* ── INTERAÇÕES ── */
 function renderInteracoes(interacoes){
   const el = document.getElementById('int-list');
@@ -1014,6 +1032,13 @@ async function registrarInteracao(){
 }
 
 /* ── COTAÇÕES ── */
+let _crmCotacoes = [];
+
+function renderCotacoesWrapper(cotacoes){
+  _crmCotacoes = cotacoes;
+  renderCotacoes(cotacoes);
+}
+
 function renderCotacoes(cotacoes){
   const el = document.getElementById('cot-list');
   if (!cotacoes.length){
@@ -1027,12 +1052,35 @@ function renderCotacoes(cotacoes){
       const opKeys = Object.keys(dados?.resultados || {});
       if (opKeys.length) ops = opKeys.join(', ');
     } catch {}
-    return `<div class="cot-item">
-      <span class="cot-data">${fmtDate(c.criado_em)}</span>
-      <span style="color:var(--t4)">•</span>
-      <span>${esc(ops)}</span>
+    return `<div class="cot-item" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px" onclick="abrirCotacaoDoCRM(${c.id})">
+      <span style="display:flex;align-items:center;gap:6px">
+        <span class="cot-data">${fmtDate(c.criado_em)}</span>
+        <span style="color:var(--t4)">•</span>
+        <span>${esc(ops)}</span>
+      </span>
+      <button onclick="event.stopPropagation();excluirCotacao(${c.id})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:2px 6px;border-radius:4px" title="Excluir cotação">✕</button>
     </div>`;
   }).join('');
+}
+
+async function abrirCotacaoDoCRM(cotacaoId){
+  const c = _crmCotacoes.find(x => x.id === cotacaoId);
+  if (!c) return;
+  const dados = typeof c.dados === 'string' ? JSON.parse(c.dados) : c.dados;
+  if (!dados) return;
+  sessionStorage.setItem('crm_cotacao_restore', JSON.stringify(dados));
+  window.location.href = 'sistema-saude-prime.html';
+}
+
+async function excluirCotacao(cotacaoId){
+  if (!confirm('Excluir esta cotação do registro do cliente?')) return;
+  try {
+    const res = await fetch(`${API}/api/cotacoes/${cotacaoId}`, {method:'DELETE', headers:authH()});
+    if (!res.ok){ showToast('Erro ao excluir'); return; }
+    _crmCotacoes = _crmCotacoes.filter(x => x.id !== cotacaoId);
+    renderCotacoes(_crmCotacoes);
+    showToast('Cotação excluída');
+  } catch { showToast('Erro ao excluir'); }
 }
 
 /* ── FECHAR MODAL ── */

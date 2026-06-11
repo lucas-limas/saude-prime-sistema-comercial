@@ -1631,7 +1631,7 @@ def atualizar_cliente(cliente_id: int, body: UpdateClienteRequest, user=Depends(
             params.append(val.strip() if isinstance(val, str) else val)
     if updates:
         updates.append("atualizado_em = ?")
-        params.append(datetime.utcnow().isoformat())
+        params.append(datetime.utcnow().isoformat() + 'Z')
         params.append(cliente_id)
         conn.execute(f"UPDATE clientes SET {', '.join(updates)} WHERE id = ?", params)
         conn.commit()
@@ -1649,7 +1649,7 @@ def desativar_cliente(cliente_id: int, user=Depends(require_corretor)):
     _check_cliente_acesso(dict(row), user)
     conn.execute(
         "UPDATE clientes SET ativo = 0, atualizado_em = ? WHERE id = ?",
-        (datetime.utcnow().isoformat(), cliente_id),
+        (datetime.utcnow().isoformat() + 'Z', cliente_id),
     )
     conn.commit()
     conn.close()
@@ -1718,7 +1718,7 @@ def atualizar_oportunidade(op_id: int, body: UpdateOportunidadeRequest, user=Dep
             params.append(val)
     if updates:
         updates.append("atualizado_em = ?")
-        params.append(datetime.utcnow().isoformat())
+        params.append(datetime.utcnow().isoformat() + 'Z')
         params.append(op_id)
         conn.execute(f"UPDATE oportunidades SET {', '.join(updates)} WHERE id = ?", params)
         conn.commit()
@@ -1803,6 +1803,22 @@ def listar_cotacoes_cliente(cliente_id: int, user=Depends(require_corretor)):
          "dados": json.loads(r["dados"]), "criado_em": r["criado_em"]}
         for r in rows
     ]
+
+
+@app.delete("/api/cotacoes/{cotacao_id}")
+def excluir_cotacao(cotacao_id: int, user=Depends(require_corretor)):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM cotacoes WHERE id = ?", (cotacao_id,)).fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(404, "Cotação não encontrada")
+    if row["usuario"] != user["sub"] and user.get("role") not in ("admin", "superadmin"):
+        conn.close()
+        raise HTTPException(403, "Sem permissão")
+    conn.execute("DELETE FROM cotacoes WHERE id = ?", (cotacao_id,))
+    conn.commit()
+    conn.close()
+    return {"ok": True}
 
 
 # ── Redirects para caminhos antigos (raiz → app/) ─────────────────────────────
