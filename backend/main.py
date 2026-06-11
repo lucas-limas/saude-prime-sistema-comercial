@@ -631,6 +631,9 @@ class UpdateClienteRequest(BaseModel):
     segmento: Optional[str] = None
     origem: Optional[str] = None
     ativo: Optional[int] = None
+    compartilhado: Optional[int] = None
+    plano_atual: Optional[str] = None
+    operadora_atual: Optional[str] = None
 
 class OportunidadeRequest(BaseModel):
     estagio: Optional[str] = "lead"
@@ -1530,21 +1533,34 @@ def _check_cliente_acesso(cliente, user):
 
 
 @app.get("/api/clientes")
-def listar_clientes(user=Depends(require_corretor)):
+def listar_clientes(view: Optional[str] = None, user=Depends(require_corretor)):
     conn = get_connection()
     role = user.get("role")
-    if role == "superadmin":
+    base = """
+        SELECT c.*,
+            (SELECT MAX(criado_em) FROM interacoes WHERE cliente_id = c.id) AS ultima_interacao_em,
+            COALESCE((SELECT estagio FROM oportunidades WHERE cliente_id = c.id ORDER BY criado_em DESC LIMIT 1), 'lead') AS estagio_atual,
+            (SELECT id FROM oportunidades WHERE cliente_id = c.id ORDER BY criado_em DESC LIMIT 1) AS oportunidade_id,
+            (SELECT nome FROM users WHERE id = c.corretor_id) AS corretor_nome
+        FROM clientes c
+    """
+    if view == "empresa":
         rows = conn.execute(
-            "SELECT * FROM clientes WHERE ativo = 1 ORDER BY criado_em DESC"
+            base + "WHERE c.corretora_id = ? AND c.compartilhado = 1 AND c.ativo = 1 ORDER BY c.criado_em DESC",
+            (user.get("corretora_id"),),
+        ).fetchall()
+    elif role == "superadmin":
+        rows = conn.execute(
+            base + "WHERE c.ativo = 1 ORDER BY c.criado_em DESC"
         ).fetchall()
     elif role == "admin":
         rows = conn.execute(
-            "SELECT * FROM clientes WHERE corretora_id = ? AND ativo = 1 ORDER BY criado_em DESC",
+            base + "WHERE c.corretora_id = ? AND c.ativo = 1 ORDER BY c.criado_em DESC",
             (user.get("corretora_id"),),
         ).fetchall()
     else:
         rows = conn.execute(
-            "SELECT * FROM clientes WHERE corretor_id = ? AND ativo = 1 ORDER BY criado_em DESC",
+            base + "WHERE c.corretor_id = ? AND c.ativo = 1 ORDER BY c.criado_em DESC",
             (user.get("id"),),
         ).fetchall()
     conn.close()
@@ -1594,7 +1610,7 @@ def atualizar_cliente(cliente_id: int, body: UpdateClienteRequest, user=Depends(
         raise HTTPException(404, "Cliente não encontrado")
     _check_cliente_acesso(dict(row), user)
     updates, params = [], []
-    for field in ("nome", "empresa", "cnpj", "telefone", "email", "n_vidas_estimado", "segmento", "origem", "ativo"):
+    for field in ("nome", "empresa", "cnpj", "telefone", "email", "n_vidas_estimado", "segmento", "origem", "ativo", "compartilhado", "plano_atual", "operadora_atual"):
         val = getattr(body, field)
         if val is not None:
             updates.append(f"{field} = ?")

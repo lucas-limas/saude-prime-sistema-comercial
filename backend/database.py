@@ -342,6 +342,10 @@ def _migrations_pg(conn):
         "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) SELECT 'sa_99_24_cc_6', id, 'Com copart — Executivo R2', 'apt', 'pme', '30-99', NULL, 24, '[1107.3,1384.12,1716.31,1905.1,2038.46,2364.62,2826.66,3312.85,3943.94,6643.57]', 94 FROM operadoras WHERE chave='sulamerica' ON CONFLICT (codigo) DO NOTHING",
         "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) SELECT 'sa_99_24_cc_7', id, 'Com copart — Executivo R3', 'apt', 'pme', '30-99', NULL, 24, '[1236.9,1546.13,1917.2,2128.09,2277.06,2641.39,3157.52,3700.62,4405.57,7421.19]', 95 FROM operadoras WHERE chave='sulamerica' ON CONFLICT (codigo) DO NOTHING",
         "INSERT INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) SELECT 'sa_99_24_cc_8', id, 'Com copart — Prestige', 'apt', 'pme', '30-99', NULL, 24, '[1622.22,2027.77,2514.43,2791.02,2986.4,3464.22,4141.13,4853.41,5777.97,9732.99]', 96 FROM operadoras WHERE chave='sulamerica' ON CONFLICT (codigo) DO NOTHING",
+        # Etapa 5: novos campos CRM em clientes
+        "ALTER TABLE clientes ADD COLUMN compartilhado INTEGER DEFAULT 0",
+        "ALTER TABLE clientes ADD COLUMN plano_atual TEXT",
+        "ALTER TABLE clientes ADD COLUMN operadora_atual TEXT",
     ]
     for sql in safe:
         try:
@@ -654,6 +658,10 @@ def _migrations_sqlite(c):
         "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) SELECT 'sa_99_24_cc_6', id, 'Com copart — Executivo R2', 'apt', 'pme', '30-99', NULL, 24, '[1107.3,1384.12,1716.31,1905.1,2038.46,2364.62,2826.66,3312.85,3943.94,6643.57]', 94 FROM operadoras WHERE chave='sulamerica'",
         "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) SELECT 'sa_99_24_cc_7', id, 'Com copart — Executivo R3', 'apt', 'pme', '30-99', NULL, 24, '[1236.9,1546.13,1917.2,2128.09,2277.06,2641.39,3157.52,3700.62,4405.57,7421.19]', 95 FROM operadoras WHERE chave='sulamerica'",
         "INSERT OR IGNORE INTO planos (codigo, operadora_id, nome, acomodacao, tipo, faixa_vidas, moderador, mes_vigencia, precos, ordem) SELECT 'sa_99_24_cc_8', id, 'Com copart — Prestige', 'apt', 'pme', '30-99', NULL, 24, '[1622.22,2027.77,2514.43,2791.02,2986.4,3464.22,4141.13,4853.41,5777.97,9732.99]', 96 FROM operadoras WHERE chave='sulamerica'",
+        # Etapa 5: novos campos CRM em clientes
+        "ALTER TABLE clientes ADD COLUMN compartilhado INTEGER DEFAULT 0",
+        "ALTER TABLE clientes ADD COLUMN plano_atual TEXT",
+        "ALTER TABLE clientes ADD COLUMN operadora_atual TEXT",
     ]
     for sql in safe:
         try:

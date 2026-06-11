@@ -96,6 +96,8 @@ html[data-theme="light"] .switcher{box-shadow:0 1px 6px rgba(0,0,0,.1)}
 
 /* ── IFRAMES ── */
 .frames{height:100vh;position:relative}
+body.nav-visible .frames{height:calc(100vh - 56px);margin-top:56px}
+.main-nav{position:fixed;top:0;left:0;right:0;z-index:200}
 iframe{
   position:absolute;top:0;left:0;width:100%;height:100%;
   border:none;display:none;-webkit-overflow-scrolling:touch;
@@ -603,6 +605,25 @@ html[data-theme="light"] .admin-loading{color:rgba(0,0,0,.38)!important}
   </div>
 </div>
 
+<!-- NAV BAR (visível após login de corretor) -->
+<div class="switcher main-nav" id="main-nav" style="display:none">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 128 52" xmlns="http://www.w3.org/2000/svg" style="height:32px;width:auto"><rect x="0.75" y="0.75" width="33" height="50.5" rx="6.5" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.72)" stroke-width="1.2"/><rect x="4" y="7.5" width="26" height="11.5" rx="2.5" fill="rgba(255,255,255,.92)"/><polyline points="6.5,17.5 10.5,14 15.5,16 20,12.5 24.5,14.5 28.5,11.5" stroke="rgba(20,30,45,.7)" stroke-width="1.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="23" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.3)"/><rect x="15" y="23" width="6.5" height="4.5" rx="1.3" fill="rgba(255,255,255,.3)"/><rect x="23.5" y="23" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.52)"/><rect x="4" y="29.5" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.3)"/><rect x="15" y="29.5" width="6.5" height="4.5" rx="1.3" fill="rgba(255,255,255,.3)"/><rect x="23.5" y="29.5" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.52)"/><rect x="4" y="36" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.3)"/><rect x="15" y="36" width="6.5" height="4.5" rx="1.3" fill="rgba(255,255,255,.3)"/><rect x="23.5" y="36" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.52)"/><rect x="4" y="42.5" width="15.5" height="4.5" rx="1.3" fill="rgba(255,255,255,.23)"/><rect x="23.5" y="42.5" width="9" height="4.5" rx="1.3" fill="rgba(255,255,255,.88)"/><text x="43" y="22" font-family="Outfit,system-ui,sans-serif" font-size="10" font-weight="200" letter-spacing="5" fill="rgba(255,255,255,.5)">COT</text><line x1="43" y1="27.5" x2="122" y2="27.5" stroke="rgba(255,255,255,.17)" stroke-width="0.6"/><text x="43" y="46" font-family="Outfit,system-ui,sans-serif" font-size="21" font-weight="700" letter-spacing="0.5" fill="rgba(255,255,255,.96)">PRIME</text></svg>
+  </div>
+  <div class="sep"></div>
+  <button class="sw-btn" onclick="window.location.href='crm-saude-prime.html'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    CRM
+  </button>
+  <div class="user-info">
+    <span class="user-nome" id="nav-user-nome"></span>
+    <button class="btn-theme" onclick="toggleTheme()" title="Alternar tema claro/escuro">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
+    <button class="btn-sair" onclick="doLogout()">Sair</button>
+  </div>
+</div>
+
 <div class="frames">
   <iframe id="cotador" src="cotador-planos-saude.html" class="visible"></iframe>
   <iframe id="apres"   src="apresentacao-executiva.html"></iframe>
@@ -674,6 +695,8 @@ function routeByRole(role, nome) {
   document.getElementById('superadmin-overlay').classList.add('hidden');
   document.getElementById('admin-overlay').classList.add('hidden');
   document.querySelector('.frames').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'none';
+  document.body.classList.remove('nav-visible');
 
   if (role === 'superadmin') {
     document.getElementById('sa-nome-bar').textContent = nome || '';
@@ -684,8 +707,12 @@ function routeByRole(role, nome) {
     document.getElementById('admin-overlay').classList.remove('hidden');
     loadColaboradores();
   } else {
-    // corretor — mostra cotador
+    // corretor — mostra cotador + barra de nav
+    document.getElementById('nav-user-nome').textContent = nome || '';
+    document.getElementById('main-nav').style.display = 'flex';
+    document.body.classList.add('nav-visible');
     document.querySelector('.frames').style.display = '';
+    _setThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
   }
 }
 
@@ -697,6 +724,8 @@ function doLogout() {
   sessionStorage.clear();
   document.getElementById('superadmin-overlay').classList.add('hidden');
   document.getElementById('admin-overlay').classList.add('hidden');
+  document.getElementById('main-nav').style.display = 'none';
+  document.body.classList.remove('nav-visible');
   document.querySelector('.frames').style.display = 'none';
   document.getElementById('auth-overlay').classList.remove('hidden');
   document.getElementById('lg-err').style.display = 'none';
