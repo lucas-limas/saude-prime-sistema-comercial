@@ -758,7 +758,12 @@ def login(req: LoginRequest, request: Request):
 
 @app.get("/api/me")
 def me(user=Depends(get_current_user)):
+    conn = get_connection()
+    row = conn.execute("SELECT id FROM users WHERE username = ?", (user["sub"],)).fetchone()
+    user_id = row["id"] if row else None
+    conn.close()
     return {
+        "id": user_id,
         "username": user["sub"],
         "nome": user.get("nome"),
         "role": user.get("role"),
