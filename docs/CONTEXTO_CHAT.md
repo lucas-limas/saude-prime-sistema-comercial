@@ -58,10 +58,9 @@ Existem 4 fontes simultâneas que precisam ser consolidadas em uma:
 `corretoras` · `users` · `cotacoes` · `audit_log` · `operadoras` · `planos` · `rede_credenciada`
 
 ### Como o cotador carrega o catálogo
-1. Carrega `dados.js` como `<script>` → popula `window.SP_DATA`
-2. Chama `GET /api/catalogo` (público, sem auth)
-3. Se banco tiver dados válidos → sobrescreve `dados.js` por operadora
-4. Se banco vazio/offline → usa `dados.js` como fallback
+1. Carrega `dados.js` como `<script>` → popula `window.SP_DATA` (apenas metadados; sem preços)
+2. Chama `GET /api/catalogo` (público, sem auth) — fonte única de preços
+3. Se a API falhar (rede ou erro HTTP) → exibe tela de erro de catálogo (não há fallback de preços)
 
 ---
 
@@ -117,9 +116,9 @@ Existem 4 fontes simultâneas que precisam ser consolidadas em uma:
 
 ## Onde estamos agora
 
-**Status:** Etapa 3 concluída (2026-06-10). Hapvida no banco, colunas renomeadas, refatorações de código.
+**Status:** Fonte única + CRM concluídos (2026-06-11). Catálogo 100% do banco (dados.js sem preços), CRM com Kanban, ficha do cliente e visão empresa (clientes compartilhados em modo leitura para colegas).
 
-**Próxima ação:** implementar a Etapa 3 (interface) — aba "Clientes" CRM no `sistema-saude-prime.html`.
+**Próxima ação:** Etapa 5/6 — assistente de IA (Claude API) para os corretores.
 
 **O que foi feito na Etapa 1 (2026-06-09):**
 - `app/cotador-planos-saude.html` — `saveToHistory()` agora chama `POST /api/cotacoes` via `window.parent.token()` após gravar no localStorage. Fire-and-forget, sem impacto no corretor.

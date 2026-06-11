@@ -623,7 +623,7 @@ function switchTab(view, btn){
 /* ── UTILS ── */
 function diasSemContato(ultima){
   if (!ultima) return {text:'Sem registro', cls:'neutral'};
-  const dias = Math.floor((Date.now() - new Date(ultima).getTime()) / 86400000);
+  const dias = Math.floor((Date.now() - new Date(_isoZ(ultima)).getTime()) / 86400000);
   if (dias <= 2) return {text:`${dias}d`, cls:'green'};
   if (dias <= 5) return {text:`${dias}d`, cls:'orange'};
   return {text:`${dias}d`, cls:'red'};
@@ -671,7 +671,7 @@ function updateDashboard(clientes){
     const s = c.estagio_atual || 'lead';
     counts[s] = (counts[s]||0) + 1;
     const dias = c.ultima_interacao_em
-      ? Math.floor((Date.now() - new Date(c.ultima_interacao_em).getTime()) / 86400000) : 999;
+      ? Math.floor((Date.now() - new Date(_isoZ(c.ultima_interacao_em)).getTime()) / 86400000) : 999;
     if (dias >= 2) semContato2++;
   });
   const sub = STAGES.filter(s => counts[s]>0)
@@ -831,6 +831,8 @@ function renderModal(c, interacoes, cotacoes){
     btn.classList.toggle('active', btn.dataset.s === stage);
     const s = btn.dataset.s;
     btn.onclick = editable ? () => setStage(s) : null;
+    btn.style.cursor = editable ? '' : 'default';
+    btn.disabled = !editable;
   });
 
   // WhatsApp
@@ -848,6 +850,11 @@ function renderModal(c, interacoes, cotacoes){
 
   const deleteBtn = document.getElementById('btn-delete-cliente');
   if (deleteBtn) deleteBtn.style.display = editable ? '' : 'none';
+
+  // Cliente compartilhado de outro corretor: somente leitura
+  const intForm = document.querySelector('.int-form');
+  if (intForm) intForm.style.display = editable ? '' : 'none';
+  _modalEditable = editable;
 
   // Interações
   renderInteracoes(interacoes);
@@ -1033,6 +1040,7 @@ async function registrarInteracao(){
 
 /* ── COTAÇÕES ── */
 let _crmCotacoes = [];
+let _modalEditable = true;
 
 function renderCotacoesWrapper(cotacoes){
   _crmCotacoes = cotacoes;
@@ -1058,7 +1066,7 @@ function renderCotacoes(cotacoes){
         <span style="color:var(--t4)">•</span>
         <span>${esc(ops)}</span>
       </span>
-      <button onclick="event.stopPropagation();excluirCotacao(${c.id})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:2px 6px;border-radius:4px" title="Excluir cotação">✕</button>
+      ${_modalEditable ? `<button onclick="event.stopPropagation();excluirCotacao(${c.id})" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:2px 6px;border-radius:4px" title="Excluir cotação">✕</button>` : ''}
     </div>`;
   }).join('');
 }

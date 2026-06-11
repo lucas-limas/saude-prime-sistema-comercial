@@ -38,6 +38,24 @@ def get_connection():
     return conn
 
 
+def insert_returning(conn, sql, params, table):
+    """Executa um INSERT e retorna a linha inserida, seguro sob concorrência.
+
+    PostgreSQL: INSERT ... RETURNING *. SQLite: cursor.lastrowid + SELECT por id.
+    Evita o padrão "SELECT ... ORDER BY id DESC LIMIT 1", que pode retornar a
+    linha de outro request concorrente. Faz o commit antes de retornar.
+    """
+    if DATABASE_URL:
+        res = conn.execute(sql + " RETURNING *", params)
+        row = res.fetchone()
+        conn.commit()
+        return row
+    cur = conn.execute(sql, params)
+    new_id = cur.lastrowid
+    conn.commit()
+    return conn.execute(f"SELECT * FROM {table} WHERE id = ?", (new_id,)).fetchone()
+
+
 def _migrations_pg(conn):
     safe = [
         "ALTER TABLE users ADD COLUMN email TEXT",
@@ -346,6 +364,12 @@ def _migrations_pg(conn):
         "ALTER TABLE clientes ADD COLUMN compartilhado INTEGER DEFAULT 0",
         "ALTER TABLE clientes ADD COLUMN plano_atual TEXT",
         "ALTER TABLE clientes ADD COLUMN operadora_atual TEXT",
+        # QA: índices nas FKs do CRM
+        "CREATE INDEX IF NOT EXISTS idx_clientes_corretor_id ON clientes(corretor_id)",
+        "CREATE INDEX IF NOT EXISTS idx_clientes_corretora_id ON clientes(corretora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_oportunidades_cliente_id ON oportunidades(cliente_id)",
+        "CREATE INDEX IF NOT EXISTS idx_interacoes_cliente_id ON interacoes(cliente_id)",
+        "CREATE INDEX IF NOT EXISTS idx_cotacoes_cliente_id ON cotacoes(cliente_id)",
     ]
     for sql in safe:
         try:
@@ -662,6 +686,12 @@ def _migrations_sqlite(c):
         "ALTER TABLE clientes ADD COLUMN compartilhado INTEGER DEFAULT 0",
         "ALTER TABLE clientes ADD COLUMN plano_atual TEXT",
         "ALTER TABLE clientes ADD COLUMN operadora_atual TEXT",
+        # QA: índices nas FKs do CRM
+        "CREATE INDEX IF NOT EXISTS idx_clientes_corretor_id ON clientes(corretor_id)",
+        "CREATE INDEX IF NOT EXISTS idx_clientes_corretora_id ON clientes(corretora_id)",
+        "CREATE INDEX IF NOT EXISTS idx_oportunidades_cliente_id ON oportunidades(cliente_id)",
+        "CREATE INDEX IF NOT EXISTS idx_interacoes_cliente_id ON interacoes(cliente_id)",
+        "CREATE INDEX IF NOT EXISTS idx_cotacoes_cliente_id ON cotacoes(cliente_id)",
     ]
     for sql in safe:
         try:

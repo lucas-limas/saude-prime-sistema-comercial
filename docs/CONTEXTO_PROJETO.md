@@ -29,7 +29,7 @@ CotadorSaúdePrime/
 ## 3. ARQUIVO: `cotador-planos-saude.html`
 
 ### O que é
-Cotador comparativo de planos de saúde. Arquivo HTML standalone (funciona offline, sem servidor). O corretor abre no navegador e usa internamente para calcular preços antes de apresentar ao cliente.
+Cotador comparativo de planos de saúde. Desde a etapa de fonte única, os preços vêm exclusivamente de `GET /api/catalogo` (banco de dados) — o cotador **requer o backend no ar** e não funciona mais offline; `dados.js` mantém apenas metadados (sem preços). O corretor abre no navegador e usa internamente para calcular preços antes de apresentar ao cliente.
 
 ### Funcionalidades
 - **3 abas:** Cotação | Rede Credenciada | Carências
@@ -230,8 +230,8 @@ Estas operadoras ainda não foram adicionadas ao sistema. Aguardam envio de PDF 
 ## 7. DECISÕES DE DESIGN E ARQUITETURA
 
 ### Por que arquivos HTML standalone?
-- Funcionam offline (o corretor pode usar em reuniões sem internet)
-- Sem dependência de servidor ou backend
+- Originalmente funcionavam offline; hoje o cotador depende do backend (`/api/catalogo`) como fonte única de preços
+- Sem build step ou framework — um arquivo HTML por tela
 - Fácil de compartilhar por e-mail ou WhatsApp
 - A logo é embutida em base64 para não depender de caminhos externos
 

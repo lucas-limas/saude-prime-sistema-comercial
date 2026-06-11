@@ -2038,6 +2038,11 @@ async function _initCotador() {
           tipoOp[op] = ts[0] || 'adesao';
         }
       });
+    } else {
+      // API respondeu erro HTTP (500/503 etc.) — sem fallback local, avisa o usuário
+      _loadingDiv.remove();
+      _mostrarErroCatalogo();
+      return;
     }
   } catch(e) {
     _loadingDiv.remove();

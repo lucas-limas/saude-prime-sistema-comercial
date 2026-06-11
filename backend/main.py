@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from auth import verify_password, hash_password, create_access_token, decode_token
-from database import get_connection, init_db
+from database import get_connection, init_db, insert_returning
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger("audit")
@@ -1038,6 +1038,16 @@ def deletar_usuario_corretora(user_id: int, admin=Depends(require_admin)):
 @app.post("/api/cotacoes")
 def salvar_cotacao(body: CotacaoRequest, user=Depends(require_corretor)):
     conn = get_connection()
+    if body.cliente_id is not None:
+        cli = conn.execute("SELECT * FROM clientes WHERE id = ?", (body.cliente_id,)).fetchone()
+        if not cli:
+            conn.close()
+            raise HTTPException(400, "Cliente informado não existe")
+        try:
+            _check_cliente_acesso(dict(cli), user)
+        except HTTPException:
+            conn.close()
+            raise
     conn.execute(
         "INSERT INTO cotacoes (usuario, usuario_id, corretora_id, cliente, cliente_id, dados) VALUES (?, ?, ?, ?, ?, ?)",
         (user["sub"], user.get("id"), user.get("corretora_id"), body.cliente, body.cliente_id, json.dumps(body.dados, ensure_ascii=False)),
@@ -1525,17 +1535,28 @@ async def importar_rede(request: Request, admin=Depends(require_superadmin)):
 
 # ── CRM: Clientes ─────────────────────────────────────────────────────────────
 
-def _check_cliente_acesso(cliente, user):
-    """Garante que o usuário tem acesso ao cliente. Lança 403 se não tiver."""
+def _check_cliente_acesso(cliente, user, write=False):
+    """Garante que o usuário tem acesso ao cliente. Lança 403 se não tiver.
+
+    write=False (leitura): cliente compartilhado é visível para colegas da
+    mesma corretora. write=True (escrita): apenas dono, admin da mesma
+    corretora ou superadmin — compartilhamento NÃO dá direito de escrita.
+    """
     role = user.get("role")
     if role == "superadmin":
         return
     if role == "admin":
         if cliente["corretora_id"] != user.get("corretora_id"):
             raise HTTPException(403, "Sem permissão para acessar este cliente")
-    else:
-        if cliente["corretor_id"] != user.get("id"):
-            raise HTTPException(403, "Sem permissão para acessar este cliente")
+        return
+    if cliente["corretor_id"] == user.get("id"):
+        return
+    if (not write and cliente.get("compartilhado") == 1
+            and cliente["corretora_id"] == user.get("corretora_id")):
+        return
+    if write:
+        raise HTTPException(403, "Cliente compartilhado é somente leitura — apenas o dono pode editar")
+    raise HTTPException(403, "Sem permissão para acessar este cliente")
 
 
 @app.get("/api/clientes")
@@ -1589,7 +1610,8 @@ def listar_clientes(view: Optional[str] = None, q: Optional[str] = None, user=De
 @app.post("/api/clientes")
 def criar_cliente(body: ClienteRequest, user=Depends(require_corretor)):
     conn = get_connection()
-    conn.execute(
+    row = insert_returning(
+        conn,
         """INSERT INTO clientes
            (nome, empresa, cnpj, telefone, email, n_vidas_estimado, segmento, origem, corretor_id, corretora_id)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -1598,11 +1620,8 @@ def criar_cliente(body: ClienteRequest, user=Depends(require_corretor)):
             body.email, body.n_vidas_estimado, body.segmento, body.origem,
             user.get("id"), user.get("corretora_id"),
         ),
+        "clientes",
     )
-    conn.commit()
-    row = conn.execute(
-        "SELECT * FROM clientes ORDER BY id DESC LIMIT 1"
-    ).fetchone()
     conn.close()
     log_action(user["sub"], "criar_cliente", f"Cliente: {body.nome}", usuario_id=user.get("id"))
     return dict(row)
@@ -1627,7 +1646,7 @@ def atualizar_cliente(cliente_id: int, body: UpdateClienteRequest, user=Depends(
     if not row:
         conn.close()
         raise HTTPException(404, "Cliente não encontrado")
-    _check_cliente_acesso(dict(row), user)
+    _check_cliente_acesso(dict(row), user, write=True)
     updates, params = [], []
     for field in ("nome", "empresa", "cnpj", "telefone", "email", "n_vidas_estimado", "segmento", "origem", "ativo", "compartilhado", "plano_atual", "operadora_atual"):
         val = getattr(body, field)
@@ -1651,7 +1670,7 @@ def desativar_cliente(cliente_id: int, user=Depends(require_corretor)):
     if not row:
         conn.close()
         raise HTTPException(404, "Cliente não encontrado")
-    _check_cliente_acesso(dict(row), user)
+    _check_cliente_acesso(dict(row), user, write=True)
     conn.execute(
         "UPDATE clientes SET ativo = 0, atualizado_em = ? WHERE id = ?",
         (datetime.utcnow().isoformat() + 'Z', cliente_id),
@@ -1687,18 +1706,15 @@ def criar_oportunidade(cliente_id: int, body: OportunidadeRequest, user=Depends(
     if not row:
         conn.close()
         raise HTTPException(404, "Cliente não encontrado")
-    _check_cliente_acesso(dict(row), user)
-    conn.execute(
+    _check_cliente_acesso(dict(row), user, write=True)
+    novo = insert_returning(
+        conn,
         """INSERT INTO oportunidades
            (cliente_id, estagio, valor_estimado, data_prevista_fechamento, motivo_perda, obs)
            VALUES (?, ?, ?, ?, ?, ?)""",
         (cliente_id, body.estagio, body.valor_estimado, body.data_prevista_fechamento, body.motivo_perda, body.obs),
+        "oportunidades",
     )
-    conn.commit()
-    novo = conn.execute(
-        "SELECT * FROM oportunidades WHERE cliente_id = ? ORDER BY id DESC LIMIT 1",
-        (cliente_id,),
-    ).fetchone()
     conn.close()
     return dict(novo)
 
@@ -1714,7 +1730,7 @@ def atualizar_oportunidade(op_id: int, body: UpdateOportunidadeRequest, user=Dep
     if not cliente:
         conn.close()
         raise HTTPException(404, "Cliente não encontrado")
-    _check_cliente_acesso(dict(cliente), user)
+    _check_cliente_acesso(dict(cliente), user, write=True)
     updates, params = [], []
     for field in ("estagio", "valor_estimado", "data_prevista_fechamento", "motivo_perda", "obs"):
         val = getattr(body, field)
@@ -1756,16 +1772,13 @@ def criar_interacao(cliente_id: int, body: InteracaoRequest, user=Depends(requir
     if not row:
         conn.close()
         raise HTTPException(404, "Cliente não encontrado")
-    _check_cliente_acesso(dict(row), user)
-    conn.execute(
+    _check_cliente_acesso(dict(row), user, write=True)
+    nova = insert_returning(
+        conn,
         "INSERT INTO interacoes (cliente_id, tipo, descricao, usuario) VALUES (?, ?, ?, ?)",
         (cliente_id, body.tipo, body.descricao, user["sub"]),
+        "interacoes",
     )
-    conn.commit()
-    nova = conn.execute(
-        "SELECT * FROM interacoes WHERE cliente_id = ? ORDER BY id DESC LIMIT 1",
-        (cliente_id,),
-    ).fetchone()
     conn.close()
     return dict(nova)
 
@@ -1781,7 +1794,7 @@ def deletar_interacao(interacao_id: int, user=Depends(require_corretor)):
     if not cliente:
         conn.close()
         raise HTTPException(404, "Cliente não encontrado")
-    _check_cliente_acesso(dict(cliente), user)
+    _check_cliente_acesso(dict(cliente), user, write=True)
     conn.execute("DELETE FROM interacoes WHERE id = ?", (interacao_id,))
     conn.commit()
     conn.close()
@@ -1817,7 +1830,14 @@ def excluir_cotacao(cotacao_id: int, user=Depends(require_corretor)):
     if not row:
         conn.close()
         raise HTTPException(404, "Cotação não encontrada")
-    if row["usuario"] != user["sub"] and user.get("role") not in ("admin", "superadmin"):
+    role = user.get("role")
+    if role == "superadmin":
+        pass
+    elif role == "admin":
+        if row["corretora_id"] != user.get("corretora_id"):
+            conn.close()
+            raise HTTPException(403, "Sem permissão para excluir cotação de outra corretora")
+    elif row["usuario"] != user["sub"]:
         conn.close()
         raise HTTPException(403, "Sem permissão")
     conn.execute("DELETE FROM cotacoes WHERE id = ?", (cotacao_id,))

@@ -1,7 +1,7 @@
 # Plano de Implementação — CRM + IA + Fonte Única de Dados
 **Projeto:** Sistema Comercial Saúde Prime
 **Criado em:** 2026-06-09
-**Status atual:** Etapa 1 concluída — dual-write ativo em produção desde 2026-06-09
+**Status atual:** Fonte única + CRM (Kanban/ficha/visão empresa) concluídos em 2026-06-11 — catálogo servido só pelo banco; CRM em produção
 
 ---
 
