@@ -845,8 +845,11 @@ window.REDE_DATA = {
       window.PLANOS = window.PLANOS.filter(p => p.op !== opKey);
       porOp[opKey].forEach(p => window.PLANOS.push(p));
     });
-    // Atualiza metadados de operadoras
-    Object.assign(window.OP_META, operadoras);
+    // Atualiza metadados de operadoras (merge por propriedade para preservar cor/cls do SP_DATA)
+    Object.entries(operadoras).forEach(([k, v]) => {
+      if (window.OP_META[k]) { Object.assign(window.OP_META[k], v); }
+      else { window.OP_META[k] = v; }
+    });
     // Atualiza rede credenciada (banco sobrescreve hardcoded por operadora)
     if (rede && typeof rede === 'object') {
       Object.keys(rede).forEach(opKey => {
