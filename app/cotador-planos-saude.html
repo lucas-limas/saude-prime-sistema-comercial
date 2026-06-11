@@ -1743,6 +1743,7 @@ function criarApresentacao() {
     filtroVig
   };
 
+  _crmTipoCotado = data.filtroTipo;
   _abrirModalCRM(clienteId => _prosseguirApresentacao(data, clienteId));
 }
 
@@ -1885,6 +1886,8 @@ let _crmModalCb = null;
 let _crmSelectedId = null;
 let _crmSearchTimer = null;
 let _crmResultados = [];
+let _crmTipoCotado = null;
+let _crmCriando = false;
 
 function _abrirModalCRM(cb) {
   _crmModalCb = cb;
@@ -1901,7 +1904,13 @@ function _crmConfirmar() {
   document.getElementById('crm-modal-overlay').style.display = 'none';
   if (_crmModalCb) { _crmModalCb(_crmSelectedId || null); _crmModalCb = null; }
 }
+function _crmFooter(mode) {
+  // 'full' = Ignorar + Confirmar; 'ignorar' = só Ignorar (Estado C tem botões próprios)
+  const conf = document.getElementById('crm-modal-confirmar');
+  if (conf) conf.style.display = mode === 'ignorar' ? 'none' : '';
+}
 function _crmEstadoA() {
+  _crmFooter('full');
   document.getElementById('crm-modal-sub').textContent = 'Esta cotação será vinculada ao cliente abaixo.';
   document.getElementById('crm-modal-body').innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(70,27,255,.12);border:1px solid rgba(70,27,255,.3);border-radius:8px;padding:12px 16px">
@@ -1915,21 +1924,54 @@ function _crmEstadoA() {
   btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
 }
 function _crmEstadoB() {
+  _crmFooter('full');
   _crmSelectedId = null;
   document.getElementById('crm-modal-sub').textContent = 'Busque o cliente para vincular esta cotação.';
   document.getElementById('crm-modal-body').innerHTML = `
     <input id="crm-search-inp" type="text" placeholder="Nome ou empresa..."
       style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:var(--t1,#f1f5f9);font-size:14px;outline:none;font-family:inherit"
       oninput="_crmSearchDelay(this.value)">
-    <div id="crm-search-list" style="margin-top:6px;max-height:190px;overflow-y:auto"></div>`;
+    <div id="crm-search-list" style="margin-top:6px;max-height:190px;overflow-y:auto"></div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)">
+      <div style="font-size:12px;color:var(--t3,rgba(255,255,255,.5));margin-bottom:6px">Não está na lista?</div>
+      <button id="crm-add-btn" onclick="_crmEstadoC()"
+        style="width:100%;padding:9px 14px;border-radius:8px;border:1px dashed rgba(70,27,255,.5);background:rgba(70,27,255,.08);color:#a78bfa;font-size:13px;cursor:pointer;font-family:inherit;text-align:left"></button>
+    </div>`;
   const btn = document.getElementById('crm-modal-confirmar');
   btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'default';
-  setTimeout(() => document.getElementById('crm-search-inp')?.focus(), 50);
+  // Busca automática pelo nome digitado no cotador
+  const nomeCotador = (document.getElementById('nome')?.value || '').trim();
+  const inp = document.getElementById('crm-search-inp');
+  if (nomeCotador) {
+    inp.value = nomeCotador;
+    _crmFetch(nomeCotador);
+  } else {
+    _crmResultados = [];
+  }
+  _crmUpdateAddBtn();
+  setTimeout(() => inp?.focus(), 50);
+}
+function _crmNomeAtual() {
+  const buscado = (document.getElementById('crm-search-inp')?.value || '').trim();
+  return buscado || (document.getElementById('nome')?.value || '').trim();
+}
+function _crmUpdateAddBtn() {
+  const btn = document.getElementById('crm-add-btn');
+  if (!btn) return;
+  const nome = _crmNomeAtual();
+  if (nome) {
+    btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+    btn.textContent = `➕ Adicionar "${nome}" como novo cliente`;
+  } else {
+    btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'default';
+    btn.textContent = '➕ Adicionar como novo cliente (digite um nome)';
+  }
 }
 function _crmSearchDelay(val) {
   clearTimeout(_crmSearchTimer);
+  _crmUpdateAddBtn();
   const list = document.getElementById('crm-search-list');
-  if (!val.trim()) { if (list) list.innerHTML = ''; return; }
+  if (!val.trim()) { if (list) list.innerHTML = ''; _crmResultados = []; return; }
   _crmSearchTimer = setTimeout(() => _crmFetch(val.trim()), 300);
 }
 async function _crmFetch(q) {
@@ -1967,6 +2009,87 @@ function _crmSelIdx(idx, el) {
   el.classList.add('sel'); el.style.background = 'rgba(70,27,255,.2)'; el.style.outline = '1px solid rgba(70,27,255,.5)';
   const btn = document.getElementById('crm-modal-confirmar');
   btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+}
+
+// ── Estado C: criar cliente novo no CRM a partir do cotador ──────────
+function _crmEsc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function _crmSegmento() {
+  // 'pme'→PME, 'pf'→PF, 'adesao'→Adesao (mesmos values do select do CRM)
+  const tipo = _crmTipoCotado || Object.values(tipoOp)[0] || 'adesao';
+  const map = { pme: ['PME','PME'], pf: ['PF','PF'], adesao: ['Adesao','Adesão'] };
+  return map[tipo] || map.adesao;
+}
+function _crmEstadoC() {
+  const nome = _crmNomeAtual();
+  if (!nome) return;
+  _crmFooter('ignorar');
+  const vidas = qtds.reduce((a,b)=>a+b,0);
+  const [, segLabel] = _crmSegmento();
+  document.getElementById('crm-modal-sub').textContent = 'Adicionar ao CRM como novo cliente?';
+  document.getElementById('crm-modal-body').innerHTML = `
+    <label style="font-size:11px;color:var(--t3,rgba(255,255,255,.5));display:block;margin-bottom:4px">Nome do cliente</label>
+    <input id="crm-novo-nome" type="text" value="${_crmEsc(nome)}" oninput="_crmCheckHomonimo()"
+      style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:var(--t1,#f1f5f9);font-size:14px;outline:none;font-family:inherit">
+    <div id="crm-homonimo" style="display:none;margin-top:8px;font-size:12px;line-height:1.5;color:#fbbf24;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-radius:8px;padding:8px 12px"></div>
+    <div style="margin-top:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--t2,rgba(255,255,255,.7))">
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--t3,rgba(255,255,255,.5))">Nº de vidas</span><span>${vidas}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--t3,rgba(255,255,255,.5))">Segmento</span><span>${segLabel}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--t3,rgba(255,255,255,.5))">Origem</span><span>Cotador</span></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end">
+      <button onclick="_crmEstadoB()" style="padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:var(--t2,rgba(255,255,255,.7));font-size:13px;cursor:pointer;font-family:inherit">Não</button>
+      <button id="crm-criar-btn" onclick="_crmCriarCliente()" style="padding:8px 16px;border-radius:8px;border:none;background:#461BFF;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Sim, criar e vincular</button>
+    </div>`;
+  _crmCheckHomonimo();
+  setTimeout(() => document.getElementById('crm-novo-nome')?.focus(), 50);
+}
+function _crmCheckHomonimo() {
+  const aviso = document.getElementById('crm-homonimo');
+  if (!aviso) return;
+  const nome = (document.getElementById('crm-novo-nome')?.value || '').trim().toLowerCase();
+  const existe = nome && _crmResultados.some(c => (c.nome||'').trim().toLowerCase() === nome);
+  if (existe) {
+    aviso.style.display = '';
+    aviso.innerHTML = `⚠ Já existe um cliente "${_crmEsc(document.getElementById('crm-novo-nome').value.trim())}". Se for a mesma pessoa, volte e selecione-a na lista. Se for outra pessoa, ajuste o nome (ex.: sobrenome ou cidade) para diferenciar.`;
+  } else {
+    aviso.style.display = 'none';
+  }
+}
+async function _crmCriarCliente() {
+  if (_crmCriando) return;
+  const nome = (document.getElementById('crm-novo-nome')?.value || '').trim();
+  if (!nome) { showToast('Informe o nome do cliente'); return; }
+  const tok = window.parent?.token?.();
+  if (!tok) { showToast('Não foi possível criar o cliente'); return; }
+  _crmCriando = true;
+  const btn = document.getElementById('crm-criar-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; btn.textContent = 'Criando...'; }
+  try {
+    const [segValue] = _crmSegmento();
+    const res = await fetch('/api/clientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok}` },
+      body: JSON.stringify({
+        nome,
+        n_vidas_estimado: qtds.reduce((a,b)=>a+b,0) || null,
+        segmento: segValue,
+        origem: 'Cotador'
+      })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const novo = await res.json();
+    _crmSelectedId = novo.id;
+    document.getElementById('crm-modal-overlay').style.display = 'none';
+    showToast('Cliente criado e vinculado ao CRM');
+    if (_crmModalCb) { _crmModalCb(novo.id); _crmModalCb = null; }
+  } catch {
+    showToast('Não foi possível criar o cliente');
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.textContent = 'Sim, criar e vincular'; }
+  } finally {
+    _crmCriando = false;
+  }
 }
 
 function _mostrarErroCatalogo() {
