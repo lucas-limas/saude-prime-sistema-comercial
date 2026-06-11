@@ -1708,6 +1708,11 @@ function renderNotes(cols) {
 
 // ── APRESENTAÇÃO ────────────────────────────────────────────────────
 function criarApresentacao() {
+  const totalVidas = qtds.reduce((a, b) => a + b, 0);
+  if (totalVidas === 0) {
+    showToast('Preencha as faixas etárias antes de gerar a apresentação.');
+    return;
+  }
   const opsOrder = Object.keys(OP_META);
   const opsInfo = opsOrder
     .filter(op => activeOps[op] && planosFiltered(op).length > 0)
@@ -1718,9 +1723,11 @@ function criarApresentacao() {
       return {op, pid, total, precos: [...p.precos]};
     }).filter(Boolean));
   const withTotal = opsInfo.filter(x => x.total > 0);
-  const winner = withTotal.length
-    ? withTotal.slice().sort((a,b) => a.total - b.total)[0].op
-    : (opsOrder.find(op => activeOps[op]) || 'unity');
+  if (withTotal.length === 0) {
+    showToast('Selecione ao menos uma operadora e um plano antes de gerar a apresentação.');
+    return;
+  }
+  const winner = withTotal.slice().sort((a,b) => a.total - b.total)[0].op;
   const data = {
     nome:        document.getElementById('nome').value,
     obs:         document.getElementById('obs').value,
