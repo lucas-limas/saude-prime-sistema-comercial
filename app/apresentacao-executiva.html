@@ -1754,6 +1754,15 @@ function receiveFromCotador(data) {
   // Armazena dados completos para gerar()
   _opsData = { qtds, selPlanos, activeOps, winner, opsInfo: opsInfo || [], filtroTipo, filtroCopart, filtroMod };
 
+  // Reconstrói PLANOS_DB a partir de window.PLANOS (populado pelo sincronizarCatalogo)
+  if (selPlanos && window.PLANOS) {
+    Object.keys(activeOps || {}).forEach(op => {
+      window.PLANOS_DB[op] = (window.PLANOS || [])
+        .filter(p => p.op === op)
+        .map(p => ({ id: p.id, nome: p.nome, aco: p.aco, tipo: p.tipo, reajuste: p.reajuste || '' }));
+    });
+  }
+
   // Campos básicos
   document.getElementById('g-nome').value = nome || '';
   previewNome();

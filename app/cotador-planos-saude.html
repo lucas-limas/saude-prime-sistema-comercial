@@ -1969,6 +1969,18 @@ function _crmSelIdx(idx, el) {
   btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
 }
 
+function _mostrarErroCatalogo() {
+  const el = document.createElement('div');
+  el.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px;color:var(--t2,rgba(255,255,255,.7));font-family:inherit';
+  el.innerHTML = `
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div style="font-size:15px;font-weight:600;color:var(--t1,#fff)">Não foi possível carregar o catálogo</div>
+    <div style="font-size:13px;text-align:center;max-width:320px">Verifique sua conexão e tente novamente.<br>Se o problema persistir, entre em contato com o suporte.</div>
+    <button onclick="location.reload()" style="padding:8px 20px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--t1,#fff);font-size:13px;cursor:pointer;font-family:inherit">Recarregar</button>
+  `;
+  (document.querySelector('.ops-area, #ops-wrap, main') || document.body).prepend(el);
+}
+
 // ── INIT (async: carrega catálogo da API antes de montar a UI) ────────
 const _loadingDiv = document.createElement('div');
 _loadingDiv.id = 'cotador-loading';
@@ -1999,8 +2011,6 @@ async function _initCotador() {
           if (hasValidPrecos) {
             PLANOS = PLANOS.filter(p => p.op !== opKey);
             dbPlansForOp.forEach(p => PLANOS.push(p));
-          } else {
-            console.warn('[catalogo] Preços zerados no banco para "' + opKey + '" — mantendo fallback do dados.js');
           }
         });
       }
@@ -2030,7 +2040,9 @@ async function _initCotador() {
       });
     }
   } catch(e) {
-    console.warn('Falha ao carregar catálogo da API:', e);
+    _loadingDiv.remove();
+    _mostrarErroCatalogo();
+    return;
   }
   _loadingDiv.remove();
   renderRedeTab();
